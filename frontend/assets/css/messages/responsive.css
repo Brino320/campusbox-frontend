@@ -1,0 +1,105 @@
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .messages-layout {
+    height: calc(100vh - 60px);
+    border-radius: 1rem;
+  }
+  .messages-list-panel {
+    width: 100%;
+    border-right: none;
+  }
+  .conversation-panel {
+    display: none;
+    width: 100%;
+  }
+  .conversation-panel.active {
+    display: flex;
+  }
+  .messages-list-panel.hidden {
+    display: none;
+  }
+  .chat-header .left .back-btn {
+    display: block;
+  }
+  .messages-list-panel .panel-header h2 {
+    font-size: 1rem;
+  }
+  .conversation-item {
+    padding: 0.4rem 0.8rem;
+  }
+  .conversation-item .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.8rem;
+  }
+  .chat-messages {
+    padding: 0.75rem 1rem;
+  }
+  .chat-messages .msg {
+    max-width: 85%;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+  .chat-input {
+    padding: 0.5rem 1rem;
+  }
+  .chat-input .input-wrapper input {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.2rem;
+  }
+  .chat-input .send-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  #emojiPicker {
+    max-width: 220px;
+    max-height: 150px;
+    left: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .messages-layout {
+    border-radius: 0.75rem;
+  }
+  .conversation-item .info .name {
+    font-size: 0.85rem;
+  }
+  .conversation-item .info .last-msg {
+    font-size: 0.7rem;
+  }
+  .chat-messages .msg {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+  }
+  .chat-input .input-wrapper {
+    padding: 0.1rem 0.4rem;
+  }
+  .chat-input .input-wrapper input {
+    font-size: 0.8rem;
+  }
+  .chat-header {
+    padding: 0.5rem 1rem;
+  }
+  .chat-header .left .avatar-sm {
+    width: 30px;
+    height: 30px;
+    font-size: 0.7rem;
+  }
+  .chat-header .left .info h4 {
+    font-size: 0.85rem;
+  }
+  .empty-state .icon {
+    font-size: 2.5rem;
+  }
+  #emojiPicker {
+    max-width: 180px;
+    max-height: 120px;
+  }
+  #emojiPicker span {
+    font-size: 1.2rem;
+  }
+}

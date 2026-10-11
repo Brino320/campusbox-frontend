@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusBox - Vérification du code</title>
+    <link rel="icon" type="image/png" href="../assets/images/Logo.png" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <script src="../assets/js/config.js"></script>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+        font-family: "Segoe UI", system-ui, sans-serif;
+        padding: 1rem;
+      }
+      .card {
+        background: white;
+        max-width: 520px;
+        width: 100%;
+        border-radius: 1.5rem;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      }
+      .icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        line-height: 1;
+      }
+      h1 {
+        font-size: 1.5rem;
+        color: #0f172a;
+        margin: 0 0 0.7rem 0;
+      }
+      p {
+        color: #64748b;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin: 0.5rem 0;
+      }
+      .email-display {
+        font-weight: 600;
+        color: #3b82f6;
+        word-break: break-all;
+      }
+      .code-inputs {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        margin: 2rem 0 1rem 0;
+      }
+      .code-inputs input {
+        width: 50px;
+        height: 60px;
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: 700;
+        border: 2px solid #cbd5e1;
+        border-radius: 0.75rem;
+        transition: 0.2s;
+        font-family: "Courier New", monospace;
+        color: #0f172a;
+      }
+      .code-inputs input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        background: #eff6ff;
+      }
+      .code-inputs input.filled {
+        border-color: #10b981;
+        background: #ecfdf5;
+      }
+      @media (max-width: 480px) {
+        .code-inputs input {
+          width: 42px;
+          height: 52px;
+          font-size: 1.5rem;
+        }
+      }
+      .btn {
+        display: inline-block;
+        background: #3b82f6;
+        color: white;
+        padding: 0.8rem 2rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 1rem;
+        transition: 0.2s;
+        border: none;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-family: inherit;
+        width: 100%;
+      }
+      .btn:hover {
+        background: #2563eb;
+      }
+      .btn:disabled {
+        background: #cbd5e1;
+        cursor: not-allowed;
+        color: #64748b;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid #94a3b8;
+        color: #1e293b;
+        margin-top: 0.5rem;
+      }
+      .btn-outline:hover {
+        background: #f1f5f9;
+      }
+      .msg {
+        margin-top: 1rem;
+        padding: 0.7rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+        display: none;
+        line-height: 1.5;
+        text-align: left;
+      }
+      .msg.active {
+        display: block;
+      }
+      .msg.success {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .msg.error {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .msg.warning {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .timer-box {
+        background: #fef3c7;
+        border: 1px solid #f59e0b;
+        color: #92400e;
+        padding: 0.8rem 1rem;
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        display: none;
+      }
+      .timer-box.active {
+        display: block;
+      }
+      .timer-counter {
+        font-size: 1.6rem;
+        font-weight: 700;
+        font-family: monospace;
+        display: block;
+        margin-top: 0.3rem;
+      }
+      .resend-section {
+        border-top: 1px solid #e2e8f0;
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+      }
+      .resend-section p {
+        font-size: 0.85rem;
+        color: #64748b;
+      }
+      .email-hint {
+        background: #eff6ff;
+        border-left: 3px solid #3b82f6;
+        padding: 0.8rem 1rem;
+        border-radius: 0.5rem;
+        text-align: left;
+        font-size: 0.85rem;
+        color: #475569;
+        margin-top: 1rem;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="icon">🔐</div>
+      <h1>Vérification de l'email</h1>
+      <p>
+        Un code à 6 chiffres a été envoyé à<br />
+        <span class="email-display" id="emailDisplay">votre email</span>
+      </p>
+
+      <div class="code-inputs" id="codeInputs">
+        <input
+          type="text"
+          maxlength="1"
+          inputmode="numeric"
+          pattern="[0-9]"
+          data-index="0"
+          autofocus
+        />
+        <input
+          type="text"
+          maxlength="1"
+          inputmode="numeric"
+          pattern="[0-9]"
+          data-index="1"
+        />
+        <input
+          type="text"
+          maxlength="1"
+          inputmode="numeric"
+          pattern="[0-9]"
+          data-index="2"
+        />
+        <input
+          type="text"
+          maxlength="1"
+          inputmode="numeric"
+          pattern="[0-9]"
+          data-index="3"
+        />
+        <input
+          type="text"
+          maxlength="1"
+          inputmode="numeric"
+          pattern="[0-9]"
+          data-index="4"
+        />
+        <input
+          type="text"
+          maxlength="1"
+          inputmode="numeric"
+          pattern="[0-9]"
+          data-index="5"
+        />
+      </div>
+
+      <button class="btn" id="verifyBtn">✅ Confirmer mon email</button>
+
+      <div class="msg" id="msg"></div>
+
+      <div class="timer-box" id="timerBox">
+        ⏳ <strong>Trop de tentatives</strong><br />
+        Réessayez dans :
+        <span class="timer-counter" id="timerCounter">--:--</span>
+      </div>
+
+      <div class="email-hint">
+        <strong>📬 Vérifiez aussi :</strong><br />
+        • Votre dossier <strong>Spam</strong> / Courrier indésirable<br />
+        • L'onglet <strong>Promotions</strong> de Gmail<br />
+        • Le code expire dans <strong>15 minutes</strong>
+      </div>
+
+      <div class="resend-section">
+        <p>Vous n'avez rien reçu ?</p>
+        <button class="btn btn-outline" id="resendBtn">
+          📧 Renvoyer un nouveau code
+        </button>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const params = new URLSearchParams(window.location.search);
+        const email = params.get("email");
+
+        const emailDisplay = document.getElementById("emailDisplay");
+        const inputs = document.querySelectorAll("#codeInputs input");
+        const verifyBtn = document.getElementById("verifyBtn");
+        const resendBtn = document.getElementById("resendBtn");
+        const msg = document.getElementById("msg");
+        const timerBox = document.getElementById("timerBox");
+        const timerCounter = document.getElementById("timerCounter");
+
+        let cooldownInterval = null;
+
+        if (!email) {
+          emailDisplay.textContent = "votre email";
+        } else {
+          emailDisplay.textContent = email;
+        }
+
+        function showMsg(text, type = "success") {
+          msg.textContent = text;
+          msg.className = `msg active ${type}`;
+        }
+
+        function getCode() {
+          return Array.from(inputs)
+            .map((i) => i.value)
+            .join("");
+        }
+
+        function clearInputs() {
+          inputs.forEach((i) => {
+            i.value = "";
+            i.classList.remove("filled");
+          });
+          inputs[0].focus();
+        }
+
+        function startCooldown(seconds) {
+          resendBtn.disabled = true;
+          verifyBtn.disabled = true;
+          timerBox.classList.add("active");
+
+          let remaining = seconds;
+
+          function updateTimer() {
+            if (remaining <= 0) {
+              clearInterval(cooldownInterval);
+              cooldownInterval = null;
+              timerBox.classList.remove("active");
+              resendBtn.disabled = false;
+              verifyBtn.disabled = false;
+              showMsg("✅ Vous pouvez réessayer maintenant.", "success");
+              return;
+            }
+            const min = Math.floor(remaining / 60);
+            const sec = remaining % 60;
+            timerCounter.textContent = `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+            remaining--;
+          }
+
+          updateTimer();
+          cooldownInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Gestion des inputs
+        inputs.forEach((input, idx) => {
+          input.addEventListener("input", (e) => {
+            const val = e.target.value;
+            if (val && !/^\d$/.test(val)) {
+              e.target.value = "";
+              return;
+            }
+            if (val) {
+              e.target.classList.add("filled");
+              if (idx < inputs.length - 1) inputs[idx + 1].focus();
+            } else {
+              e.target.classList.remove("filled");
+            }
+          });
+
+          input.addEventListener("keydown", (e) => {
+            if (e.key === "Backspace" && !e.target.value && idx > 0) {
+              inputs[idx - 1].focus();
+            }
+            if (e.key === "ArrowLeft" && idx > 0) inputs[idx - 1].focus();
+            if (e.key === "ArrowRight" && idx < inputs.length - 1)
+              inputs[idx + 1].focus();
+            if (e.key === "Enter") verifyBtn.click();
+          });
+
+          input.addEventListener("paste", (e) => {
+            e.preventDefault();
+            const pasted = (e.clipboardData || window.clipboardData)
+              .getData("text")
+              .replace(/\D/g, "")
+              .slice(0, 6);
+            pasted.split("").forEach((digit, i) => {
+              if (inputs[i]) {
+                inputs[i].value = digit;
+                inputs[i].classList.add("filled");
+              }
+            });
+            const lastIdx = Math.min(pasted.length, 6) - 1;
+            if (lastIdx >= 0) inputs[lastIdx].focus();
+          });
+        });
+
+        // Vérification
+        verifyBtn.addEventListener("click", async () => {
+          if (!email) {
+            showMsg("Email inconnu. Revenez à l'inscription.", "error");
+            return;
+          }
+
+          const code = getCode();
+          if (code.length !== 6) {
+            showMsg("❌ Entrez les 6 chiffres du code.", "error");
+            return;
+          }
+
+          verifyBtn.disabled = true;
+          verifyBtn.textContent = "⏳ Vérification...";
+          msg.className = "msg";
+
+          try {
+            const res = await fetch(`${window.API_BASE}/verify-code`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, code }),
+            });
+
+            const data = await res.json();
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = "✅ Confirmer mon email";
+
+            if (res.ok) {
+              showMsg("✅ " + data.message, "success");
+              verifyBtn.disabled = true;
+              setTimeout(() => {
+                window.location.href = "authentification.html";
+              }, 2000);
+              return;
+            }
+
+            if (data.code === "CODE_EXPIRED") {
+              showMsg("⏰ " + data.error, "warning");
+              clearInputs();
+              return;
+            }
+
+            if (data.code === "TOO_MANY_ATTEMPTS") {
+              showMsg("❌ " + data.error, "error");
+              clearInputs();
+              return;
+            }
+
+            if (data.code === "INVALID_CODE") {
+              showMsg("❌ " + data.error, "error");
+              clearInputs();
+              return;
+            }
+
+            showMsg("❌ " + (data.error || "Erreur"), "error");
+            clearInputs();
+          } catch (err) {
+            console.error(err);
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = "✅ Confirmer mon email";
+            showMsg("❌ Erreur réseau. Vérifiez votre connexion.", "error");
+          }
+        });
+
+        // Renvoi du code
+        resendBtn.addEventListener("click", async () => {
+          if (!email) {
+            showMsg("Email inconnu.", "error");
+            return;
+          }
+
+          resendBtn.disabled = true;
+          resendBtn.textContent = "⏳ Envoi...";
+
+          try {
+            const res = await fetch(`${window.API_BASE}/resend-confirmation`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email }),
+            });
+            const data = await res.json();
+
+            resendBtn.textContent = "📧 Renvoyer un nouveau code";
+
+            if (res.ok) {
+              showMsg(data.message || "✅ Nouveau code envoyé !", "success");
+              clearInputs();
+
+              if (data.remaining === 0) {
+                resendBtn.disabled = true;
+                setTimeout(() => startCooldown(25 * 60), 2000);
+              } else {
+                resendBtn.disabled = false;
+              }
+            } else if (res.status === 429) {
+              showMsg(data.error || "Trop de tentatives.", "warning");
+              startCooldown(data.remaining_seconds || 25 * 60);
+            } else {
+              showMsg(data.error || "Erreur.", "error");
+              resendBtn.disabled = false;
+            }
+          } catch (err) {
+            console.error(err);
+            resendBtn.disabled = false;
+            resendBtn.textContent = "📧 Renvoyer un nouveau code";
+            showMsg("❌ Erreur réseau.", "error");
+          }
+        });
+
+        // Auto-submit quand les 6 chiffres sont saisis
+        inputs[5].addEventListener("input", () => {
+          if (getCode().length === 6) {
+            setTimeout(() => verifyBtn.click(), 200);
+          }
+        });
+
+        window.addEventListener("beforeunload", () => {
+          if (cooldownInterval) clearInterval(cooldownInterval);
+        });
+      })();
+    </script>
+  </body>
+</html>

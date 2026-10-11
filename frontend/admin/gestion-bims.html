@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Gestion BIM</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #f1f5f9;
+        font-family: "Segoe UI", system-ui, Roboto, sans-serif;
+        padding: 1.5rem;
+      }
+
+      .admin-nav {
+        background: #1e293b;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .admin-nav a {
+        color: #cbd5e1;
+        text-decoration: none;
+        padding: 0.4rem 1rem;
+        border-radius: 2rem;
+        font-size: 0.85rem;
+        transition: 0.2s;
+        white-space: nowrap;
+      }
+      .admin-nav a:hover {
+        background: #334155;
+        color: white;
+      }
+      .admin-nav a.active {
+        background: #3b82f6;
+        color: white;
+      }
+      .admin-nav .nav-brand {
+        font-weight: 700;
+        color: white;
+        font-size: 1rem;
+        margin-right: 0.5rem;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      h1 small {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #64748b;
+      }
+      hr {
+        border: none;
+        border-top: 2px solid #e2e8f0;
+        margin: 1.2rem 0;
+      }
+
+      .stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .stat-box {
+        background: #f8fafc;
+        padding: 0.8rem 1.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-left: 4px solid #3b82f6;
+        flex: 1;
+        min-width: 140px;
+      }
+      .stat-box.orange {
+        border-left-color: #f59e0b;
+      }
+      .stat-box.purple {
+        border-left-color: #8b5cf6;
+      }
+      .stat-box.green {
+        border-left-color: #10b981;
+      }
+      .stat-box .stat-num {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+      .stat-box .stat-label {
+        font-size: 0.75rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 0.3rem;
+        margin-bottom: 1.5rem;
+        background: #f1f5f9;
+        padding: 0.3rem;
+        border-radius: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .tab-btn {
+        padding: 0.6rem 1.2rem;
+        border: none;
+        background: transparent;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 500;
+        color: #475569;
+        transition: 0.2s;
+        font-size: 0.9rem;
+      }
+      .tab-btn.active {
+        background: white;
+        color: #3b82f6;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+      }
+
+      .tab-panel {
+        display: none;
+      }
+      .tab-panel.active {
+        display: block;
+      }
+
+      .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: flex-end;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 0.75rem;
+      }
+      .filter-bar .form-group {
+        flex: 1;
+        min-width: 150px;
+      }
+      .filter-bar .form-group label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #1e293b;
+        font-size: 0.85rem;
+      }
+      .filter-bar .form-group select,
+      .filter-bar .form-group input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        background: white;
+        font-size: 0.9rem;
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      th,
+      td {
+        padding: 0.6rem 0.8rem;
+        text-align: left;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      th {
+        background: #f1f5f9;
+        font-weight: 600;
+        color: #1e293b;
+        position: sticky;
+        top: 0;
+        white-space: nowrap;
+      }
+      tr:hover {
+        background: #f8fafc;
+      }
+
+      .badge {
+        padding: 0.15rem 0.6rem;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .badge.en_attente {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .badge.confirmee {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .badge.refusee {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .badge.rewarded {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .badge.pending {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .solde-badge {
+        font-weight: 700;
+        color: #3b82f6;
+        background: #eff6ff;
+        padding: 0.2rem 0.6rem;
+        border-radius: 1rem;
+        font-size: 0.85rem;
+        display: inline-block;
+      }
+
+      .btn {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.8rem;
+        border-radius: 0.5rem;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.2rem;
+      }
+      .btn-primary {
+        background: #3b82f6;
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #2563eb;
+      }
+      .btn-success {
+        background: #10b981;
+        color: white;
+      }
+      .btn-success:hover {
+        background: #059669;
+      }
+      .btn-danger {
+        background: #ef4444;
+        color: white;
+      }
+      .btn-danger:hover {
+        background: #dc2626;
+      }
+      .btn-warning {
+        background: #f59e0b;
+        color: white;
+      }
+      .btn-warning:hover {
+        background: #d97706;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid #94a3b8;
+        color: #1e293b;
+      }
+      .btn-outline:hover {
+        background: #f1f5f9;
+      }
+      .btn-sm {
+        padding: 0.2rem 0.6rem;
+        font-size: 0.75rem;
+      }
+
+      .actions-cell {
+        display: flex;
+        gap: 0.3rem;
+        flex-wrap: wrap;
+      }
+
+      .empty-state {
+        text-align: center;
+        color: #64748b;
+        padding: 3rem 0;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+      }
+      .modal.active {
+        display: flex;
+      }
+      .modal-content {
+        background: white;
+        max-width: 600px;
+        width: 95%;
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+      .modal-content.large {
+        max-width: 850px;
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+      .modal-header h2 {
+        font-size: 1.4rem;
+        color: #0f172a;
+      }
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #94a3b8;
+        transition: 0.2s;
+      }
+      .modal-close:hover {
+        color: #ef4444;
+      }
+      .modal .form-group {
+        margin-bottom: 1rem;
+      }
+      .modal .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+        color: #1e293b;
+      }
+      .modal .form-group input,
+      .modal .form-group select,
+      .modal .form-group textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+        font-family: inherit;
+      }
+      .modal .form-group textarea {
+        min-height: 70px;
+        resize: vertical;
+      }
+      .modal .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+      }
+
+      .message {
+        padding: 0.6rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+      }
+      .message.success {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .message.error {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .tx-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .tx-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e2e8f0;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+      }
+      .tx-item:last-child {
+        border-bottom: none;
+      }
+      .tx-credit {
+        color: #10b981;
+        font-weight: 700;
+      }
+      .tx-debit {
+        color: #ef4444;
+        font-weight: 700;
+      }
+
+      .top-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .top-list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0.8rem;
+        background: #f8fafc;
+        margin-bottom: 0.4rem;
+        border-radius: 0.5rem;
+        border-left: 3px solid #3b82f6;
+      }
+      .top-list .rank {
+        font-weight: 700;
+        color: #3b82f6;
+        margin-right: 0.5rem;
+        min-width: 25px;
+      }
+
+      body.dark-mode {
+        background: #0f172a;
+      }
+      body.dark-mode .container {
+        background: #1e293b;
+        color: #e2e8f0;
+      }
+      body.dark-mode .admin-nav {
+        background: #0f172a;
+      }
+      body.dark-mode .admin-nav a {
+        color: #94a3b8;
+      }
+      body.dark-mode .admin-nav a:hover {
+        background: #1e293b;
+        color: white;
+      }
+      body.dark-mode .admin-nav a.active {
+        background: #3b82f6;
+        color: white;
+      }
+      body.dark-mode h1 {
+        color: #f1f5f9;
+      }
+      body.dark-mode .stat-box {
+        background: #334155;
+        border-color: #475569;
+      }
+      body.dark-mode .stat-box .stat-num {
+        color: #f1f5f9;
+      }
+      body.dark-mode .stat-box .stat-label {
+        color: #94a3b8;
+      }
+      body.dark-mode .filter-bar {
+        background: #334155;
+      }
+      body.dark-mode .filter-bar .form-group label {
+        color: #cbd5e1;
+      }
+      body.dark-mode .filter-bar .form-group select,
+      body.dark-mode .filter-bar .form-group input {
+        background: #1e293b;
+        color: #e2e8f0;
+        border-color: #475569;
+      }
+      body.dark-mode th {
+        background: #334155;
+        color: #f1f5f9;
+      }
+      body.dark-mode td {
+        border-bottom-color: #475569;
+      }
+      body.dark-mode tr:hover {
+        background: #334155;
+      }
+      body.dark-mode .modal-content {
+        background: #1e293b;
+        color: #e2e8f0;
+      }
+      body.dark-mode .modal-header h2 {
+        color: #f1f5f9;
+      }
+      body.dark-mode .modal .form-group label {
+        color: #cbd5e1;
+      }
+      body.dark-mode .modal .form-group input,
+      body.dark-mode .modal .form-group select,
+      body.dark-mode .modal .form-group textarea {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-color: #475569;
+      }
+      body.dark-mode .btn-outline {
+        color: #cbd5e1;
+        border-color: #475569;
+      }
+      body.dark-mode .btn-outline:hover {
+        background: #334155;
+      }
+      body.dark-mode .empty-state {
+        color: #94a3b8;
+      }
+      body.dark-mode .top-list li {
+        background: #334155;
+      }
+      body.dark-mode .tx-item {
+        border-bottom-color: #475569;
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 1rem;
+        }
+        .container {
+          padding: 1rem;
+        }
+        .admin-nav {
+          padding: 0.5rem;
+          gap: 0.3rem;
+        }
+        .admin-nav a {
+          font-size: 0.75rem;
+          padding: 0.3rem 0.6rem;
+        }
+        .filter-bar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .stats-row {
+          flex-direction: column;
+        }
+        .actions-cell {
+          flex-direction: column;
+        }
+        .modal-content {
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="admin-nav">
+      <span class="nav-brand">⚙️ Admin</span>
+      <a href="index.html">🏠 Accueil</a>
+      <a href="gestion-matieres.html">📚 Matières</a>
+      <a href="chapitres.html">📖 Chapitres</a>
+      <a href="exercices.html">📝 Exercices</a>
+      <a href="quiz-manager.html">🧠 Quiz</a>
+      <a href="devoirs.html">📋 Devoirs</a>
+      <a href="gestion-examens.html">📄 Examens</a>
+      <a href="filieres.html">🏛️ Filières</a>
+      <a href="bulletins.html">📊 Bulletins</a>
+      <a href="etudiants.html">👨‍🎓 Étudiants</a>
+      <a href="gestion-bims.html" class="active">💎 BIM</a>
+    </nav>
+
+    <div class="container">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 1rem;
+        "
+      >
+        <h1>
+          💎 Gestion du système BIM <small>Monnaie virtuelle interne</small>
+        </h1>
+        <button id="btnExportCsv" class="btn btn-outline">
+          📥 Exporter CSV
+        </button>
+      </div>
+      <hr />
+
+      <!-- KPIs -->
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num" id="kpiTotalSolde">0</div>
+          <div class="stat-label">BIM en circulation</div>
+        </div>
+        <div class="stat-box orange">
+          <div class="stat-num" id="kpiDemandesAttente">0</div>
+          <div class="stat-label">Demandes en attente</div>
+        </div>
+        <div class="stat-box purple">
+          <div class="stat-num" id="kpiParrainages">0</div>
+          <div class="stat-label">Parrainages</div>
+        </div>
+        <div class="stat-box green">
+          <div class="stat-num" id="kpiRewardes">0</div>
+          <div class="stat-label">Récompenses versées</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="etudiants">
+          👥 Soldes étudiants
+        </button>
+        <button class="tab-btn" data-tab="demandes">🛒 Demandes d'achat</button>
+        <button class="tab-btn" data-tab="parrainages">🤝 Parrainages</button>
+        <button class="tab-btn" data-tab="offres">🏷️ Offres</button>
+        <button class="tab-btn" data-tab="stats">📊 Statistiques</button>
+      </div>
+
+      <!-- Tab étudiants -->
+      <div class="tab-panel active" id="tab-etudiants">
+        <div class="filter-bar">
+          <div class="form-group" style="min-width: 250px">
+            <label>🔍 Recherche</label>
+            <input
+              type="text"
+              id="searchEtudiant"
+              placeholder="Nom, email, username..."
+            />
+          </div>
+          <div class="form-group">
+            <label>Tri par solde</label>
+            <select id="sortSolde">
+              <option value="desc">Décroissant</option>
+              <option value="asc">Croissant</option>
+              <option value="none">Aucun</option>
+            </select>
+          </div>
+          <button id="btnReloadEtudiants" class="btn btn-primary">
+            🔄 Rafraîchir
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nom complet</th>
+                <th>Email</th>
+                <th>Filière</th>
+                <th>💎 Solde</th>
+                <th style="text-align: right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="etudiantsBody">
+              <tr>
+                <td colspan="6" class="empty-state">Chargement...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab demandes -->
+      <div class="tab-panel" id="tab-demandes">
+        <div class="filter-bar">
+          <div class="form-group">
+            <label>Filtrer par statut</label>
+            <select id="filtreStatutDemande">
+              <option value="en_attente">⏳ En attente</option>
+              <option value="confirmee">✅ Confirmées</option>
+              <option value="refusee">❌ Refusées</option>
+              <option value="">Toutes</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Étudiant</th>
+                <th>Offre</th>
+                <th>Montant</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th style="text-align: right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="demandesBody">
+              <tr>
+                <td colspan="6" class="empty-state">Chargement...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab parrainages -->
+      <div class="tab-panel" id="tab-parrainages">
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Parrain</th>
+                <th>Filleul</th>
+                <th>Date</th>
+                <th>Récompense</th>
+              </tr>
+            </thead>
+            <tbody id="parrainagesBody">
+              <tr>
+                <td colspan="4" class="empty-state">Chargement...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab offres -->
+      <div class="tab-panel" id="tab-offres">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+          "
+        >
+          <h3 style="font-size: 1.1rem; color: #0f172a">
+            🏷️ Offres d'achat BIM
+          </h3>
+          <button id="btnNouvelleOffre" class="btn btn-success">
+            ➕ Nouvelle offre
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Quantité</th>
+                <th>Prix</th>
+                <th>Ordre</th>
+                <th>Statut</th>
+                <th style="text-align: right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="offresBody">
+              <tr>
+                <td colspan="5" class="empty-state">Chargement...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab statistiques -->
+      <div class="tab-panel" id="tab-stats">
+        <div
+          style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem"
+          id="statsGrid"
+        >
+          <div>
+            <h3 style="font-size: 1.1rem; color: #0f172a; margin-bottom: 1rem">
+              🏆 Top 10 — Meilleurs soldes
+            </h3>
+            <ul class="top-list" id="topSoldes">
+              <li class="empty-state">Chargement...</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="font-size: 1.1rem; color: #0f172a; margin-bottom: 1rem">
+              🎁 Top 10 — Meilleurs parrains
+            </h3>
+            <ul class="top-list" id="topParrains">
+              <li class="empty-state">Chargement...</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal : crédit / débit BIM -->
+    <div class="modal" id="modalAction">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalActionTitle">💳 Créditer des BIM</h2>
+          <button class="modal-close" id="modalActionClose">&times;</button>
+        </div>
+        <p id="modalActionUser" style="margin-bottom: 1rem; color: #64748b"></p>
+        <div class="form-group">
+          <label>Montant (BIM)</label>
+          <input
+            type="number"
+            id="actionAmount"
+            min="1"
+            step="1"
+            placeholder="Ex: 5"
+          />
+        </div>
+        <div class="form-group">
+          <label>Motif (obligatoire)</label>
+          <textarea
+            id="actionMotif"
+            placeholder="Ex: Achat espèces validé, correction..."
+          ></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-outline" id="modalActionCancel">
+            Annuler
+          </button>
+          <button class="btn btn-primary" id="modalActionConfirm">
+            Valider
+          </button>
+        </div>
+        <div
+          id="modalActionMessage"
+          class="message"
+          style="display: none"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Modal : historique étudiant -->
+    <div class="modal" id="modalHistorique">
+      <div class="modal-content large">
+        <div class="modal-header">
+          <h2 id="modalHistoTitle">Historique du portefeuille</h2>
+          <button class="modal-close" id="modalHistoriqueClose">&times;</button>
+        </div>
+        <p id="modalHistoSolde" style="margin-bottom: 1rem; color: #64748b"></p>
+        <div id="historiqueContent">
+          <p class="empty-state">Chargement...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal : offre -->
+    <div class="modal" id="modalOffre">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalOffreTitle">Nouvelle offre</h2>
+          <button class="modal-close" id="modalOffreClose">&times;</button>
+        </div>
+        <div class="form-group">
+          <label>Quantité de BIM</label>
+          <input type="number" id="offreQuantite" min="1" placeholder="Ex: 5" />
+        </div>
+        <div class="form-group">
+          <label>Prix (FCFA)</label>
+          <input type="number" id="offrePrix" min="0" placeholder="Ex: 2000" />
+        </div>
+        <div class="form-group">
+          <label>Ordre d'affichage</label>
+          <input type="number" id="offreOrdre" min="0" value="0" />
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-outline" id="modalOffreCancel">Annuler</button>
+          <button class="btn btn-primary" id="modalOffreConfirm">
+            Enregistrer
+          </button>
+        </div>
+        <div id="modalOffreMessage" class="message" style="display: none"></div>
+      </div>
+    </div>
+
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/admin-bims.js"></script>
+  </body>
+</html>

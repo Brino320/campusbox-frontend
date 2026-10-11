@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Gestion des chapitres</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <style>
+      /* ===== STYLES GÉNÉRAUX ===== */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #f1f5f9;
+        font-family: "Segoe UI", system-ui, Roboto, sans-serif;
+        padding: 2rem;
+      }
+      .admin-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      }
+      h1 {
+        font-size: 1.8rem;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      h1 small {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #64748b;
+      }
+      hr {
+        border: none;
+        border-top: 2px solid #e2e8f0;
+        margin: 1.5rem 0;
+      }
+
+      /* ===== NAV ===== */
+      .admin-nav {
+        background: #1e293b;
+        padding: 0.5rem;
+        text-align: center;
+        margin-bottom: 1rem;
+        border-radius: 0.5rem;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .admin-nav a {
+        color: white;
+        text-decoration: none;
+        padding: 0.3rem 1rem;
+        border-radius: 2rem;
+        transition: 0.2s;
+      }
+      .admin-nav a:hover {
+        background: #334155;
+      }
+      .admin-nav a.active {
+        background: #3b82f6;
+      }
+
+      /* ===== FILTRES ===== */
+      .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        align-items: flex-end;
+      }
+      .filter-row .form-group {
+        flex: 1;
+        min-width: 180px;
+      }
+      .filter-row .form-group label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #1e293b;
+      }
+      .filter-row .form-group select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        background: white;
+        font-size: 0.95rem;
+      }
+
+      /* ===== BOUTONS ===== */
+      .btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 2rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.2s;
+        text-decoration: none;
+      }
+      .btn-primary {
+        background: #3b82f6;
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #2563eb;
+      }
+      .btn-success {
+        background: #10b981;
+        color: white;
+      }
+      .btn-success:hover {
+        background: #059669;
+      }
+      .btn-danger {
+        background: #ef4444;
+        color: white;
+      }
+      .btn-danger:hover {
+        background: #dc2626;
+      }
+      .btn-warning {
+        background: #f59e0b;
+        color: white;
+      }
+      .btn-warning:hover {
+        background: #d97706;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid #94a3b8;
+        color: #1e293b;
+      }
+      .btn-outline:hover {
+        background: #f1f5f9;
+      }
+      .btn-sm {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.85rem;
+      }
+
+      /* ===== FORMULAIRE ===== */
+      #formChapitre {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+        border: 1px solid #e2e8f0;
+        display: none;
+      }
+      #formChapitre .form-group {
+        margin-bottom: 1rem;
+      }
+      #formChapitre .form-group label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #1e293b;
+      }
+      #formChapitre .form-group input,
+      #formChapitre .form-group textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        font-size: 0.95rem;
+      }
+      #formChapitre .form-group textarea {
+        min-height: 120px;
+        font-family: monospace;
+      }
+      #formChapitre .form-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: flex-end;
+      }
+      #formChapitre .form-row .form-group {
+        flex: 1;
+        min-width: 120px;
+      }
+
+      /* ===== LISTE ===== */
+      .chapitre-item {
+        background: #f8fafc;
+        padding: 1rem 1.2rem;
+        border-radius: 0.75rem;
+        margin-bottom: 0.8rem;
+        border-left: 4px solid #3b82f6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .chapitre-item .info {
+        flex: 1;
+      }
+      .chapitre-item .info .titre {
+        font-weight: 600;
+        color: #0f172a;
+      }
+      .chapitre-item .info .apercu {
+        font-size: 0.85rem;
+        color: #475569;
+        margin-top: 0.2rem;
+        max-width: 400px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .chapitre-item .actions {
+        display: flex;
+        gap: 0.4rem;
+        flex-shrink: 0;
+      }
+
+      /* ===== ÉTAT VIDE ===== */
+      .empty-state {
+        text-align: center;
+        color: #64748b;
+        padding: 2rem 0;
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 640px) {
+        body {
+          padding: 1rem;
+        }
+        .admin-container {
+          padding: 1rem;
+        }
+        .chapitre-item {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .chapitre-item .actions {
+          justify-content: flex-end;
+        }
+        #formChapitre .form-row {
+          flex-direction: column;
+        }
+      }
+
+      /* ===== MODE SOMBRE ===== */
+      body.dark-mode {
+        background: #0f172a;
+      }
+      body.dark-mode .admin-container {
+        background: #1e293b;
+        color: #e2e8f0;
+      }
+      body.dark-mode h1 {
+        color: #f1f5f9;
+      }
+      body.dark-mode .filter-row .form-group label {
+        color: #cbd5e1;
+      }
+      body.dark-mode .filter-row .form-group select {
+        background: #334155;
+        color: #e2e8f0;
+        border-color: #475569;
+      }
+      body.dark-mode .chapitre-item {
+        background: #334155;
+        border-left-color: #3b82f6;
+      }
+      body.dark-mode .chapitre-item .info .titre {
+        color: #f1f5f9;
+      }
+      body.dark-mode .chapitre-item .info .apercu {
+        color: #94a3b8;
+      }
+      body.dark-mode #formChapitre {
+        background: #334155;
+        border-color: #475569;
+      }
+      body.dark-mode #formChapitre .form-group label {
+        color: #cbd5e1;
+      }
+      body.dark-mode #formChapitre .form-group input,
+      body.dark-mode #formChapitre .form-group textarea {
+        background: #1e293b;
+        color: #e2e8f0;
+        border-color: #475569;
+      }
+      body.dark-mode .empty-state {
+        color: #94a3b8;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===== NAV ===== -->
+    <nav class="admin-nav">
+      <a href="index.html">🏠 Accueil</a>
+      <a href="chapitres.html" class="active">📚 Chapitres</a>
+      <a href="exercices.html">📝 Exercices</a>
+      <a href="quiz-manager.html">🧠 Quiz</a>
+    </nav>
+
+    <!-- ===== CONTENEUR PRINCIPAL ===== -->
+    <div class="admin-container">
+      <h1>
+        📚 Gestion des chapitres <small>créez et modifiez les leçons</small>
+      </h1>
+      <hr />
+
+      <!-- ===== FILTRES : FILIÈRE + MATIÈRE ===== -->
+      <div class="filter-row">
+        <div class="form-group">
+          <label for="filiereSelect">Choisir une filière</label>
+          <select id="filiereSelect">
+            <option value="">-- Chargement --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="matiereSelect">Choisir une matière</label>
+          <select id="matiereSelect" disabled>
+            <option value="">-- Sélectionnez d'abord une filière --</option>
+          </select>
+        </div>
+        <div
+          style="
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            padding-bottom: 0.2rem;
+          "
+        >
+          <button id="btnNouveauChapitre" class="btn btn-success">
+            ➕ Nouveau chapitre
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== FORMULAIRE D'AJOUT / MODIFICATION ===== -->
+      <div id="formChapitre">
+        <h2 id="formTitle">➕ Ajouter un chapitre</h2>
+        <input type="hidden" id="chapitreId" value="" />
+        <div class="form-group">
+          <label for="titre">Titre du chapitre *</label>
+          <input
+            type="text"
+            id="titre"
+            placeholder="Ex: Introduction à la programmation"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="contenu_html">Contenu (HTML) *</label>
+          <textarea
+            id="contenu_html"
+            rows="8"
+            placeholder="<p>Votre contenu ici...</p>"
+          ></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ordre_chapitre">Ordre d’affichage</label>
+            <input type="number" id="ordre_chapitre" value="0" />
+          </div>
+          <div
+            class="form-group"
+            style="display: flex; gap: 0.5rem; align-items: flex-end"
+          >
+            <button id="btnSaveChapitre" class="btn btn-primary">
+              💾 Enregistrer
+            </button>
+            <button id="btnCancelChapitre" class="btn btn-outline">
+              Annuler
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== LISTE DES CHAPITRES ===== -->
+      <hr />
+      <h2>📖 Liste des chapitres</h2>
+      <div id="listeChapitres">
+        <p class="empty-state">Sélectionnez une filière et une matière.</p>
+      </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- SCRIPTS -->
+    <!-- ===================================================== -->
+    <script src="../assets/js/config.js"></script>
+    <script>
+      // =====================================================
+      // ADMIN CHAPITRES (avec filtrage par filière et matière)
+      // =====================================================
+
+      const API_BASE = window.API_BASE
+        ? `${window.API_BASE}/admin`
+        : "http://localhost:3000/api/admin";
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Vous devez être connecté en tant qu'admin.");
+        window.location.href = "../pages/authentification.html";
+      }
+
+      // Éléments DOM
+      const filiereSelect = document.getElementById("filiereSelect");
+      const matiereSelect = document.getElementById("matiereSelect");
+      const listeChapitres = document.getElementById("listeChapitres");
+      const formChapitre = document.getElementById("formChapitre");
+      const chapitreId = document.getElementById("chapitreId");
+      const titreInput = document.getElementById("titre");
+      const contenuInput = document.getElementById("contenu_html");
+      const ordreInput = document.getElementById("ordre_chapitre");
+      const formTitle = document.getElementById("formTitle");
+      const btnNouveau = document.getElementById("btnNouveauChapitre");
+      const btnSave = document.getElementById("btnSaveChapitre");
+      const btnCancel = document.getElementById("btnCancelChapitre");
+
+      let currentMatiereId = null;
+      let toutesMatieres = [];
+
+      // =====================================================
+      // 1. CHARGER LES FILIÈRES (avec gestion d'erreur améliorée)
+      // =====================================================
+      async function chargerFilieres() {
+        try {
+          console.log("🔍 Chargement des filières...");
+          const res = await fetch(`${API_BASE}/filieres`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (!res.ok) {
+            const errorText = await res.text();
+            throw new Error(`HTTP ${res.status}: ${errorText}`);
+          }
+
+          const filieres = await res.json();
+          console.log("✅ Filieres reçues :", filieres);
+
+          filiereSelect.innerHTML =
+            '<option value="">-- Sélectionner une filière --</option>';
+          if (filieres.length === 0) {
+            const opt = document.createElement("option");
+            opt.value = "";
+            opt.textContent = "⚠️ Aucune filière trouvée";
+            opt.disabled = true;
+            filiereSelect.appendChild(opt);
+          } else {
+            filieres.forEach((f) => {
+              const opt = document.createElement("option");
+              opt.value = f.id;
+              opt.textContent = `${f.nom} ${f.description ? `(${f.description})` : ""}`;
+              filiereSelect.appendChild(opt);
+            });
+          }
+
+          // Charger toutes les matières en mémoire
+          await chargerToutesMatieres();
+
+          // Écouter le changement de filière
+          filiereSelect.addEventListener("change", (e) => {
+            const filiereId = e.target.value;
+            if (filiereId) {
+              chargerMatieresParFiliere(filiereId);
+              document.getElementById("matiereSelect").disabled = false;
+            } else {
+              afficherToutesMatieres();
+              document.getElementById("matiereSelect").disabled = false;
+            }
+          });
+
+          // Si une filière est pré-sélectionnée
+          if (filiereSelect.value) {
+            filiereSelect.dispatchEvent(new Event("change"));
+          } else {
+            // Par défaut : afficher toutes les matières
+            afficherToutesMatieres();
+            document.getElementById("matiereSelect").disabled = false;
+          }
+        } catch (error) {
+          console.error("❌ Erreur chargement filières :", error);
+          filiereSelect.innerHTML = `<option value="">❌ Erreur : ${error.message}</option>`;
+        }
+      }
+
+      // =====================================================
+      // 2. CHARGER TOUTES LES MATIÈRES (en mémoire)
+      // =====================================================
+      async function chargerToutesMatieres() {
+        try {
+          console.log("🔍 Chargement de toutes les matières...");
+          const res = await fetch(`${API_BASE}/matieres`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          toutesMatieres = await res.json();
+          console.log(`✅ ${toutesMatieres.length} matières chargées`);
+        } catch (error) {
+          console.error("❌ Erreur chargement matières :", error);
+          toutesMatieres = [];
+        }
+      }
+
+      // =====================================================
+      // 3. AFFICHER TOUTES LES MATIÈRES (pas de filtre)
+      // =====================================================
+      function afficherToutesMatieres() {
+        const select = document.getElementById("matiereSelect");
+        select.innerHTML =
+          '<option value="">-- Toutes les matières --</option>';
+        toutesMatieres.forEach((m) => {
+          const opt = document.createElement("option");
+          opt.value = m.id;
+          opt.textContent = m.nom;
+          select.appendChild(opt);
+        });
+        select.disabled = false;
+        attacherEcouteurMatiere();
+        // Si une matière est déjà sélectionnée
+        if (select.value) {
+          currentMatiereId = select.value;
+          chargerChapitres(currentMatiereId);
+        } else {
+          listeChapitres.innerHTML =
+            '<p class="empty-state">Sélectionnez une matière.</p>';
+          currentMatiereId = null;
+        }
+      }
+
+      // =====================================================
+      // 4. CHARGER LES MATIÈRES D'UNE FILIÈRE (via associations)
+      // =====================================================
+      async function chargerMatieresParFiliere(filiereId) {
+        try {
+          const [matieresRes, assocRes] = await Promise.all([
+            fetch(`${API_BASE}/matieres`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+            fetch(`${API_BASE}/matieres-filieres`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+          ]);
+          if (!matieresRes.ok || !assocRes.ok)
+            throw new Error("Erreur chargement matières");
+
+          const allMatieres = await matieresRes.json();
+          const associations = await assocRes.json();
+
+          const matieresFiltrees = allMatieres.filter((m) =>
+            associations.some(
+              (a) => a.matiere_id === m.id && a.filiere_id == filiereId,
+            ),
+          );
+
+          const select = document.getElementById("matiereSelect");
+          select.innerHTML =
+            '<option value="">-- Sélectionner une matière --</option>';
+          if (matieresFiltrees.length === 0) {
+            const emptyOpt = document.createElement("option");
+            emptyOpt.value = "";
+            emptyOpt.textContent = "⚠️ Aucune matière associée";
+            emptyOpt.disabled = true;
+            select.appendChild(emptyOpt);
+            // Option pour tout voir
+            const allOpt = document.createElement("option");
+            allOpt.value = "__all__";
+            allOpt.textContent = "📚 Voir toutes les matières";
+            select.appendChild(allOpt);
+          } else {
+            matieresFiltrees.forEach((m) => {
+              const opt = document.createElement("option");
+              opt.value = m.id;
+              opt.textContent = m.nom;
+              select.appendChild(opt);
+            });
+          }
+
+          select.disabled = false;
+          attacherEcouteurMatiere();
+
+          if (select.value && select.value !== "__all__") {
+            currentMatiereId = select.value;
+            chargerChapitres(currentMatiereId);
+          } else {
+            listeChapitres.innerHTML =
+              '<p class="empty-state">Sélectionnez une matière.</p>';
+            currentMatiereId = null;
+          }
+        } catch (error) {
+          console.error("Erreur chargement matières par filière", error);
+          document.getElementById("matiereSelect").innerHTML =
+            '<option value="">❌ Erreur</option>';
+        }
+      }
+
+      // =====================================================
+      // 5. ÉCOUTEUR SUR LE SELECTEUR DE MATIÈRE
+      // =====================================================
+      function attacherEcouteurMatiere() {
+        // Supprimer l'ancien écouteur en remplaçant l'élément
+        const oldSelect = document.getElementById("matiereSelect");
+        const newSelect = oldSelect.cloneNode(true);
+        oldSelect.parentNode.replaceChild(newSelect, oldSelect);
+
+        newSelect.addEventListener("change", (e) => {
+          const val = e.target.value;
+          if (val === "__all__") {
+            afficherToutesMatieres();
+            return;
+          }
+          if (val) {
+            currentMatiereId = val;
+            chargerChapitres(val);
+          } else {
+            listeChapitres.innerHTML =
+              '<p class="empty-state">Sélectionnez une matière.</p>';
+            currentMatiereId = null;
+            masquerFormulaire();
+          }
+        });
+        // Mettre à jour la référence (on ne la réaffecte pas, on utilise getElementById à chaque fois)
+      }
+
+      // =====================================================
+      // 6. CHARGER LES CHAPITRES D'UNE MATIÈRE
+      // =====================================================
+      async function chargerChapitres(matiereId) {
+        listeChapitres.innerHTML = '<p class="empty-state">Chargement...</p>';
+        try {
+          const url = `${API_BASE}/chapitres?matiere_id=${matiereId}`;
+          console.log(`🔍 Chargement chapitres : ${url}`);
+          const res = await fetch(url, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!res.ok) throw new Error("Erreur chargement chapitres");
+          const chapitres = await res.json();
+          if (chapitres.length === 0) {
+            listeChapitres.innerHTML =
+              '<p class="empty-state">Aucun chapitre. Créez-en un !</p>';
+            return;
+          }
+          let html = "";
+          chapitres.forEach((ch) => {
+            const plainText = ch.contenu_html
+              ? ch.contenu_html.replace(/<[^>]*>/g, "")
+              : "";
+            const apercu =
+              plainText.length > 100
+                ? plainText.substring(0, 100) + "..."
+                : plainText;
+            html += `
+                <div class="chapitre-item">
+                  <div class="info">
+                    <div class="titre">${escapeHtml(ch.titre)} <span style="font-weight:400; color:#64748b; font-size:0.8rem;">(ordre ${ch.ordre_chapitre})</span></div>
+                    <div class="apercu">${escapeHtml(apercu)}</div>
+                  </div>
+                  <div class="actions">
+                    <button class="btn btn-warning btn-sm modifier-chapitre" data-id="${ch.id}">✏️ Modifier</button>
+                    <button class="btn btn-danger btn-sm supprimer-chapitre" data-id="${ch.id}">🗑️ Supprimer</button>
+                  </div>
+                </div>
+              `;
+          });
+          listeChapitres.innerHTML = html;
+
+          document.querySelectorAll(".modifier-chapitre").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const id = btn.dataset.id;
+              const ch = chapitres.find((c) => c.id == id);
+              if (ch) afficherFormulaire("edit", ch);
+            });
+          });
+          document.querySelectorAll(".supprimer-chapitre").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const id = btn.dataset.id;
+              if (confirm("Supprimer définitivement ce chapitre ?")) {
+                supprimerChapitre(id);
+              }
+            });
+          });
+        } catch (error) {
+          console.error("Erreur chargement chapitres", error);
+          listeChapitres.innerHTML =
+            '<p class="empty-state">❌ Erreur de chargement.</p>';
+        }
+      }
+
+      // =====================================================
+      // 7. AFFICHER LE FORMULAIRE (ajout ou modification)
+      // =====================================================
+      function afficherFormulaire(mode = "add", chapitre = null) {
+        formChapitre.style.display = "block";
+        if (mode === "add") {
+          formTitle.textContent = "➕ Ajouter un chapitre";
+          chapitreId.value = "";
+          titreInput.value = "";
+          contenuInput.value = "";
+          ordreInput.value = "0";
+        } else if (mode === "edit" && chapitre) {
+          formTitle.textContent = "✏️ Modifier le chapitre";
+          chapitreId.value = chapitre.id;
+          titreInput.value = chapitre.titre || "";
+          contenuInput.value = chapitre.contenu_html || "";
+          ordreInput.value = chapitre.ordre_chapitre || 0;
+        }
+        formChapitre.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      function masquerFormulaire() {
+        formChapitre.style.display = "none";
+        chapitreId.value = "";
+        titreInput.value = "";
+        contenuInput.value = "";
+        ordreInput.value = "0";
+        formTitle.textContent = "➕ Ajouter un chapitre";
+      }
+
+      // =====================================================
+      // 9. ENREGISTRER (AJOUT ou MODIFICATION)
+      // =====================================================
+      btnSave.addEventListener("click", async () => {
+        const id = chapitreId.value;
+        const titre = titreInput.value.trim();
+        const contenu_html = contenuInput.value;
+        const ordre_chapitre = parseInt(ordreInput.value) || 0;
+
+        if (!currentMatiereId) {
+          alert("Veuillez sélectionner une matière.");
+          return;
+        }
+        if (!titre) {
+          alert("Le titre est requis.");
+          return;
+        }
+
+        const body = {
+          matiere_id: currentMatiereId,
+          titre,
+          contenu_html,
+          ordre_chapitre,
+        };
+
+        let url, method;
+        if (id) {
+          url = `${API_BASE}/chapitres/${id}`;
+          method = "PUT";
+        } else {
+          url = `${API_BASE}/chapitres`;
+          method = "POST";
+        }
+
+        try {
+          const res = await fetch(url, {
+            method,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(body),
+          });
+          const data = await res.json();
+          if (res.ok) {
+            alert(id ? "✅ Chapitre modifié" : "✅ Chapitre ajouté");
+            masquerFormulaire();
+            chargerChapitres(currentMatiereId);
+          } else {
+            alert("❌ Erreur : " + (data.error || "Inconnue"));
+          }
+        } catch (error) {
+          alert("❌ Erreur réseau");
+          console.error(error);
+        }
+      });
+
+      // =====================================================
+      // 10. SUPPRIMER UN CHAPITRE
+      // =====================================================
+      async function supprimerChapitre(id) {
+        try {
+          const res = await fetch(`${API_BASE}/chapitres/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (res.ok) {
+            alert("✅ Chapitre supprimé");
+            chargerChapitres(currentMatiereId);
+          } else {
+            alert("❌ Erreur suppression");
+          }
+        } catch (error) {
+          alert("❌ Erreur réseau");
+        }
+      }
+
+      // =====================================================
+      // 11. BOUTONS : NOUVEAU CHAPITRE / ANNULER
+      // =====================================================
+      btnNouveau.addEventListener("click", () => {
+        if (!currentMatiereId) {
+          alert("Veuillez d'abord sélectionner une matière.");
+          return;
+        }
+        afficherFormulaire("add");
+      });
+
+      btnCancel.addEventListener("click", masquerFormulaire);
+
+      // =====================================================
+      // 12. UTILITAIRE D'ÉCHAPPEMENT HTML
+      // =====================================================
+      function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, (m) =>
+          m === "&" ? "&amp;" : m === "<" ? "&lt;" : "&gt;",
+        );
+      }
+
+      // =====================================================
+      // 13. MODE SOMBRE
+      // =====================================================
+      function applySavedTheme() {
+        const theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+          document.body.classList.add("dark-mode");
+        } else {
+          document.body.classList.remove("dark-mode");
+        }
+      }
+      applySavedTheme();
+
+      // =====================================================
+      // 14. INITIALISATION
+      // =====================================================
+      chargerFilieres();
+    </script>
+  </body>
+</html>

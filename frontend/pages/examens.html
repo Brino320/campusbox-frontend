@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusBox - Mes examens</title>
+    <script src="../assets/js/config.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+    <style>
+      .exam-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-left: 5px solid #3b82f6;
+        word-wrap: break-word;
+      }
+      .exam-card h3 {
+        font-size: 1.1rem;
+        color: #0f172a;
+        margin-bottom: 0.5rem;
+      }
+      .exam-card p {
+        font-size: 0.9rem;
+        color: #475569;
+        margin-bottom: 0.3rem;
+      }
+      .exam-date {
+        font-size: 0.8rem;
+        color: #475569;
+      }
+      .note {
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #0f172a;
+      }
+      .btn-passer-examen {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 500;
+        margin-top: 0.5rem;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+      .btn-passer-examen:hover {
+        background: #2563eb;
+      }
+      .btn-retake {
+        background: #8b5cf6;
+      }
+      .btn-retake:hover {
+        background: #7c3aed;
+      }
+      .btn-no-bim {
+        background: #cbd5e1;
+        color: #64748b;
+        cursor: not-allowed;
+      }
+      .btn-no-bim:hover {
+        background: #cbd5e1;
+      }
+
+      /* Badges */
+      .badge-gratuit {
+        display: inline-block;
+        background: #d1fae5;
+        color: #065f46;
+        font-size: 0.75rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 1rem;
+        margin-left: 0.5rem;
+        font-weight: 600;
+      }
+      .badge-solde {
+        display: inline-block;
+        background: #eff6ff;
+        color: #3b82f6;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.7rem;
+        border-radius: 1rem;
+        margin-left: 0.5rem;
+        font-weight: 600;
+      }
+      .badge-no-bim {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .btn-obtenir-bim {
+        display: inline-block;
+        background: #10b981;
+        color: white;
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+        margin-top: 0.5rem;
+        transition: 0.2s;
+      }
+      .btn-obtenir-bim:hover {
+        background: #059669;
+      }
+
+      /* Dark mode */
+      body.dark-mode .exam-card {
+        background: #1e293b;
+        border-left-color: #3b82f6;
+        color: #e2e8f0;
+      }
+      body.dark-mode .exam-card h3 {
+        color: #f1f5f9;
+      }
+      body.dark-mode .exam-card p {
+        color: #94a3b8;
+      }
+      body.dark-mode .exam-date {
+        color: #94a3b8;
+      }
+      body.dark-mode .note {
+        color: #f1f5f9;
+      }
+      body.dark-mode .badge-gratuit {
+        background: #065f46;
+        color: #d1fae5;
+      }
+      body.dark-mode .badge-solde {
+        background: #1e3a5f;
+        color: #93c5fd;
+      }
+      body.dark-mode .badge-no-bim {
+        background: #7f1d1d;
+        color: #fee2e2;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Overlay pour mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="dashboard-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <a href="dashboard.html" class="logo">
+            <img src="../assets/images/Logo.png" alt="CampusBox" />
+          </a>
+          <button class="btn-toggle-sidebar" id="toggleSidebarBtn">☰</button>
+          <div class="user-info-sidebar">
+            <span id="sidebarUserName">Chargement...</span>
+            <span class="online-status">● En ligne</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="dashboard.html">
+                <img
+                  src="../assets/images/icons/dashboard.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Tableau de bord</span>
+              </a>
+            </li>
+            <li>
+              <a href="cours.html">
+                <img
+                  src="../assets/images/icons/cours.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mes cours</span>
+              </a>
+            </li>
+            <li>
+              <a href="examens.html" class="active">
+                <img
+                  src="../assets/images/icons/exams.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Examens</span>
+              </a>
+            </li>
+            <li>
+              <a href="notes.html">
+                <img
+                  src="../assets/images/icons/notes.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Notes</span>
+              </a>
+            </li>
+            <li>
+              <a href="quiz.html">
+                <span class="nav-emoji">🧠</span>
+                <span>Quiz</span>
+              </a>
+            </li>
+            <li>
+              <a href="compte.html">
+                <img
+                  src="../assets/images/icons/profil.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mon profil</span>
+              </a>
+            </li>
+            <li>
+              <a href="messages.html">
+                <img
+                  src="../assets/images/icons/messages.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Messages</span>
+              </a>
+            </li>
+            <li>
+              <a href="parametres.html">
+                <span class="nav-emoji">⚙️</span>
+                <span>Paramètres</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" id="logoutBtnSidebar">
+                <span class="nav-emoji">🚪</span>
+                <span>Déconnexion</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <button class="btn-burger" id="burgerBtn">☰</button>
+
+        <h1>Mes examens et devoirs</h1>
+        <div id="examensContainer">Chargement...</div>
+      </main>
+    </div>
+
+    <footer><p>&copy; 2025 CampusBox</p></footer>
+
+    <script src="../assets/js/examens.js"></script>
+  </body>
+</html>

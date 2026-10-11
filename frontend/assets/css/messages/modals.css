@@ -1,0 +1,87 @@
+/* ============================================
+   MODALES
+   ============================================ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.active {
+  display: flex;
+}
+.modal-box {
+  background: white;
+  max-width: 500px;
+  width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+.modal-box h3 {
+  color: #0f172a;
+  margin-bottom: 1rem;
+}
+.modal-box .form-group {
+  margin-bottom: 1rem;
+}
+.modal-box .form-group input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
+.modal-box .modal-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+.modal-box .modal-actions .btn {
+  padding: 0.4rem 1.2rem;
+  border-radius: 2rem;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+.modal-box .modal-actions .btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+.modal-box .modal-actions .btn-primary:hover {
+  background: #2563eb;
+}
+.modal-box .modal-actions .btn-danger {
+  background: #ef4444;
+  color: white;
+}
+.modal-box .modal-actions .btn-danger:hover {
+  background: #dc2626;
+}
+.modal-box .modal-actions .btn-outline {
+  background: transparent;
+  border: 1px solid #94a3b8;
+  color: #1e293b;
+}
+.modal-box .modal-actions .btn-outline:hover {
+  background: #f1f5f9;
+}
+
+body.dark-mode .modal-box {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+body.dark-mode .modal-box h3 {
+  color: #f1f5f9;
+}
+body.dark-mode .modal-box .form-group input {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-color: #475569;
+}

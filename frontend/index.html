@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusBox - Authentification</title>
+
+    <!-- ✅ Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/Logo.png" />
+
+    <script src="../assets/js/config.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/auth.css" />
+
+    <style>
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 1.5rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      @media (max-width: 640px) {
+        .navbar {
+          padding: 0.4rem 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="../index.html" class="logo" aria-label="CampusBox - Accueil">
+        <img src="../assets/images/Logo.png" alt="CampusBox" />
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="../index.html">Accueil</a></li>
+        <li>
+          <a href="authentification.html" class="btn-outline"
+            >Authentification</a
+          >
+        </li>
+        <li><a href="inscription.html" class="btn-primary">Inscription</a></li>
+      </ul>
+    </nav>
+
+    <div class="auth-page">
+      <div class="auth-card">
+        <h1>Bienvenue !</h1>
+        <h2>Authentification à votre compte CampusBox</h2>
+
+        <form id="formAuthentification">
+          <div class="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="Tonemail@gmail.com"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" id="motDePasse" required />
+          </div>
+
+          <!-- ✅ LIEN CORRIGÉ vers mot-de-passe-oublie.html -->
+          <div class="forgot-password">
+            <a href="mot-de-passe-oublie.html">🔑 Mot de passe oublié ?</a>
+          </div>
+
+          <button type="submit" class="btn-auth">Se connecter</button>
+        </form>
+
+        <div class="signup-prompt">
+          <p>Nouveau sur CampusBox ?</p>
+          <p class="signup-text">
+            Inscrivez-vous pour accéder à vos cours, ressources et communauté.
+          </p>
+          <a href="inscription.html" class="btn-signup"
+            >S'inscrire maintenant</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 CampusBox - Tous droits réservés.</p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("formAuthentification");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("motDePasse");
+
+        console.log("🔍 API_BASE =", window.API_BASE);
+        if (!window.API_BASE) {
+          alert(
+            "❌ Erreur de configuration : API_BASE non défini. Vérifie que config.js est chargé.",
+          );
+          return;
+        }
+
+        function validerFormulaire() {
+          let erreurs = [];
+          if (!emailInput.value.trim()) erreurs.push("Email requis");
+          if (!passwordInput.value) erreurs.push("Mot de passe requis");
+          if (erreurs.length > 0) {
+            alert("❌ Erreurs :\n- " + erreurs.join("\n- "));
+            return false;
+          }
+          return true;
+        }
+
+        async function authentifierUtilisateur(email, password) {
+          const url = window.API_BASE + "/login";
+          console.log("🔗 Tentative de connexion à :", url);
+
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+              localStorage.setItem("token", data.token);
+              localStorage.setItem("user", JSON.stringify(data.user));
+
+              if (data.user.role === "admin") {
+                window.location.href = "../admin/chapitres.html";
+              } else {
+                window.location.href = "dashboard.html";
+              }
+            } else {
+              // ✅ Gestion du cas "email non confirmé"
+              if (data.code === "EMAIL_NOT_CONFIRMED") {
+                const goToConfirm = confirm(
+                  "📧 Votre email n'est pas encore confirmé.\n\n" +
+                    "Voulez-vous aller sur la page de confirmation pour renvoyer l'email ?",
+                );
+                if (goToConfirm) {
+                  window.location.href = `confirmation-email.html?status=pending&email=${encodeURIComponent(email)}`;
+                }
+                return;
+              }
+
+              alert(
+                "❌ Échec de l'authentification : " +
+                  (data.message || "Identifiants invalides"),
+              );
+            }
+          } catch (error) {
+            console.error("Erreur réseau :", error);
+            alert(
+              "❌ Impossible de contacter le serveur. Vérifie que le backend est lancé (npm run dev).",
+            );
+          }
+        }
+
+        if (form) {
+          form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            if (validerFormulaire()) {
+              authentifierUtilisateur(
+                emailInput.value.trim(),
+                passwordInput.value,
+              );
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

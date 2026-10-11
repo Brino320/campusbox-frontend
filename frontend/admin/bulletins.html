@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Bulletins</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #f1f5f9;
+        font-family: "Segoe UI", system-ui, Roboto, sans-serif;
+        padding: 1.5rem;
+      }
+      .admin-nav {
+        background: #1e293b;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .admin-nav a {
+        color: #cbd5e1;
+        text-decoration: none;
+        padding: 0.4rem 1rem;
+        border-radius: 2rem;
+        font-size: 0.85rem;
+        transition: 0.2s;
+        white-space: nowrap;
+      }
+      .admin-nav a:hover {
+        background: #334155;
+        color: white;
+      }
+      .admin-nav a.active {
+        background: #3b82f6;
+        color: white;
+      }
+      .admin-nav .nav-brand {
+        font-weight: 700;
+        color: white;
+        font-size: 1rem;
+        margin-right: 0.5rem;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: auto;
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      }
+      h1 {
+        font-size: 1.6rem;
+        color: #0f172a;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      h1 small {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #64748b;
+      }
+      hr {
+        border: none;
+        border-top: 2px solid #e2e8f0;
+        margin: 1.2rem 0;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 0.3rem;
+        margin-bottom: 1.5rem;
+        background: #f1f5f9;
+        padding: 0.3rem;
+        border-radius: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .tab-btn {
+        padding: 0.6rem 1.2rem;
+        border: none;
+        background: transparent;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 500;
+        color: #475569;
+        transition: 0.2s;
+        font-size: 0.9rem;
+      }
+      .tab-btn.active {
+        background: white;
+        color: #3b82f6;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+      }
+
+      .tab-panel {
+        display: none;
+      }
+      .tab-panel.active {
+        display: block;
+      }
+
+      .filters {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 0.75rem;
+      }
+      .filters select,
+      .filters input {
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid #cbd5e1;
+        font-size: 0.9rem;
+        font-family: inherit;
+      }
+      .filters button {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.5rem 1.2rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      th,
+      td {
+        padding: 0.6rem 0.8rem;
+        border-bottom: 1px solid #e2e8f0;
+        text-align: left;
+      }
+      th {
+        background: #f1f5f9;
+        font-weight: 600;
+        color: #1e293b;
+        position: sticky;
+        top: 0;
+      }
+      tr:hover {
+        background: #f8fafc;
+      }
+
+      .btn {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.3rem 0.8rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.2rem;
+      }
+      .btn-success {
+        background: #10b981;
+      }
+      .btn-success:hover {
+        background: #059669;
+      }
+      .btn-sm {
+        padding: 0.2rem 0.6rem;
+        font-size: 0.75rem;
+      }
+
+      .empty {
+        text-align: center;
+        color: #64748b;
+        padding: 2rem;
+        font-style: italic;
+      }
+
+      /* Coeff editable */
+      .coeff-input {
+        width: 70px;
+        padding: 0.3rem 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.4rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-align: center;
+        color: #3b82f6;
+      }
+      .coeff-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+      }
+      .coeff-save {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 0.3rem 0.6rem;
+        border-radius: 0.4rem;
+        cursor: pointer;
+        font-size: 0.75rem;
+        margin-left: 0.3rem;
+      }
+      .coeff-save:hover {
+        background: #059669;
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 1rem;
+        }
+        .container {
+          padding: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="admin-nav">
+      <span class="nav-brand">⚙️ Admin</span>
+      <a href="index.html">🏠 Accueil</a>
+      <a href="gestion-matieres.html">📚 Matières</a>
+      <a href="gestion-examens.html">📄 Examens</a>
+      <a href="etudiants.html">👨‍🎓 Étudiants</a>
+      <a href="bulletins.html" class="active">📊 Bulletins</a>
+      <a href="gestion-bims.html">💎 BIM</a>
+    </nav>
+
+    <div class="container">
+      <h1>📊 Bulletins <small>Gestion des notes et coefficients</small></h1>
+      <hr />
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="etudiants">
+          👨‍🎓 Bulletins étudiants
+        </button>
+        <button class="tab-btn" data-tab="coefficients">
+          ⚖️ Coefficients des matières
+        </button>
+      </div>
+
+      <!-- TAB ÉTUDIANTS -->
+      <div class="tab-panel active" id="tab-etudiants">
+        <div class="filters">
+          <select id="filiereFilter">
+            <option value="">Toutes filières</option>
+          </select>
+          <select id="classeFilter">
+            <option value="">Toutes classes</option>
+          </select>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Rechercher un étudiant..."
+          />
+          <button id="applyFilterBtn">🔍 Filtrer</button>
+        </div>
+        <div id="studentsList">
+          <p class="empty">Chargement...</p>
+        </div>
+      </div>
+
+      <!-- TAB COEFFICIENTS -->
+      <div class="tab-panel" id="tab-coefficients">
+        <p style="margin-bottom: 1rem; color: #64748b; font-size: 0.9rem">
+          Modifiez les coefficients directement. Cliquez sur 💾 pour
+          enregistrer. Les coefficients déterminent le poids de chaque matière
+          dans la moyenne générale.
+        </p>
+        <div id="coefficientsList">
+          <p class="empty">Chargement...</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="../assets/js/config.js"></script>
+    <script>
+      const API_BASE = window.API_BASE || "http://localhost:3000/api";
+      const token = localStorage.getItem("token");
+      if (!token) window.location.href = "../pages/authentification.html";
+
+      // =====================================================
+      // TABS
+      // =====================================================
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab-btn")
+            .forEach((b) => b.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-panel")
+            .forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          document
+            .getElementById(`tab-${btn.dataset.tab}`)
+            .classList.add("active");
+
+          if (btn.dataset.tab === "coefficients") chargerCoefficients();
+          else chargerEtudiants();
+        });
+      });
+
+      // =====================================================
+      // LISTE ÉTUDIANTS
+      // =====================================================
+      async function chargerEtudiants(filiere = "", classe = "", search = "") {
+        const container = document.getElementById("studentsList");
+        container.innerHTML = '<p class="empty">Chargement...</p>';
+
+        try {
+          let url = `${API_BASE}/admin/etudiants`;
+          const params = new URLSearchParams();
+          if (filiere) params.append("filiere", filiere);
+          if (classe) params.append("classe", classe);
+          if (search) params.append("search", search);
+          if (params.toString()) url += "?" + params.toString();
+
+          const res = await fetch(url, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!res.ok) throw new Error("Erreur");
+          const etudiants = await res.json();
+
+          if (etudiants.length === 0) {
+            container.innerHTML = '<p class="empty">Aucun étudiant trouvé.</p>';
+            return;
+          }
+
+          let html = `
+            <table>
+              <thead>
+                <tr>
+                  <th>Nom</th><th>Prénom</th><th>Email</th>
+                  <th>Filière</th><th>Classe</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+          `;
+
+          etudiants.forEach((e) => {
+            html += `
+              <tr>
+                <td>${e.nom || "—"}</td>
+                <td>${e.prenom || "—"}</td>
+                <td>${e.email || "—"}</td>
+                <td>${e.filiere || "—"}</td>
+                <td>${e.classe || "—"}</td>
+                <td>
+                  <a href="bulletin-etudiant.html?user_id=${e.id}" target="_blank" class="btn btn-success btn-sm">
+                    📄 Voir bulletin
+                  </a>
+                </td>
+              </tr>
+            `;
+          });
+
+          html += "</tbody></table>";
+          container.innerHTML = html;
+        } catch (error) {
+          console.error(error);
+          container.innerHTML = '<p class="empty">❌ Erreur de chargement</p>';
+        }
+      }
+
+      // =====================================================
+      // LISTE COEFFICIENTS (éditable)
+      // =====================================================
+      async function chargerCoefficients() {
+        const container = document.getElementById("coefficientsList");
+        container.innerHTML = '<p class="empty">Chargement...</p>';
+
+        try {
+          const res = await fetch(`${API_BASE}/admin/matieres`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!res.ok) throw new Error("Erreur");
+          const matieres = await res.json();
+
+          if (matieres.length === 0) {
+            container.innerHTML =
+              '<p class="empty">Aucune matière trouvée.</p>';
+            return;
+          }
+
+          let html = `
+            <table>
+              <thead>
+                <tr>
+                  <th>Matière</th>
+                  <th>Niveau</th>
+                  <th>Semestre</th>
+                  <th>Coefficient actuel</th>
+                  <th>Modifier</th>
+                </tr>
+              </thead>
+              <tbody>
+          `;
+
+          matieres.forEach((m) => {
+            html += `
+              <tr>
+                <td><strong>${m.nom}</strong></td>
+                <td>${m.niveau || "—"}</td>
+                <td>S${m.semestre || 1}</td>
+                <td>
+                  <input
+                    type="number"
+                    class="coeff-input"
+                    id="coeff-${m.id}"
+                    value="${m.coefficient_matiere}"
+                    min="0.5"
+                    max="20"
+                    step="0.5"
+                  />
+                </td>
+                <td>
+                  <button class="coeff-save" data-id="${m.id}">💾 Enregistrer</button>
+                </td>
+              </tr>
+            `;
+          });
+
+          html += "</tbody></table>";
+          container.innerHTML = html;
+
+          // Bind boutons de sauvegarde
+          container.querySelectorAll(".coeff-save").forEach((btn) => {
+            btn.addEventListener("click", async () => {
+              const id = btn.dataset.id;
+              const input = document.getElementById(`coeff-${id}`);
+              const coeff = parseFloat(input.value);
+
+              if (isNaN(coeff) || coeff < 0.5 || coeff > 20) {
+                alert("❌ Coefficient invalide (entre 0.5 et 20)");
+                return;
+              }
+
+              btn.disabled = true;
+              btn.textContent = "⏳";
+
+              try {
+                const r = await fetch(
+                  `${API_BASE}/admin/matieres/${id}/coefficient`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ coefficient: coeff }),
+                  },
+                );
+                const data = await r.json();
+
+                if (r.ok) {
+                  btn.textContent = "✅";
+                  btn.style.background = "#059669";
+                  setTimeout(() => {
+                    btn.textContent = "💾 Enregistrer";
+                    btn.style.background = "";
+                    btn.disabled = false;
+                  }, 1500);
+                } else {
+                  alert("❌ " + (data.error || "Erreur"));
+                  btn.textContent = "💾 Enregistrer";
+                  btn.disabled = false;
+                }
+              } catch (e) {
+                console.error(e);
+                alert("❌ Erreur réseau");
+                btn.textContent = "💾 Enregistrer";
+                btn.disabled = false;
+              }
+            });
+          });
+        } catch (error) {
+          console.error(error);
+          container.innerHTML = '<p class="empty">❌ Erreur de chargement</p>';
+        }
+      }
+
+      // =====================================================
+      // FILTRES
+      // =====================================================
+      async function chargerFiltres() {
+        try {
+          const [filieresRes, classesRes] = await Promise.all([
+            fetch(`${API_BASE}/admin/filieres`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }).catch(() => null),
+            fetch(`${API_BASE}/admin/classes`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }).catch(() => null),
+          ]);
+
+          if (filieresRes && filieresRes.ok) {
+            const filieres = await filieresRes.json();
+            const select = document.getElementById("filiereFilter");
+            filieres.forEach((f) => {
+              const opt = document.createElement("option");
+              opt.value = f.nom;
+              opt.textContent = f.nom;
+              select.appendChild(opt);
+            });
+          }
+
+          if (classesRes && classesRes.ok) {
+            const classes = await classesRes.json();
+            const select = document.getElementById("classeFilter");
+            classes.forEach((c) => {
+              const opt = document.createElement("option");
+              opt.value = c.nom;
+              opt.textContent = c.nom;
+              select.appendChild(opt);
+            });
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      document
+        .getElementById("applyFilterBtn")
+        .addEventListener("click", () => {
+          const filiere = document.getElementById("filiereFilter").value;
+          const classe = document.getElementById("classeFilter").value;
+          const search = document.getElementById("searchInput").value.trim();
+          chargerEtudiants(filiere, classe, search);
+        });
+
+      // =====================================================
+      // INIT
+      // =====================================================
+      chargerFiltres();
+      chargerEtudiants();
+    </script>
+  </body>
+</html>

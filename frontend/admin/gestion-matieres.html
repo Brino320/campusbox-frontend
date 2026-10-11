@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gestion des matières - Admin</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <style>
+      /* --- Général --- */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #f1f5f9;
+        font-family: "Segoe UI", system-ui, Roboto, sans-serif;
+        padding: 1.5rem;
+      }
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      }
+
+      /* --- En-tête --- */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .header h1 {
+        font-size: 1.8rem;
+        color: #0f172a;
+      }
+      .btn-primary {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 2rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn-primary:hover {
+        background: #2563eb;
+      }
+      .btn-success {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn-success:hover {
+        background: #059669;
+      }
+      .btn-danger {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 0.3rem 0.8rem;
+        border-radius: 0.3rem;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn-danger:hover {
+        background: #dc2626;
+      }
+      .btn-warning {
+        background: #f59e0b;
+        color: white;
+        border: none;
+        padding: 0.3rem 0.8rem;
+        border-radius: 0.3rem;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn-warning:hover {
+        background: #d97706;
+      }
+
+      /* --- Tableau --- */
+      .table-responsive {
+        overflow-x: auto;
+        margin-top: 1.5rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      th,
+      td {
+        padding: 0.6rem 0.8rem;
+        text-align: left;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      th {
+        background: #f1f5f9;
+        font-weight: 600;
+        color: #1e293b;
+        position: sticky;
+        top: 0;
+      }
+      tr:hover {
+        background: #f8fafc;
+      }
+      .badge-actif {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 0.2rem 0.6rem;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+      .badge-inactif {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 0.2rem 0.6rem;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+      .badge-semestre {
+        background: #dbeafe;
+        color: #1e40af;
+        padding: 0.2rem 0.6rem;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .filiere-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+      }
+      .filiere-tag {
+        background: #e0e7ff;
+        color: #1e40af;
+        padding: 0.1rem 0.5rem;
+        border-radius: 2rem;
+        font-size: 0.7rem;
+      }
+
+      /* --- Filtres --- */
+      .filters {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 0.75rem;
+        border: 1px solid #e2e8f0;
+      }
+      .filters label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #475569;
+        margin-right: 0.3rem;
+      }
+      .filters select {
+        padding: 0.4rem 0.8rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        font-size: 0.85rem;
+        background: white;
+      }
+
+      /* --- Modal --- */
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal.active {
+        display: flex;
+      }
+      .modal-content {
+        background: white;
+        max-width: 700px;
+        width: 95%;
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+      .modal-header h2 {
+        font-size: 1.4rem;
+        color: #0f172a;
+      }
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #94a3b8;
+        transition: 0.2s;
+      }
+      .modal-close:hover {
+        color: #ef4444;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+        color: #1e293b;
+      }
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .checkbox-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding-top: 0.3rem;
+      }
+      .checkbox-grid label {
+        font-weight: normal;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        cursor: pointer;
+      }
+      .checkbox-grid input[type="checkbox"] {
+        width: auto;
+      }
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+      }
+      .btn-secondary {
+        background: #e2e8f0;
+        color: #1e293b;
+        border: none;
+        padding: 0.5rem 1.2rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn-secondary:hover {
+        background: #cbd5e1;
+      }
+
+      /* --- Mode sombre --- */
+      body.dark-mode {
+        background: #0f172a;
+      }
+      body.dark-mode .container {
+        background: #1e293b;
+        color: #e2e8f0;
+      }
+      body.dark-mode .header h1 {
+        color: #f1f5f9;
+      }
+      body.dark-mode th {
+        background: #334155;
+        color: #f1f5f9;
+      }
+      body.dark-mode td {
+        border-bottom-color: #475569;
+      }
+      body.dark-mode tr:hover {
+        background: #334155;
+      }
+      body.dark-mode .filters {
+        background: #0f172a;
+        border-color: #334155;
+      }
+      body.dark-mode .filters label {
+        color: #cbd5e1;
+      }
+      body.dark-mode .filters select {
+        background: #1e293b;
+        border-color: #475569;
+        color: #e2e8f0;
+      }
+      body.dark-mode .modal-content {
+        background: #1e293b;
+        color: #e2e8f0;
+      }
+      body.dark-mode .modal-header h2 {
+        color: #f1f5f9;
+      }
+      body.dark-mode .form-group label {
+        color: #f1f5f9;
+      }
+      body.dark-mode .form-group input,
+      body.dark-mode .form-group select,
+      body.dark-mode .form-group textarea {
+        background: #0f172a;
+        border-color: #475569;
+        color: #e2e8f0;
+      }
+      body.dark-mode .btn-secondary {
+        background: #475569;
+        color: #f1f5f9;
+      }
+      body.dark-mode .filiere-tag {
+        background: #1e293b;
+        color: #60a5fa;
+      }
+      body.dark-mode .badge-actif {
+        background: #065f46;
+        color: #d1fae5;
+      }
+      body.dark-mode .badge-inactif {
+        background: #7f1d1d;
+        color: #fee2e2;
+      }
+      body.dark-mode .badge-semestre {
+        background: #1e3a8a;
+        color: #93c5fd;
+      }
+
+      @media (max-width: 640px) {
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+        .header {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .header h1 {
+          font-size: 1.4rem;
+        }
+        .filters {
+          flex-direction: column;
+          align-items: stretch;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- En-tête -->
+      <div class="header">
+        <h1>📚 Gestion des matières</h1>
+        <button class="btn-primary" id="newMatiereBtn">
+          ➕ Nouvelle matière
+        </button>
+      </div>
+
+      <!-- Filtres -->
+      <div class="filters">
+        <div>
+          <label for="filtreSemestre">Semestre :</label>
+          <select id="filtreSemestre">
+            <option value="">Tous</option>
+            <option value="1">Semestre 1</option>
+            <option value="2">Semestre 2</option>
+            <option value="3">Semestre 3</option>
+            <option value="4">Semestre 4</option>
+            <option value="5">Semestre 5</option>
+            <option value="6">Semestre 6</option>
+          </select>
+        </div>
+        <div>
+          <label for="filtreNiveau">Niveau :</label>
+          <select id="filtreNiveau">
+            <option value="">Tous</option>
+            <option value="L1">L1</option>
+            <option value="L2">L2</option>
+            <option value="L3">L3</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tableau -->
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Description</th>
+              <th>Ordre</th>
+              <th>Coeff</th>
+              <th>Niveau</th>
+              <th>Semestre</th>
+              <th>Groupe</th>
+              <th>Filières</th>
+              <th>Actif</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="matieresBody">
+            <tr>
+              <td colspan="11">Chargement...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Modal pour ajouter/modifier -->
+    <div class="modal" id="matiereModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">Ajouter une matière</h2>
+          <button class="modal-close" id="closeModalBtn">&times;</button>
+        </div>
+        <form id="matiereForm">
+          <input type="hidden" id="matiereId" />
+          <div class="form-group">
+            <label>Nom *</label>
+            <input
+              type="text"
+              id="nom"
+              required
+              placeholder="Ex: Algorithmique"
+            />
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea
+              id="description"
+              rows="2"
+              placeholder="Description de la matière"
+            ></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Ordre d'affichage</label>
+              <input type="number" id="ordre_affiche" value="0" />
+            </div>
+            <div class="form-group">
+              <label>Semestre *</label>
+              <select id="semestre" required>
+                <option value="1">📘 Semestre 1</option>
+                <option value="2">📗 Semestre 2</option>
+                <option value="3">📙 Semestre 3</option>
+                <option value="4">📕 Semestre 4</option>
+                <option value="5">📓 Semestre 5</option>
+                <option value="6">📔 Semestre 6</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Coefficient</label>
+              <input
+                type="number"
+                step="0.1"
+                id="coefficient_matiere"
+                value="1.0"
+              />
+            </div>
+            <div class="form-group">
+              <label>Niveau</label>
+              <select id="niveau">
+                <option value="L1">L1</option>
+                <option value="L2">L2</option>
+                <option value="L3">L3</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Groupe (optionnel)</label>
+            <select id="groupe_id">
+              <option value="">-- Aucun --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Filières concernées</label>
+            <div id="filieresCheckboxes" class="checkbox-grid"></div>
+          </div>
+          <div class="form-group">
+            <label>Actif</label>
+            <select id="actif">
+              <option value="1">Oui</option>
+              <option value="0">Non</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" id="cancelModalBtn">
+              Annuler
+            </button>
+            <button type="submit" class="btn-success">💾 Enregistrer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/admin-matieres.js"></script>
+  </body>
+</html>

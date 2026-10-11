@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes"
+    />
+    <title>CampusBox - Paramètres</title>
+
+    <!-- ✅ Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/Logo.png" />
+
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+    <!-- ✅ CSS dédié à la page Paramètres -->
+    <link rel="stylesheet" href="../assets/css/parametres.css" />
+  </head>
+  <body>
+    <!-- Overlay mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="dashboard-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <a href="dashboard.html" class="logo">
+            <img src="../assets/images/Logo.png" alt="CampusBox" />
+          </a>
+          <button class="btn-toggle-sidebar" id="toggleSidebarBtn">☰</button>
+          <div class="user-info-sidebar">
+            <span id="sidebarUserName">Chargement...</span>
+            <span class="online-status">● En ligne</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="dashboard.html">
+                <img
+                  src="../assets/images/icons/dashboard.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Tableau de bord</span>
+              </a>
+            </li>
+            <li>
+              <a href="cours.html">
+                <img
+                  src="../assets/images/icons/cours.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mes cours</span>
+              </a>
+            </li>
+            <li>
+              <a href="examens.html">
+                <img
+                  src="../assets/images/icons/exams.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Examens</span>
+              </a>
+            </li>
+            <li>
+              <a href="notes.html">
+                <img
+                  src="../assets/images/icons/notes.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Notes</span>
+              </a>
+            </li>
+            <li>
+              <a href="quiz.html">
+                <span class="nav-emoji">🧠</span>
+                <span>Quiz</span>
+              </a>
+            </li>
+            <li>
+              <a href="compte.html">
+                <img
+                  src="../assets/images/icons/profil.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mon profil</span>
+              </a>
+            </li>
+            <li>
+              <a href="messages.html">
+                <img
+                  src="../assets/images/icons/messages.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Messages</span>
+              </a>
+            </li>
+            <li>
+              <a href="parametres.html" class="active">
+                <span class="nav-emoji">⚙️</span>
+                <span>Paramètres</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" id="logoutBtnSidebar">
+                <span class="nav-emoji">🚪</span>
+                <span>Déconnexion</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- CONTENU PRINCIPAL -->
+      <main class="main-content">
+        <button class="btn-burger" id="burgerBtn">☰</button>
+
+        <div class="param-container">
+          <div class="param-header">
+            <h1>⚙️ Paramètres</h1>
+            <span style="color: #64748b; font-size: 0.9rem"
+              >Gérez vos préférences</span
+            >
+          </div>
+
+          <!-- SECTION 1 : SÉCURITÉ -->
+          <div class="param-section">
+            <div class="section-title">
+              <span class="icon">🔒</span> Sécurité
+            </div>
+            <div class="option-group">
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">🔑</span> Modifier le mot de passe</span
+                >
+                <span class="description"
+                  >Changez votre mot de passe régulièrement</span
+                >
+                <div class="control">
+                  <button class="btn btn-primary btn-sm" id="changePasswordBtn">
+                    Modifier
+                  </button>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">📱</span> Authentification à deux
+                  facteurs</span
+                >
+                <span class="description"
+                  >Ajoutez une couche de sécurité supplémentaire</span
+                >
+                <div class="control">
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="twoFactorToggle" />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">💻</span> Appareils connectés</span
+                >
+                <span class="description"
+                  >Gérez les appareils connectés à votre compte</span
+                >
+                <div class="control">
+                  <button class="btn btn-outline btn-sm" id="devicesBtn">
+                    Voir
+                  </button>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">🚪</span> Déconnexion de tous les
+                  appareils</span
+                >
+                <span class="description"
+                  >Déconnectez-vous de tous les appareils actifs</span
+                >
+                <div class="control">
+                  <button class="btn btn-danger btn-sm" id="logoutAllBtn">
+                    Déconnecter tout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 2 : NOTIFICATIONS -->
+          <div class="param-section">
+            <div class="section-title">
+              <span class="icon">🔔</span> Notifications
+            </div>
+            <div class="option-group">
+              <div class="option-item">
+                <span class="label"><span class="icon">✉️</span> E-mails</span>
+                <span class="description"
+                  >Recevoir des notifications par email</span
+                >
+                <div class="control">
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="emailNotifToggle" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">⏰</span> Rappels d'apprentissage</span
+                >
+                <span class="description"
+                  >Rappels pour vos sessions d'étude</span
+                >
+                <div class="control">
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="reminderNotifToggle" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"><span class="icon">💬</span> Messages</span>
+                <span class="description"
+                  >Notifications des nouveaux messages</span
+                >
+                <div class="control">
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="messageNotifToggle" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">📚</span> Nouveaux cours</span
+                >
+                <span class="description"
+                  >Soyez informé des nouveaux cours disponibles</span
+                >
+                <div class="control">
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="courseNotifToggle" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 3 : LANGUE -->
+          <div class="param-section">
+            <div class="section-title"><span class="icon">🌍</span> Langue</div>
+            <div class="option-group">
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">🗣️</span> Langue de l'application</span
+                >
+                <span class="description"
+                  >Choisissez votre langue préférée</span
+                >
+                <div class="control">
+                  <select class="param-select" id="languageSelect">
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="ar">🇸🇦 العربية</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 4 : CONFIDENTIALITÉ -->
+          <div class="param-section">
+            <div class="section-title">
+              <span class="icon">🔐</span> Confidentialité
+            </div>
+            <div class="option-group">
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">👁️</span> Visibilité du profil</span
+                >
+                <span class="description">Qui peut voir votre profil</span>
+                <div class="control">
+                  <select class="param-select" id="visibilitySelect">
+                    <option value="public">🌍 Public</option>
+                    <option value="private">🔒 Privé</option>
+                    <option value="friends">👥 Amis uniquement</option>
+                  </select>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">📜</span> Afficher les certificats</span
+                >
+                <span class="description"
+                  >Partager vos certificats sur votre profil</span
+                >
+                <div class="control">
+                  <label class="toggle-switch">
+                    <input
+                      type="checkbox"
+                      id="showCertificatesToggle"
+                      checked
+                    />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">📥</span> Télécharger mes données</span
+                >
+                <span class="description"
+                  >Exportez vos données personnelles</span
+                >
+                <div class="control">
+                  <button class="btn btn-primary btn-sm" id="downloadDataBtn">
+                    Télécharger
+                  </button>
+                </div>
+              </div>
+              <div
+                class="option-item"
+                style="border-left: 3px solid #ef4444; background: #fef2f2"
+              >
+                <span class="label"
+                  ><span class="icon">🗑️</span> Supprimer mon compte</span
+                >
+                <span class="description" style="color: #991b1b"
+                  >Cette action est irréversible</span
+                >
+                <div class="control">
+                  <button class="btn btn-danger btn-sm" id="deleteAccountBtn">
+                    Supprimer
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 5 : PRÉFÉRENCES -->
+          <div class="param-section">
+            <div class="section-title">
+              <span class="icon">🎨</span> Préférences
+            </div>
+            <div class="option-group">
+              <div class="option-item">
+                <span class="label"><span class="icon">☀️</span> Mode</span>
+                <span class="description"
+                  >Choisissez entre clair et sombre</span
+                >
+                <div class="control">
+                  <select class="param-select" id="themeSelect">
+                    <option value="light">☀️ Clair</option>
+                    <option value="dark">🌙 Sombre</option>
+                    <option value="auto">🔄 Système</option>
+                  </select>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">🎯</span> Couleur d'accent</span
+                >
+                <span class="description"
+                  >Choisissez une couleur principale</span
+                >
+                <div class="control">
+                  <select class="param-select" id="accentColorSelect">
+                    <option value="#3b82f6">🔵 Bleu</option>
+                    <option value="#10b981">🟢 Vert</option>
+                    <option value="#8b5cf6">🟣 Violet</option>
+                    <option value="#f59e0b">🟡 Jaune</option>
+                    <option value="#ef4444">🔴 Rouge</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 6 : À PROPOS -->
+          <div
+            class="param-section"
+            style="border-bottom: none; margin-bottom: 0"
+          >
+            <div class="section-title">
+              <span class="icon">ℹ️</span> À propos
+            </div>
+            <div class="option-group">
+              <div class="option-item">
+                <span class="label"><span class="icon">📌</span> Version</span>
+                <span class="description">CampusBox v2.5.0</span>
+                <div class="control">
+                  <span style="color: #64748b; font-size: 0.8rem"
+                    >Dernière mise à jour : 2026</span
+                  >
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">📄</span> Conditions d'utilisation</span
+                >
+                <span class="description">Lire nos conditions</span>
+                <div class="control">
+                  <button class="btn btn-outline btn-sm" id="termsBtn">
+                    Lire
+                  </button>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">🔒</span> Politique de
+                  confidentialité</span
+                >
+                <span class="description"
+                  >Comment nous protégeons vos données</span
+                >
+                <div class="control">
+                  <button class="btn btn-outline btn-sm" id="privacyBtn">
+                    Lire
+                  </button>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"><span class="icon">💬</span> Support</span>
+                <span class="description">Besoin d'aide ? Contactez-nous</span>
+                <div class="control">
+                  <button class="btn btn-primary btn-sm" id="supportBtn">
+                    Contacter
+                  </button>
+                </div>
+              </div>
+              <div class="option-item">
+                <span class="label"
+                  ><span class="icon">✉️</span> Notre email</span
+                >
+                <span class="description">campusbox10@gmail.com</span>
+                <div class="control">
+                  <a
+                    href="mailto:campusbox10@gmail.com"
+                    class="btn btn-outline btn-sm"
+                  >
+                    Écrire
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- MODAL DE CONFIRMATION -->
+    <div class="modal-overlay" id="confirmModal">
+      <div class="modal-box">
+        <h3 id="modalTitle">⚠️ Confirmation</h3>
+        <p id="modalMessage">
+          Êtes-vous sûr de vouloir effectuer cette action ?
+        </p>
+        <div class="modal-actions">
+          <button class="btn btn-outline" id="modalCancelBtn">Annuler</button>
+          <button class="btn btn-danger" id="modalConfirmBtn">Confirmer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <footer><p>&copy; 2026 CampusBox</p></footer>
+
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/parametres.js"></script>
+  </body>
+</html>

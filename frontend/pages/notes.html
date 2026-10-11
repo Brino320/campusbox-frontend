@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusBox - Mon bulletin</title>
+    <script src="../assets/js/config.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+    <style>
+      .bulletin-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .bulletin-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e2e8f0;
+      }
+      .bulletin-header h1 {
+        color: #1e3a8a;
+        margin: 0 0 0.5rem 0;
+        font-size: 1.6rem;
+      }
+      .bulletin-header p {
+        color: #475569;
+        font-size: 0.95rem;
+        margin: 0;
+      }
+
+      .student-info {
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1.5rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1rem;
+      }
+      .student-info p {
+        margin: 0;
+        font-size: 0.95rem;
+      }
+      .student-info strong {
+        color: #0f172a;
+      }
+
+      /* 🎯 Cartes de rang */
+      .rang-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .rang-card {
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        color: white;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+      }
+      .rang-card.orange {
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+      }
+      .rang-card.green {
+        background: linear-gradient(135deg, #10b981, #059669);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+      }
+      .rang-card .label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.9;
+      }
+      .rang-card .value {
+        font-size: 2rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-top: 0.3rem;
+      }
+      .rang-card .total {
+        font-size: 0.85rem;
+        opacity: 0.85;
+      }
+
+      /* Moyenne générale */
+      .moyenne-box {
+        background: #eff6ff;
+        border: 2px solid #3b82f6;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+      .moyenne-box .label {
+        font-size: 0.85rem;
+        color: #1e40af;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+      }
+      .moyenne-box .value {
+        font-size: 2.4rem;
+        font-weight: 800;
+        color: #1e3a8a;
+        line-height: 1;
+        margin: 0.3rem 0;
+      }
+      .moyenne-box .sur {
+        font-size: 1rem;
+        color: #64748b;
+      }
+
+      /* Tableau */
+      .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 1.5rem;
+        border-radius: 0.75rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 800px;
+      }
+      th,
+      td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #e2e8f0;
+        white-space: nowrap;
+      }
+      th {
+        background: #f1f5f9;
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+      tr:hover {
+        background: #f8fafc;
+      }
+      .note-bad {
+        color: #ef4444;
+        font-weight: 700;
+      }
+      .note-mid {
+        color: #f59e0b;
+        font-weight: 700;
+      }
+      .note-good {
+        color: #10b981;
+        font-weight: 700;
+      }
+      .rang-inline {
+        font-size: 0.75rem;
+        color: #64748b;
+        font-weight: 400;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 2rem;
+        font-size: 0.75rem;
+        color: #64748b;
+      }
+
+      /* Mode sombre */
+      body.dark-mode .bulletin-container {
+        background: #1e293b;
+        color: #e2e8f0;
+      }
+      body.dark-mode .bulletin-header h1 {
+        color: #60a5fa;
+      }
+      body.dark-mode .student-info {
+        background: #334155;
+      }
+      body.dark-mode .student-info strong {
+        color: #f1f5f9;
+      }
+      body.dark-mode th {
+        background: #334155;
+        color: #f1f5f9;
+      }
+      body.dark-mode td {
+        border-bottom-color: #475569;
+      }
+      body.dark-mode .moyenne-box {
+        background: #1e3a5f;
+        border-color: #60a5fa;
+      }
+      body.dark-mode .moyenne-box .value {
+        color: #93c5fd;
+      }
+
+      @media (max-width: 640px) {
+        .bulletin-container {
+          padding: 1rem;
+        }
+        .bulletin-header h1 {
+          font-size: 1.2rem;
+        }
+        .rang-card .value {
+          font-size: 1.6rem;
+        }
+        .moyenne-box .value {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="dashboard-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <a href="dashboard.html" class="logo">
+            <img src="../assets/images/Logo.png" alt="CampusBox" />
+          </a>
+          <button class="btn-toggle-sidebar" id="toggleSidebarBtn">☰</button>
+          <div class="user-info-sidebar">
+            <span id="sidebarUserName">Chargement...</span>
+            <span class="online-status">● En ligne</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="dashboard.html">
+                <img
+                  src="../assets/images/icons/dashboard.png"
+                  class="nav-icon"
+                />
+                <span>Tableau de bord</span>
+              </a>
+            </li>
+            <li>
+              <a href="cours.html">
+                <img src="../assets/images/icons/cours.png" class="nav-icon" />
+                <span>Mes cours</span>
+              </a>
+            </li>
+            <li>
+              <a href="examens.html">
+                <img src="../assets/images/icons/exams.png" class="nav-icon" />
+                <span>Examens</span>
+              </a>
+            </li>
+            <li>
+              <a href="notes.html" class="active">
+                <img src="../assets/images/icons/notes.png" class="nav-icon" />
+                <span>Notes</span>
+              </a>
+            </li>
+            <li>
+              <a href="compte.html">
+                <img src="../assets/images/icons/profil.png" class="nav-icon" />
+                <span>Mon profil</span>
+              </a>
+            </li>
+            <li>
+              <a href="messages.html">
+                <img
+                  src="../assets/images/icons/messages.png"
+                  class="nav-icon"
+                />
+                <span>Messages</span>
+              </a>
+            </li>
+            <li>
+              <a href="parametres.html">
+                <span class="nav-emoji">⚙️</span>
+                <span>Paramètres</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" id="logoutBtnSidebar">
+                <span class="nav-emoji">🚪</span>
+                <span>Déconnexion</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <button class="btn-burger" id="burgerBtn">☰</button>
+
+        <div class="bulletin-container">
+          <div class="bulletin-header">
+            <h1>📊 Bulletin de notes</h1>
+            <p>Année académique 2025/2026</p>
+          </div>
+
+          <div class="student-info">
+            <p><strong>Nom :</strong> <span id="studentNom">...</span></p>
+            <p><strong>Prénom :</strong> <span id="studentPrenom">...</span></p>
+            <p>
+              <strong>Filière :</strong> <span id="studentFiliere">...</span>
+            </p>
+            <p><strong>Classe :</strong> <span id="studentClasse">...</span></p>
+          </div>
+
+          <!-- 🎯 Cartes de rang -->
+          <div class="rang-grid" id="rangGrid">
+            <div class="rang-card">
+              <div class="label">Rang dans la classe</div>
+              <div class="value" id="rangClasseValue">—</div>
+              <div class="total" id="rangClasseTotal"></div>
+            </div>
+            <div class="rang-card orange">
+              <div class="label">Rang dans la filière</div>
+              <div class="value" id="rangFiliereValue">—</div>
+              <div class="total" id="rangFiliereTotal"></div>
+            </div>
+            <div class="rang-card green">
+              <div class="label">Rang global</div>
+              <div class="value" id="rangGlobalValue">—</div>
+              <div class="total" id="rangGlobalTotal"></div>
+            </div>
+          </div>
+
+          <!-- Moyenne générale -->
+          <div class="moyenne-box">
+            <div class="label">Moyenne générale</div>
+            <div class="value" id="moyenneGenerale">—</div>
+            <div class="sur">sur 20</div>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Matière</th>
+                  <th>Coeff</th>
+                  <th>Moyenne</th>
+                  <th>Pondérée</th>
+                  <th>Rang classe</th>
+                  <th>Rang filière</th>
+                  <th>Rang global</th>
+                </tr>
+              </thead>
+              <tbody id="bulletinBody">
+                <tr>
+                  <td colspan="7">Chargement...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="footer">Bulletin généré automatiquement - CampusBox</div>
+        </div>
+      </main>
+    </div>
+    <script src="../assets/js/notes.js"></script>
+  </body>
+</html>

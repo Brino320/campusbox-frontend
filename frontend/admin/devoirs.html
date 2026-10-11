@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Gestion des devoirs</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <style>
+      /* =====================================================
+         STYLES ADMIN DEVOIRS
+         ===================================================== */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #f1f5f9;
+        font-family: "Segoe UI", system-ui, Roboto, sans-serif;
+        padding: 1.5rem;
+      }
+
+      /* === NAV ADMIN === */
+      .admin-nav {
+        background: #1e293b;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .admin-nav a {
+        color: #cbd5e1;
+        text-decoration: none;
+        padding: 0.4rem 1rem;
+        border-radius: 2rem;
+        font-size: 0.85rem;
+        transition: 0.2s;
+        white-space: nowrap;
+      }
+      .admin-nav a:hover {
+        background: #334155;
+        color: white;
+      }
+      .admin-nav a.active {
+        background: #3b82f6;
+        color: white;
+      }
+      .admin-nav .nav-brand {
+        font-weight: 700;
+        color: white;
+        font-size: 1rem;
+        margin-right: 0.5rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      h1 small {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #64748b;
+      }
+      hr {
+        border: none;
+        border-top: 2px solid #e2e8f0;
+        margin: 1.2rem 0;
+      }
+
+      /* === FILTRES === */
+      .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: flex-end;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 0.75rem;
+      }
+      .filter-bar .form-group {
+        flex: 1;
+        min-width: 160px;
+      }
+      .filter-bar .form-group label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #1e293b;
+        font-size: 0.85rem;
+      }
+      .filter-bar .form-group select,
+      .filter-bar .form-group input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        background: white;
+        font-size: 0.9rem;
+      }
+
+      /* === LISTE DES DEVOIRS === */
+      .devoir-item {
+        background: #f8fafc;
+        padding: 1rem 1.2rem;
+        border-radius: 0.75rem;
+        margin-bottom: 0.8rem;
+        border-left: 4px solid #3b82f6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        transition: 0.2s;
+      }
+      .devoir-item:hover {
+        background: #f1f5f9;
+      }
+      .devoir-item .info {
+        flex: 1;
+      }
+      .devoir-item .info .titre {
+        font-weight: 600;
+        color: #0f172a;
+        font-size: 1.05rem;
+      }
+      .devoir-item .info .meta {
+        font-size: 0.85rem;
+        color: #475569;
+        margin-top: 0.2rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
+      .devoir-item .info .meta .badge {
+        background: #e0e7ff;
+        color: #1e40af;
+        padding: 0.1rem 0.6rem;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+      .devoir-item .actions {
+        display: flex;
+        gap: 0.4rem;
+        flex-shrink: 0;
+      }
+      .devoir-item .actions .btn {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.8rem;
+        border-radius: 0.5rem;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .devoir-item .actions .btn-edit {
+        background: #f59e0b;
+        color: white;
+      }
+      .devoir-item .actions .btn-edit:hover {
+        background: #d97706;
+      }
+      .devoir-item .actions .btn-delete {
+        background: #ef4444;
+        color: white;
+      }
+      .devoir-item .actions .btn-delete:hover {
+        background: #dc2626;
+      }
+
+      .empty-state {
+        text-align: center;
+        color: #64748b;
+        padding: 2rem 0;
+      }
+
+      /* === FORMULAIRE === */
+      #devoirFormDiv {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+        border: 1px solid #e2e8f0;
+        display: none;
+      }
+      #devoirFormDiv .form-group {
+        margin-bottom: 1rem;
+      }
+      #devoirFormDiv .form-group label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #1e293b;
+        font-size: 0.9rem;
+      }
+      #devoirFormDiv .form-group input,
+      #devoirFormDiv .form-group select,
+      #devoirFormDiv .form-group textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        font-size: 0.95rem;
+        font-family: inherit;
+      }
+      #devoirFormDiv .form-group textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+      #devoirFormDiv .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      #devoirFormDiv .form-row .form-group {
+        flex: 1;
+        min-width: 150px;
+      }
+
+      /* === QUESTIONS === */
+      .question-block {
+        background: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #10b981;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .question-block .q-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+      .question-block .q-header .q-number {
+        font-weight: 600;
+        color: #0f172a;
+      }
+      .question-block .q-header .remove-q {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 0.2rem 0.6rem;
+        border-radius: 0.3rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+      .question-block .q-header .remove-q:hover {
+        background: #dc2626;
+      }
+      .question-block .form-group {
+        margin-bottom: 0.5rem;
+      }
+      .question-block .form-group label {
+        font-weight: 500;
+        font-size: 0.85rem;
+        color: #1e293b;
+      }
+      .question-block .form-group input,
+      .question-block .form-group textarea {
+        width: 100%;
+        padding: 0.4rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.3rem;
+        font-size: 0.9rem;
+      }
+      .reponse-row {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 0.3rem;
+      }
+      .reponse-row input[type="text"] {
+        flex: 1;
+        padding: 0.3rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.3rem;
+        font-size: 0.9rem;
+      }
+      .reponse-row input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+      }
+      .reponse-row label {
+        font-weight: normal !important;
+        font-size: 0.85rem !important;
+        color: #1e293b !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.3rem !important;
+        cursor: pointer !important;
+      }
+      .reponse-row .remove-rep {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 0.1rem 0.5rem;
+        border-radius: 0.3rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+      .reponse-row .remove-rep:hover {
+        background: #dc2626;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.5rem 1.2rem;
+        border: none;
+        border-radius: 2rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.2s;
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+      .btn-primary {
+        background: #3b82f6;
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #2563eb;
+      }
+      .btn-success {
+        background: #10b981;
+        color: white;
+      }
+      .btn-success:hover {
+        background: #059669;
+      }
+      .btn-danger {
+        background: #ef4444;
+        color: white;
+      }
+      .btn-danger:hover {
+        background: #dc2626;
+      }
+      .btn-warning {
+        background: #f59e0b;
+        color: white;
+      }
+      .btn-warning:hover {
+        background: #d97706;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid #94a3b8;
+        color: #1e293b;
+      }
+      .btn-outline:hover {
+        background: #f1f5f9;
+      }
+      .btn-sm {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.8rem;
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+
+      /* === STATS === */
+      .stats-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+      .stat-box {
+        background: #f8fafc;
+        padding: 0.8rem 1.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #e2e8f0;
+      }
+      .stat-box .stat-num {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+      .stat-box .stat-label {
+        font-size: 0.75rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      /* === MODE SOMBRE === */
+      body.dark-mode {
+        background: #0f172a;
+      }
+      body.dark-mode .container {
+        background: #1e293b;
+        color: #e2e8f0;
+      }
+      body.dark-mode .admin-nav {
+        background: #0f172a;
+      }
+      body.dark-mode .admin-nav a {
+        color: #94a3b8;
+      }
+      body.dark-mode .admin-nav a:hover {
+        background: #1e293b;
+        color: white;
+      }
+      body.dark-mode .admin-nav a.active {
+        background: #3b82f6;
+        color: white;
+      }
+      body.dark-mode h1 {
+        color: #f1f5f9;
+      }
+      body.dark-mode .filter-bar {
+        background: #334155;
+      }
+      body.dark-mode .filter-bar .form-group label {
+        color: #cbd5e1;
+      }
+      body.dark-mode .filter-bar .form-group select,
+      body.dark-mode .filter-bar .form-group input {
+        background: #1e293b;
+        color: #e2e8f0;
+        border-color: #475569;
+      }
+      body.dark-mode .devoir-item {
+        background: #334155;
+        border-left-color: #3b82f6;
+      }
+      body.dark-mode .devoir-item .info .titre {
+        color: #f1f5f9;
+      }
+      body.dark-mode .devoir-item .info .meta {
+        color: #94a3b8;
+      }
+      body.dark-mode .devoir-item .info .meta .badge {
+        background: #1e293b;
+        color: #60a5fa;
+      }
+      body.dark-mode .devoir-item:hover {
+        background: #3b4a5a;
+      }
+      body.dark-mode #devoirFormDiv {
+        background: #334155;
+        border-color: #475569;
+      }
+      body.dark-mode #devoirFormDiv .form-group label {
+        color: #cbd5e1;
+      }
+      body.dark-mode #devoirFormDiv .form-group input,
+      body.dark-mode #devoirFormDiv .form-group select,
+      body.dark-mode #devoirFormDiv .form-group textarea {
+        background: #1e293b;
+        color: #e2e8f0;
+        border-color: #475569;
+      }
+      body.dark-mode .question-block {
+        background: #1e293b;
+        border-left-color: #10b981;
+      }
+      body.dark-mode .question-block .q-header .q-number {
+        color: #f1f5f9;
+      }
+      body.dark-mode .question-block .form-group label {
+        color: #cbd5e1;
+      }
+      body.dark-mode .question-block .form-group input,
+      body.dark-mode .question-block .form-group textarea {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-color: #475569;
+      }
+      body.dark-mode .reponse-row input[type="text"] {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-color: #475569;
+      }
+      body.dark-mode .reponse-row label {
+        color: #cbd5e1 !important;
+      }
+      body.dark-mode .stat-box {
+        background: #334155;
+        border-color: #475569;
+      }
+      body.dark-mode .stat-box .stat-num {
+        color: #f1f5f9;
+      }
+      body.dark-mode .stat-box .stat-label {
+        color: #94a3b8;
+      }
+      body.dark-mode .empty-state {
+        color: #94a3b8;
+      }
+      body.dark-mode .btn-outline {
+        color: #cbd5e1;
+        border-color: #475569;
+      }
+      body.dark-mode .btn-outline:hover {
+        background: #334155;
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 1rem;
+        }
+        .container {
+          padding: 1rem;
+        }
+        .admin-nav {
+          padding: 0.5rem;
+          gap: 0.3rem;
+        }
+        .admin-nav a {
+          font-size: 0.75rem;
+          padding: 0.3rem 0.6rem;
+        }
+        .devoir-item {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .devoir-item .actions {
+          justify-content: flex-end;
+        }
+        .filter-bar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        #devoirFormDiv .form-row {
+          flex-direction: column;
+        }
+        .stats-row {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===================================================== -->
+    <!-- NAVIGATION ADMIN -->
+    <!-- ===================================================== -->
+    <nav class="admin-nav">
+      <span class="nav-brand">⚙️ Admin</span>
+      <a href="index.html">🏠 Accueil</a>
+      <a href="gestion-matieres.html">📚 Matières</a>
+      <a href="chapitres.html">📖 Chapitres</a>
+      <a href="exercices.html">📝 Exercices</a>
+      <a href="quiz-manager.html">🧠 Quiz</a>
+      <a href="devoirs.html" class="active">📋 Devoirs</a>
+      <a href="gestion-examens.html">📄 Examens</a>
+      <a href="filieres.html">🏛️ Filières</a>
+      <a href="bulletins.html">📊 Bulletins</a>
+      <a href="etudiants.html">👨‍🎓 Étudiants</a>
+    </nav>
+
+    <!-- ===================================================== -->
+    <!-- CONTENEUR PRINCIPAL -->
+    <!-- ===================================================== -->
+    <div class="container">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 1rem;
+        "
+      >
+        <h1>📋 Gestion des devoirs <small>de fin de leçon</small></h1>
+        <button id="btnNouveauDevoir" class="btn btn-success">
+          ➕ Nouveau devoir
+        </button>
+      </div>
+      <hr />
+
+      <!-- STATISTIQUES -->
+      <div class="stats-row" id="statsRow">
+        <div class="stat-box">
+          <div class="stat-num" id="statTotal">0</div>
+          <div class="stat-label">Total devoirs</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="statActifs">0</div>
+          <div class="stat-label">Devoirs actifs</div>
+        </div>
+      </div>
+
+      <!-- FILTRE PAR MATIÈRE -->
+      <div class="filter-bar">
+        <div class="form-group">
+          <label>Filtrer par matière</label>
+          <select id="filterMatiere">
+            <option value="">-- Toutes les matières --</option>
+          </select>
+        </div>
+        <button
+          id="btnFiltrer"
+          class="btn btn-primary"
+          style="margin-bottom: 0.2rem"
+        >
+          🔍 Filtrer
+        </button>
+      </div>
+
+      <!-- ===================================================== -->
+      <!-- FORMULAIRE CRÉATION / MODIFICATION -->
+      <!-- ===================================================== -->
+      <div id="devoirFormDiv">
+        <h2 id="formTitle">➕ Nouveau devoir</h2>
+        <input type="hidden" id="devoirId" />
+
+        <div class="form-group">
+          <label for="matiere_id">Matière *</label>
+          <select id="matiere_id" required>
+            <option value="">-- Sélectionner une matière --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="titre">Titre *</label>
+          <input
+            type="text"
+            id="titre"
+            placeholder="Ex: Devoir sur les boucles"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            rows="2"
+            placeholder="Description du devoir..."
+          ></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="note_max">Note maximale</label>
+            <input type="number" id="note_max" value="20" min="1" max="100" />
+          </div>
+          <div class="form-group">
+            <label for="duree">Durée (minutes, optionnel)</label>
+            <input type="number" id="duree" placeholder="Ex: 30" min="1" />
+          </div>
+        </div>
+
+        <hr />
+
+        <!-- QUESTIONS -->
+        <h3>📝 Questions du devoir</h3>
+        <div id="questionsContainer"></div>
+        <button
+          type="button"
+          id="addQuestionBtn"
+          class="btn btn-success btn-sm"
+          style="margin-top: 0.5rem"
+        >
+          ➕ Ajouter une question
+        </button>
+
+        <hr />
+
+        <div class="form-actions">
+          <button type="submit" id="btnSaveDevoir" class="btn btn-primary">
+            💾 Enregistrer le devoir
+          </button>
+          <button type="button" id="btnCancelDevoir" class="btn btn-outline">
+            Annuler
+          </button>
+        </div>
+      </div>
+
+      <!-- ===================================================== -->
+      <!-- LISTE DES DEVOIRS -->
+      <!-- ===================================================== -->
+      <hr />
+      <h2>📋 Liste des devoirs</h2>
+      <div id="devoirsList">
+        <p class="empty-state">Chargement...</p>
+      </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- SCRIPTS -->
+    <!-- ===================================================== -->
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/admin-devoirs.js"></script>
+  </body>
+</html>

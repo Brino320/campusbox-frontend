@@ -1,0 +1,742 @@
+/* =====================================================
+   MODE SOMBRE GLOBAL – CampusBox
+   Ce fichier centralise TOUTES les règles dark-mode
+   pour l'ensemble des pages.
+   Il suffit de l'ajouter dans le <head> de chaque page.
+   ===================================================== */
+
+/* =====================================================
+   BASE
+   ===================================================== */
+body.dark-mode {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+body.dark-mode * {
+  border-color: #334155;
+}
+
+/* =====================================================
+   LAYOUT – dashboard, cours, quiz, notes, examens...
+   ===================================================== */
+body.dark-mode .dashboard-layout {
+  background-color: #0f172a;
+}
+
+body.dark-mode .main-content {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+body.dark-mode .top-bar h1 {
+  color: #f1f5f9;
+}
+
+/* =====================================================
+   SIDEBAR
+   ===================================================== */
+body.dark-mode .sidebar {
+  background-color: #1e293b;
+  border-right-color: #334155;
+}
+
+body.dark-mode .sidebar-header {
+  border-bottom-color: #334155;
+}
+
+body.dark-mode .logo,
+body.dark-mode .sidebar-header .logo {
+  color: #60a5fa;
+}
+
+body.dark-mode .user-info-sidebar span:first-child {
+  color: #f1f5f9;
+}
+
+body.dark-mode .online-status {
+  color: #34d399;
+}
+
+body.dark-mode .sidebar-nav li a {
+  color: #cbd5e1;
+}
+
+body.dark-mode .sidebar-nav li a:hover,
+body.dark-mode .sidebar-nav li a.active {
+  background-color: #334155;
+  color: #60a5fa;
+}
+
+body.dark-mode .btn-toggle-sidebar {
+  color: #cbd5e1;
+}
+
+body.dark-mode .sidebar-overlay.active {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* =====================================================
+   BURGER (mobile)
+   ===================================================== */
+body.dark-mode .btn-burger {
+  background: #3b82f6;
+  color: white;
+}
+
+/* =====================================================
+   DASHBOARD – Stat cards
+   ===================================================== */
+body.dark-mode .stats-section h2 {
+  color: #cbd5e1;
+}
+
+body.dark-mode .stat-card {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: none;
+}
+
+body.dark-mode .stat-card h3 {
+  color: #94a3b8;
+}
+
+body.dark-mode .stat-value {
+  color: #f1f5f9;
+}
+
+/* =====================================================
+   DASHBOARD – Programme / Matières
+   ===================================================== */
+body.dark-mode .programme-section {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .programme-section h2 {
+  color: #f1f5f9;
+  border-bottom-color: #334155;
+}
+
+body.dark-mode .matiere-item {
+  background-color: #0f172a;
+  border-left-color: #475569;
+}
+
+body.dark-mode .matiere-item:hover {
+  background-color: #334155;
+  border-left-color: #60a5fa;
+}
+
+body.dark-mode .matiere-nom {
+  color: #f1f5f9;
+}
+
+body.dark-mode .matiere-desc {
+  color: #94a3b8;
+}
+
+body.dark-mode .progression-stats {
+  color: #60a5fa !important;
+}
+
+/* =====================================================
+   DASHBOARD – Onglets semestre
+   ===================================================== */
+body.dark-mode .semestre-tabs {
+  background: #1e293b;
+}
+
+body.dark-mode .semestre-tab {
+  color: #cbd5e1;
+}
+
+body.dark-mode .semestre-tab:hover {
+  background: #334155;
+}
+
+body.dark-mode .semestre-tab.active {
+  background: #3b82f6;
+  color: white;
+}
+
+/* =====================================================
+   CHART (Chart.js wrapper)
+   ===================================================== */
+body.dark-mode .chart-wrapper {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+/* =====================================================
+   COURS
+   ===================================================== */
+body.dark-mode .cours-container,
+body.dark-mode .cours-header {
+  color: #e2e8f0;
+}
+
+body.dark-mode .cours-header h1 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .cours-header p,
+body.dark-mode #coursMeta {
+  color: #94a3b8;
+}
+
+body.dark-mode .chapitre-item {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .chapitre-titre {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .chapitre-titre h2 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .chapitre-contenu {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+body.dark-mode .contenu-texte {
+  color: #e2e8f0;
+}
+
+body.dark-mode .contenu-texte h1,
+body.dark-mode .contenu-texte h2,
+body.dark-mode .contenu-texte h3,
+body.dark-mode .contenu-texte h4 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .contenu-texte a {
+  color: #60a5fa;
+}
+
+body.dark-mode .contenu-texte pre,
+body.dark-mode .contenu-texte code {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+body.dark-mode .exercices-section {
+  border-top-color: #334155;
+}
+
+body.dark-mode .exercices-section h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .exercice {
+  background: #1e293b;
+  border-left-color: #60a5fa;
+}
+
+body.dark-mode .exercice-question {
+  color: #f1f5f9;
+}
+
+body.dark-mode .option-label {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode .option-label:hover {
+  background: #334155;
+  border-color: #60a5fa;
+}
+
+body.dark-mode .reponse-texte {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode .btn-correction {
+  background: #475569;
+  color: #f1f5f9;
+}
+
+body.dark-mode .btn-correction:hover {
+  background: #64748b;
+}
+
+body.dark-mode .correction {
+  background: #064e3b;
+  color: #d1fae5;
+  border-left-color: #10b981;
+}
+
+body.dark-mode .devoirs-section {
+  border-top-color: #334155;
+}
+
+body.dark-mode .devoirs-section h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .devoir-item {
+  background: #1e293b;
+  border-left-color: #10b981;
+  color: #e2e8f0;
+}
+
+body.dark-mode .devoir-item p {
+  color: #94a3b8;
+}
+
+body.dark-mode .btn-retour {
+  color: #60a5fa;
+}
+
+/* =====================================================
+   QUIZ
+   ===================================================== */
+body.dark-mode .quiz-container {
+  color: #e2e8f0;
+}
+
+body.dark-mode .quiz-container h1,
+body.dark-mode .quiz-container h2 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .quiz-list {
+  background: transparent;
+}
+
+body.dark-mode .quiz-card {
+  background: #1e293b;
+  border-left-color: #60a5fa;
+}
+
+body.dark-mode .quiz-card:hover {
+  background: #334155;
+}
+
+body.dark-mode .quiz-card-title {
+  color: #f1f5f9;
+}
+
+body.dark-mode .quiz-card-desc {
+  color: #94a3b8;
+}
+
+body.dark-mode .quiz-badge-done {
+  background: #065f46;
+  color: #d1fae5;
+}
+
+body.dark-mode #progressBar {
+  color: #cbd5e1;
+}
+
+body.dark-mode #timerDisplay.no-limit {
+  color: #e2e8f0;
+}
+
+body.dark-mode #progressTrack {
+  background: #334155;
+}
+
+body.dark-mode .question-item {
+  background: #1e293b;
+  border-left-color: #60a5fa;
+}
+
+body.dark-mode .question-text {
+  color: #f1f5f9;
+}
+
+body.dark-mode .empty-msg,
+body.dark-mode .empty-state {
+  color: #94a3b8;
+}
+
+body.dark-mode .empty-state h3 {
+  color: #cbd5e1;
+}
+
+/* =====================================================
+   NOTES / BULLETIN
+   ===================================================== */
+body.dark-mode .bulletin-container {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+body.dark-mode .bulletin-header h1 {
+  color: #60a5fa;
+}
+
+body.dark-mode .bulletin-header p {
+  color: #94a3b8;
+}
+
+body.dark-mode .student-info {
+  background: #334155;
+}
+
+body.dark-mode .student-info strong {
+  color: #f1f5f9;
+}
+
+body.dark-mode .bulletin-container table th {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .bulletin-container table td {
+  border-bottom-color: #475569;
+  color: #e2e8f0;
+}
+
+body.dark-mode .bulletin-container tr:hover {
+  background: #334155;
+}
+
+body.dark-mode .moyenne-gen {
+  border-top-color: #475569;
+  color: #93c5fd;
+}
+
+body.dark-mode .footer {
+  color: #94a3b8;
+}
+
+/* =====================================================
+   EXAMENS
+   ===================================================== */
+body.dark-mode .exam-card {
+  background: #1e293b;
+  border-left-color: #60a5fa;
+  color: #e2e8f0;
+}
+
+body.dark-mode .exam-card h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .exam-card p {
+  color: #94a3b8;
+}
+
+body.dark-mode .exam-date {
+  color: #94a3b8;
+}
+
+body.dark-mode .note {
+  color: #f1f5f9;
+}
+
+/* =====================================================
+   COMPTE / PROFIL (déjà inline mais on consolide)
+   ===================================================== */
+body.dark-mode .profil-container {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+body.dark-mode .profil-header {
+  border-bottom-color: #334155;
+}
+
+body.dark-mode .profil-header h1 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .tabs {
+  background: #334155;
+}
+
+body.dark-mode .tab-btn {
+  color: #94a3b8;
+}
+
+body.dark-mode .tab-btn.active {
+  background: #1e293b;
+  color: #60a5fa;
+}
+
+body.dark-mode .form-group label {
+  color: #cbd5e1;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-color: #475569;
+}
+
+body.dark-mode .form-group input:disabled,
+body.dark-mode .form-group input.readonly {
+  background: #1e293b;
+  color: #94a3b8;
+  border-color: #334155;
+}
+
+body.dark-mode .stat-card {
+  background: #334155;
+  border-color: #475569;
+}
+
+body.dark-mode .parrainage-box {
+  background: #334155;
+  border-color: #475569;
+}
+
+body.dark-mode .parrainage-box .code {
+  background: #1e293b;
+  border-color: #60a5fa;
+  color: #60a5fa;
+}
+
+body.dark-mode .presentation-preview {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+/* =====================================================
+   MESSAGES (déjà couvert par messages.css, on consolide)
+   ===================================================== */
+body.dark-mode .messages-layout {
+  background: #0f172a;
+}
+
+body.dark-mode .messages-list-panel,
+body.dark-mode .conversation-panel {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .conversation-item:hover,
+body.dark-mode .conversation-item.active {
+  background: #334155;
+}
+
+body.dark-mode .conversation-item .name {
+  color: #f1f5f9;
+}
+
+body.dark-mode .conversation-item .last-msg {
+  color: #94a3b8;
+}
+
+body.dark-mode .chat-header {
+  background: #1e293b;
+  border-bottom-color: #334155;
+}
+
+body.dark-mode .chat-header h4 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .chat-messages {
+  background: #0f172a;
+}
+
+body.dark-mode .msg.received {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode .chat-input {
+  background: #1e293b;
+  border-top-color: #334155;
+}
+
+body.dark-mode .chat-input input {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-color: #475569;
+}
+
+/* =====================================================
+   PARAMÈTRES (déjà couvert par parametres.css)
+   ===================================================== */
+body.dark-mode .param-container {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+body.dark-mode .param-header {
+  border-bottom-color: #334155;
+}
+
+body.dark-mode .param-header h1 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .param-section {
+  border-bottom-color: #334155;
+}
+
+body.dark-mode .param-section .section-title {
+  color: #f1f5f9;
+}
+
+body.dark-mode .option-item {
+  background: #334155;
+}
+
+body.dark-mode .option-item .label {
+  color: #e2e8f0;
+}
+
+body.dark-mode .option-item .description {
+  color: #94a3b8;
+}
+
+/* =====================================================
+   FORMULAIRES (login, inscription, etc.)
+   ===================================================== */
+body.dark-mode .auth-card {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+body.dark-mode .auth-card h1,
+body.dark-mode .auth-card h2 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .auth-card label {
+  color: #cbd5e1;
+}
+
+body.dark-mode .auth-card input {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-color: #475569;
+}
+
+body.dark-mode .auth-card .btn-signup {
+  color: #60a5fa;
+}
+
+/* =====================================================
+   MODALES
+   ===================================================== */
+body.dark-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .modal-box,
+body.dark-mode .modal-content {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+body.dark-mode .modal-box h3,
+body.dark-mode .modal-content h2 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .modal-box p {
+  color: #94a3b8;
+}
+
+/* =====================================================
+   TOAST
+   ===================================================== */
+body.dark-mode .toast {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+body.dark-mode .toast.success {
+  background: #065f46;
+}
+
+body.dark-mode .toast.error {
+  background: #7f1d1d;
+}
+
+body.dark-mode .toast.info {
+  background: #1e40af;
+}
+
+/* =====================================================
+   BOUTONS GÉNÉRIQUES
+   ===================================================== */
+body.dark-mode .btn-outline {
+  color: #cbd5e1;
+  border-color: #475569;
+}
+
+body.dark-mode .btn-outline:hover {
+  background: #334155;
+}
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+body.dark-mode footer {
+  color: #64748b;
+}
+
+body.dark-mode footer p {
+  color: #64748b;
+}
+
+/* =====================================================
+   SCROLLBAR (bonus)
+   ===================================================== */
+body.dark-mode ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 5px;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* =====================================================
+   TEXTE GÉNÉRIQUE
+   ===================================================== */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+  color: #f1f5f9;
+}
+
+body.dark-mode p {
+  color: #cbd5e1;
+}
+
+body.dark-mode a {
+  color: #60a5fa;
+}
+
+body.dark-mode a:hover {
+  color: #93c5fd;
+}
+
+body.dark-mode hr {
+  border-color: #334155;
+}
+
+body.dark-mode strong {
+  color: #f1f5f9;
+}

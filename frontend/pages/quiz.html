@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusBox - Quiz</title>
+    <script src="../assets/js/config.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+    <link rel="stylesheet" href="../assets/css/quiz.css" />
+  </head>
+  <body>
+    <!-- Overlay pour mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="dashboard-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <a href="dashboard.html" class="logo">
+            <img src="../assets/images/Logo.png" alt="CampusBox" />
+          </a>
+          <button class="btn-toggle-sidebar" id="toggleSidebarBtn">☰</button>
+          <div class="user-info-sidebar">
+            <span id="sidebarUserName">Chargement...</span>
+            <span class="online-status">● En ligne</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="dashboard.html">
+                <img
+                  src="../assets/images/icons/dashboard.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Tableau de bord</span>
+              </a>
+            </li>
+            <li>
+              <a href="cours.html">
+                <img
+                  src="../assets/images/icons/cours.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mes cours</span>
+              </a>
+            </li>
+            <li>
+              <a href="examens.html">
+                <img
+                  src="../assets/images/icons/exams.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Examens</span>
+              </a>
+            </li>
+            <li>
+              <a href="notes.html">
+                <img
+                  src="../assets/images/icons/notes.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Notes</span>
+              </a>
+            </li>
+            <li>
+              <a href="quiz.html" class="active">
+                <span class="nav-emoji">🧠</span>
+                <span>Quiz</span>
+              </a>
+            </li>
+            <li>
+              <a href="compte.html">
+                <img
+                  src="../assets/images/icons/profil.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mon profil</span>
+              </a>
+            </li>
+            <li>
+              <a href="messages.html">
+                <img
+                  src="../assets/images/icons/messages.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Messages</span>
+              </a>
+            </li>
+            <li>
+              <a href="parametres.html">
+                <span class="nav-emoji">⚙️</span>
+                <span>Paramètres</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" id="logoutBtnSidebar">
+                <span class="nav-emoji">🚪</span>
+                <span>Déconnexion</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- CONTENU PRINCIPAL -->
+      <main class="main-content">
+        <button class="btn-burger" id="burgerBtn">☰</button>
+
+        <div class="quiz-container">
+          <h1>📋 Mes quiz</h1>
+
+          <!-- Liste des quiz -->
+          <div id="quizListContainer">
+            <p>Chargement des quiz...</p>
+          </div>
+
+          <!-- Quiz actif -->
+          <div id="quizActive" style="display: none">
+            <h2 id="quizTitre"></h2>
+
+            <div id="quizMeta">
+              <div id="progressBar">
+                Progression : <span id="progressText">0/0</span>
+              </div>
+              <div id="timerDisplay">⏱️ <span id="timerValue">--:--</span></div>
+            </div>
+
+            <div id="progressTrack">
+              <div id="progressFill"></div>
+            </div>
+
+            <p id="quizDescription"></p>
+
+            <form id="quizForm">
+              <div id="questionsContainer"></div>
+              <button type="submit" class="btn-submit">
+                Soumettre le quiz
+              </button>
+            </form>
+          </div>
+
+          <!-- Résultat -->
+          <div id="quizResult" style="display: none">
+            <h2>Résultat</h2>
+            <p>
+              Votre score : <span id="scoreSpan"></span> /
+              <span id="totalSpan"></span>
+            </p>
+            <p>Pourcentage : <span id="pourcentageSpan"></span>%</p>
+            <button id="backToListBtn" class="btn-submit">
+              Retour à la liste
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <footer><p>&copy; 2025 CampusBox</p></footer>
+
+    <script src="../assets/js/quiz.js"></script>
+  </body>
+</html>

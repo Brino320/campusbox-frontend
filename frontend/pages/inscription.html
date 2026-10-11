@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusBox - Inscription</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/inscription.css" />
+    <script src="../assets/js/config.js"></script>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">CampusBox</div>
+      <ul class="nav-links">
+        <li><a href="../index.html">Accueil</a></li>
+        <li><a href="authentification.html">Connexion</a></li>
+      </ul>
+    </nav>
+
+    <div class="inscription-container">
+      <h1>Rejoindre la Communauté CampusBox - Inscription</h1>
+
+      <div class="inscription-wrapper">
+        <div class="form-section">
+          <h2>Informations Personnelles</h2>
+          <form id="formInscription">
+            <div class="form-group">
+              <label>Prénom *</label>
+              <input
+                type="text"
+                id="prenom"
+                placeholder="Ex: Ton prenom"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Nom *</label>
+              <input type="text" id="nom" placeholder="Ton nom de famille" />
+            </div>
+            <div class="form-group">
+              <label>Pays</label>
+              <input
+                type="text"
+                id="pays"
+                placeholder="Mali"
+                value="Mali"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Téléphone</label>
+              <input
+                type="text"
+                id="telephone"
+                placeholder="+223 70 00 00 00"
+              />
+            </div>
+            <!-- 🆕 Code parrain (optionnel) -->
+            <div class="form-group">
+              <label
+                >Code parrain
+                <span style="color: #64748b; font-weight: normal"
+                  >(optionnel)</span
+                ></label
+              >
+              <input
+                type="text"
+                id="codeParrain"
+                placeholder="Ex: CAMPUS-0004-R10R"
+                style="text-transform: uppercase"
+              />
+              <div
+                id="codeParrainMessage"
+                style="font-size: 0.8rem; margin-top: 0.2rem; color: #64748b"
+              >
+                Si un ami vous a parrainé, collez son code ici.
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Type d'étude *</label>
+              <select id="typeEtude" required>
+                <option value="universite" selected>Université</option>
+                <option value="lycee" disabled>Lycée (bientôt)</option>
+                <option value="fondamental" disabled>
+                  Fondamental (bientôt)
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="Tonemail@gmail.com"
+                required
+              />
+            </div>
+
+            <!-- 🆕 Nom d'utilisateur -->
+            <div class="form-group">
+              <label>Nom d'utilisateur *</label>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <input
+                  type="text"
+                  id="username"
+                  placeholder="Choisissez un nom unique"
+                  required
+                  style="flex: 1"
+                />
+                <span
+                  id="usernameStatus"
+                  style="font-size: 1.2rem; min-width: 30px"
+                ></span>
+              </div>
+              <div
+                id="usernameMessage"
+                style="font-size: 0.8rem; margin-top: 0.2rem; color: #64748b"
+              >
+                Minimum 3 caractères
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Mot de passe *</label>
+              <input type="password" id="motDePasse" required />
+            </div>
+            <div class="form-group">
+              <label>Confirmer le mot de passe *</label>
+              <input type="password" id="confirmMotDePasse" required />
+            </div>
+
+            <div class="form-group">
+              <label>Classe *</label>
+              <select id="classe" required>
+                <option value="">Sélectionnez</option>
+                <option value="L1">L1 (Licence 1)</option>
+                <!-- Ajouter L2, L3 si besoin -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Option *</label>
+              <select id="option" required>
+                <option value="">Sélectionnez</option>
+                <option value="DGL">DGL - Développement Génie Logiciel</option>
+                <option value="RIT">
+                  RIT - Réseaux Informatique et Télécommunications
+                </option>
+                <option value="IG">IG - Informatique de Gestion</option>
+                <option value="GEA">
+                  GEA - Gestion d'entreprise et d'administration
+                </option>
+                <option value="FC">FC - Finance Comptabilité</option>
+                <option value="GLT">
+                  GLT - Gestion Logistique et transport
+                </option>
+                <option value="MAR">MAR - Marketing</option>
+                <option value="MM">MM - Multimedia</option>
+              </select>
+            </div>
+
+            <!-- Politique de confidentialité -->
+            <div
+              class="form-group"
+              style="
+                margin-top: 1.5rem;
+                border-top: 1px solid #e2e8f0;
+                padding-top: 1rem;
+              "
+            >
+              <label
+                style="
+                  display: flex;
+                  align-items: flex-start;
+                  gap: 0.75rem;
+                  font-weight: normal;
+                  cursor: pointer;
+                "
+              >
+                <input
+                  type="checkbox"
+                  id="acceptPrivacy"
+                  style="width: auto; margin-top: 0.2rem"
+                />
+                <span>
+                  J'accepte la
+                  <a
+                    href="#"
+                    id="openPrivacyModal"
+                    style="color: #3b82f6; text-decoration: underline"
+                    >politique de confidentialité</a
+                  >
+                  de CampusBox.
+                </span>
+              </label>
+              <div
+                id="privacyError"
+                style="
+                  color: #dc2626;
+                  font-size: 0.9rem;
+                  margin-top: 0.3rem;
+                  display: none;
+                "
+              >
+                Vous devez accepter la politique de confidentialité pour vous
+                inscrire.
+              </div>
+            </div>
+
+            <div class="form-navigation">
+              <button type="button" id="btnInscription">S'inscrire</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="preview-section">
+          <h3>Vos Informations d'Inscription</h3>
+          <div class="preview-content">
+            <p><strong>Prénom :</strong> <span id="previewPrenom">—</span></p>
+            <p><strong>Nom :</strong> <span id="previewNom">—</span></p>
+            <p>
+              <strong>Nom d'utilisateur :</strong>
+              <span id="previewUsername">—</span>
+            </p>
+            <p><strong>Pays :</strong> <span id="previewPays">—</span></p>
+            <p>
+              <strong>Téléphone :</strong> <span id="previewTelephone">—</span>
+            </p>
+            <p>
+              <strong>Type d'étude :</strong>
+              <span id="previewTypeEtude">—</span>
+            </p>
+            <p><strong>Email :</strong> <span id="previewEmail">—</span></p>
+            <p>
+              <strong>Mot de passe :</strong>
+              <span id="previewMdp">••••••</span>
+            </p>
+            <p><strong>Classe :</strong> <span id="previewClasse">—</span></p>
+            <p><strong>Option :</strong> <span id="previewOption">—</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Politique de confidentialité -->
+    <div
+      id="privacyModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      "
+    >
+      <div
+        style="
+          background: white;
+          max-width: 700px;
+          max-height: 80vh;
+          overflow-y: auto;
+          padding: 2rem;
+          border-radius: 1rem;
+          position: relative;
+          margin: 1rem;
+        "
+      >
+        <button
+          id="closePrivacyModal"
+          style="
+            position: sticky;
+            top: 0;
+            float: right;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #1e293b;
+          "
+        >
+          &times;
+        </button>
+        <h2 style="margin-top: 0">Politique de confidentialité</h2>
+        <div
+          style="
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #1e293b;
+          "
+        >
+          <strong>Dernière mise à jour : Juin 2026</strong>
+
+          CampusBox s’engage à protéger la vie privée de ses utilisateurs. Cette
+          politique explique quelles données nous collectons, comment nous les
+          utilisons, et vos droits.
+
+          <strong>1. Données collectées</strong>
+          - Informations d’identification : nom, prénom, email, filière, classe,
+          pays, téléphone (optionnel). - Données de connexion : adresse IP,
+          navigateur, horodatages. - Données d’activité : exercices réalisés,
+          quiz passés, notes obtenues, progression.
+
+          <strong>2. Utilisation des données</strong>
+          - Création et gestion de votre compte. - Affichage de votre
+          progression et de vos notes. - Amélioration de la plateforme (analyse
+          anonyme). - Communication administrative (rare, uniquement pour des
+          informations importantes).
+
+          <strong>3. Partage des données</strong>
+          Nous ne vendons ni ne partageons vos données personnelles avec des
+          tiers, sauf : - Obligation légale (justice, autorités). - Prestataires
+          techniques (hébergement, bases de données) qui s’engagent à respecter
+          la confidentialité.
+
+          <strong>4. Sécurité</strong>
+          Vos mots de passe sont hashés (bcrypt). Nous mettons en œuvre des
+          mesures techniques pour protéger vos données contre tout accès non
+          autorisé.
+
+          <strong>5. Vos droits</strong>
+          Vous pouvez à tout moment : - Accéder à vos données. - Rectifier vos
+          informations. - Supprimer votre compte (contactez l’administrateur).
+
+          <strong>6. Cookies</strong>
+          CampusBox utilise des cookies de session (uniquement pour maintenir
+          votre connexion). Aucun cookie tiers n’est utilisé.
+
+          <strong>7. Contact</strong>
+          Pour toute question, écrivez à : campusbox10@gmail.com En vous
+          inscrivant, vous acceptez cette politique.
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 CampusBox - Tous droits réservés.</p>
+    </footer>
+
+    <script src="../assets/js/inscription.js"></script>
+  </body>
+</html>

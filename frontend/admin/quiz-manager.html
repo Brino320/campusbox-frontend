@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gestion des quiz</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <style>
+      body {
+        background: #f1f5f9;
+        font-family: system-ui;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 1200px;
+        margin: auto;
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #cbd5e1;
+      }
+      button {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        cursor: pointer;
+        margin-right: 0.5rem;
+      }
+      .quiz-item {
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #3b82f6;
+      }
+      .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.3rem;
+      }
+      .checkbox-group label {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-weight: normal;
+        cursor: pointer;
+      }
+      .checkbox-group input[type="checkbox"] {
+        width: auto;
+      }
+      .btn-danger {
+        background: #ef4444;
+      }
+      .btn-success {
+        background: #10b981;
+      }
+      .btn-warning {
+        background: #f59e0b;
+      }
+      .filter-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .filter-row .form-group {
+        flex: 1;
+        min-width: 150px;
+      }
+      .btn-create {
+        background: #8b5cf6;
+      }
+      .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .btn-filter {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        cursor: pointer;
+        margin-bottom: 1rem;
+      }
+      .reponse-item {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+      .reponse-item input[type="text"] {
+        flex: 1;
+      }
+      #quizFormDiv {
+        display: none;
+        margin-top: 1.5rem;
+        border-top: 2px solid #e2e8f0;
+        padding-top: 1.5rem;
+      }
+      #questionsSection {
+        display: none;
+        margin-top: 2rem;
+        border-top: 2px solid #e2e8f0;
+        padding-top: 1rem;
+      }
+      #questionForm {
+        display: none;
+        margin-top: 1rem;
+        border: 1px solid #cbd5e1;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        background: #f8fafc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header-actions">
+        <h1>📝 Gestion des quiz</h1>
+        <button id="newQuizBtn" class="btn-create">➕ Nouveau quiz</button>
+      </div>
+      <hr />
+
+      <!-- FILTRAGE EN CASCADE -->
+      <div class="filter-row">
+        <div class="form-group">
+          <label>Cycle</label>
+          <select id="cycleSelect">
+            <option value="">-- Sélectionner --</option>
+            <option value="1">Université</option>
+            <option value="2">Lycée</option>
+            <option value="3">Fondamental</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Classe</label>
+          <select id="classeSelect">
+            <option value="">-- Sélectionner d'abord un cycle --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Filière</label>
+          <select id="filiereSelect">
+            <option value="">-- Sélectionner d'abord une classe --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Matière *</label>
+          <select id="matiereSelect">
+            <option value="">-- Sélectionner d'abord une filière --</option>
+          </select>
+        </div>
+      </div>
+      <button id="filterBtn" class="btn-filter">🔍 Appliquer le filtre</button>
+
+      <!-- Sélecteur de classes (multiples) -->
+      <div class="form-group">
+        <label>Classes concernées (laisser vide = toutes les classes)</label>
+        <div id="classesContainer" class="checkbox-group"></div>
+      </div>
+
+      <!-- Sélecteur de filières (multiples) -->
+      <div class="form-group">
+        <label>Filières concernées (laisser vide = toutes les filières)</label>
+        <div id="filieresContainer" class="checkbox-group"></div>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- FORMULAIRE DU QUIZ (avec ID #quizFormDiv)   -->
+      <!-- ============================================ -->
+      <div id="quizFormDiv">
+        <h2 id="quizFormTitle">Créer un quiz</h2>
+        <input type="hidden" id="quizId" />
+        <div class="form-group">
+          <label>Titre du quiz *</label>
+          <input
+            type="text"
+            id="quizTitre"
+            placeholder="Ex: Quiz sur le Mali"
+          />
+        </div>
+        <div class="form-group">
+          <label>Description (optionnel)</label>
+          <textarea id="quizDescription" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Note maximale</label>
+          <input type="number" id="quizNoteMax" value="10" />
+        </div>
+        <div class="form-group">
+          <label>Temps limite (minutes, optionnel)</label>
+          <input type="number" id="quizTempsLimite" placeholder="Ex: 30" />
+        </div>
+        <button id="saveQuizBtn" class="btn-success">
+          💾 Enregistrer le quiz
+        </button>
+        <button id="cancelQuizBtn" style="background: #94a3b8">Annuler</button>
+
+        <!-- SECTION QUESTIONS (affichée après création/modification) -->
+        <div id="questionsSection">
+          <h3>📋 Questions du quiz : <span id="currentQuizTitle"></span></h3>
+          <button id="addQuestionBtn" class="btn-success">
+            ➕ Ajouter une question
+          </button>
+          <div id="questionsList" style="margin-top: 1rem"></div>
+
+          <div id="questionForm">
+            <h4 id="questionFormTitle">Ajouter une question</h4>
+            <input type="hidden" id="currentQuestionId" />
+            <div class="form-group">
+              <label>Texte de la question *</label>
+              <textarea
+                id="questionText"
+                rows="2"
+                placeholder="Ex: Quelle est la capitale du Mali ?"
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label>Type</label>
+              <select id="questionType">
+                <option value="qcm">QCM (choix multiple)</option>
+                <option value="vrai_faux">Vrai / Faux</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Points</label>
+              <input type="number" id="questionPoints" value="1" />
+            </div>
+            <div class="form-group">
+              <label>Réponses</label>
+              <div id="reponsesContainer"></div>
+              <button
+                type="button"
+                id="addReponseBtn"
+                class="btn-success"
+                style="margin-top: 0.5rem"
+              >
+                ➕ Ajouter une réponse
+              </button>
+            </div>
+            <button id="saveQuestionBtn" class="btn-success">
+              💾 Enregistrer la question
+            </button>
+            <button id="cancelQuestionBtn" style="background: #94a3b8">
+              Annuler
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- ============================================ -->
+
+      <hr />
+
+      <!-- Liste des quiz -->
+      <h2>📋 Quiz existants</h2>
+      <div id="quizListContainer">Chargement...</div>
+    </div>
+
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/admin-quiz.js"></script>
+  </body>
+</html>

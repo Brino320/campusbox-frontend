@@ -1,0 +1,157 @@
+/* Styles spécifiques à la page quiz */
+.quiz-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.question-item {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1rem;
+}
+
+.question-item p {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.options label {
+  display: block;
+  margin: 0.3rem 0;
+}
+
+.btn-submit {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+#backToListBtn {
+  background: #64748b;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+}
+/* Mode sombre pour la page quiz */
+body.dark-mode .quiz-container {
+  background-color: #1e293b;
+  color: #e2e8f0;
+}
+
+body.dark-mode .quiz-list li {
+  background-color: #334155 !important;
+  color: #e2e8f0;
+}
+
+body.dark-mode .question-item {
+  background-color: #334155;
+  border-color: #475569;
+}
+
+body.dark-mode .options label {
+  color: #e2e8f0;
+}
+
+body.dark-mode .btn-submit {
+  background-color: #3b82f6;
+}
+
+body.dark-mode .btn-start-quiz {
+  background-color: #3b82f6;
+}
+/* Quiz - Feedback instantané */
+.feedback-instant {
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.3rem;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+.feedback-instant.correct {
+  color: #065f46;
+  background: #d1fae5;
+}
+.feedback-instant.incorrect {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+/* Question item */
+.question-item {
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #3b82f6;
+}
+.question-item .options label {
+  display: inline-block;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+.question-item .options label input[type="radio"] {
+  margin-right: 0.3rem;
+}
+
+/* Timer */
+#timerDisplay {
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+#timerDisplay .warning {
+  color: #dc2626;
+}
+
+/* Barre de progression */
+#progressTrack {
+  width: 100%;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+#progressFill {
+  height: 100%;
+  background: #3b82f6;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.option-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: 0.15s;
+  margin-bottom: 0.4rem;
+  word-wrap: break-word;
+}
+.option-label:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+body.dark-mode .option-label {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+body.dark-mode .option-label:hover {
+  background: #334155;
+  border-color: #60a5fa;
+}

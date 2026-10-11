@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Gestion des examens</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <style>
+      body {
+        background: #f1f5f9;
+        font-family: system-ui;
+        padding: 1.5rem;
+      }
+      .container {
+        max-width: 1200px;
+        margin: auto;
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+      }
+      h1 {
+        margin-bottom: 1rem;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #cbd5e1;
+        font-family: inherit;
+      }
+      button {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        cursor: pointer;
+        margin-right: 0.5rem;
+        font-size: 0.9rem;
+      }
+      button:hover {
+        background: #2563eb;
+      }
+      .btn-secondary {
+        background: #94a3b8;
+      }
+      .btn-secondary:hover {
+        background: #64748b;
+      }
+      .btn-danger {
+        background: #ef4444;
+      }
+      .btn-danger:hover {
+        background: #dc2626;
+      }
+      .btn-success {
+        background: #10b981;
+      }
+      .btn-success:hover {
+        background: #059669;
+      }
+      .exam-item {
+        background: #f8fafc;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        border-left: 4px solid #3b82f6;
+      }
+      .exam-item h3 {
+        margin: 0 0 0.5rem;
+        color: #0f172a;
+        font-size: 1.05rem;
+      }
+      .exam-item p {
+        font-size: 0.85rem;
+        color: #475569;
+        margin: 0.2rem 0;
+      }
+      .exam-meta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        font-size: 0.8rem;
+        color: #64748b;
+        margin: 0.5rem 0;
+      }
+      .exam-meta span {
+        background: #e0e7ff;
+        color: #1e40af;
+        padding: 0.15rem 0.5rem;
+        border-radius: 0.5rem;
+      }
+      .exam-actions {
+        margin-top: 0.75rem;
+      }
+      .stats-box {
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        background: #eff6ff;
+        border-radius: 0.5rem;
+        font-size: 0.8rem;
+        color: #1e40af;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      @media (max-width: 640px) {
+        .row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📋 Gestion des examens</h1>
+      <p style="color: #64748b; margin-bottom: 1rem">
+        Créez un examen, puis ajoutez-lui des questions (10 à 100+).
+      </p>
+      <hr />
+
+      <h2>➕ Ajouter / modifier un examen</h2>
+      <form id="examForm">
+        <input type="hidden" id="examId" />
+
+        <div class="row">
+          <div class="form-group">
+            <label>Matière *</label>
+            <select id="matiere_id" required></select>
+          </div>
+          <div class="form-group">
+            <label>Titre *</label>
+            <input
+              type="text"
+              id="titre"
+              required
+              placeholder="Ex: Examen final Maths"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            id="description"
+            rows="2"
+            placeholder="Description courte"
+          ></textarea>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label>Date *</label>
+            <input type="date" id="date_evaluation" required />
+          </div>
+          <div class="form-group">
+            <label>Coefficient</label>
+            <input type="number" step="0.1" id="coefficient" value="1.0" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label>Note maximale (sur)</label>
+            <input type="number" id="note_max_sur" value="20" />
+          </div>
+          <div class="form-group">
+            <label>Statut</label>
+            <select id="actif">
+              <option value="1">Actif</option>
+              <option value="0">Inactif</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit">💾 Enregistrer</button>
+        <button type="button" class="btn-secondary" id="cancelBtn">
+          Annuler
+        </button>
+      </form>
+
+      <hr />
+      <h2>📄 Liste des examens</h2>
+      <div id="examensList">Chargement...</div>
+    </div>
+
+    <!-- ✅ config.js AVANT le JS métier -->
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/admin-examens.js"></script>
+  </body>
+</html>

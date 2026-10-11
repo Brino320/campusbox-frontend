@@ -1,0 +1,1441 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes"
+    />
+    <title>CampusBox - Mon profil</title>
+    <link rel="icon" type="image/png" href="../assets/images/Logo.png" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+    <link rel="stylesheet" href="../assets/css/dark-mode.css" />
+    <style>
+      /* ============================================
+       STYLES DU PROFIL – RESPONSIVE
+       ============================================ */
+      * {
+        box-sizing: border-box;
+      }
+      .profil-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        overflow-x: hidden;
+      }
+      .profil-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e2e8f0;
+      }
+      .profil-header h1 {
+        font-size: 1.8rem;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .profil-header .badge {
+        background: #3b82f6;
+        color: white;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 2rem;
+      }
+      .profil-avatar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .avatar-container {
+        position: relative;
+        cursor: pointer;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: transform 0.2s;
+        flex-shrink: 0;
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+      }
+      .avatar-container:hover {
+        transform: scale(1.05);
+      }
+      .avatar-container:hover .avatar-overlay {
+        opacity: 1;
+      }
+      .profil-avatar .avatar-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #3b82f6;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        font-weight: bold;
+        flex-shrink: 0;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+      }
+      .avatar-circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 50%;
+      }
+      .avatar-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        opacity: 0;
+        transition: opacity 0.2s;
+        border-radius: 50%;
+      }
+
+      .profil-avatar .avatar-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #0f172a;
+      }
+      .profil-avatar .avatar-email {
+        font-size: 0.85rem;
+        color: #64748b;
+        word-break: break-all;
+      }
+
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin-bottom: 2rem;
+        background: #f1f5f9;
+        padding: 0.3rem;
+        border-radius: 0.75rem;
+      }
+      .tab-btn {
+        padding: 0.6rem 1.2rem;
+        border: none;
+        background: transparent;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 500;
+        color: #475569;
+        transition: 0.2s;
+        font-size: 0.9rem;
+        flex: 1 1 auto;
+        min-width: 100px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .tab-btn:hover {
+        background: rgba(59, 130, 246, 0.08);
+        color: #1e293b;
+      }
+      .tab-btn.active {
+        background: white;
+        color: #3b82f6;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+      }
+      .tab-btn .icon {
+        margin-right: 0.4rem;
+      }
+
+      .tab-content {
+        display: none;
+        animation: fadeIn 0.3s ease;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .section-title {
+        font-size: 1.2rem;
+        color: #0f172a;
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .section-title .icon {
+        font-size: 1.3rem;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+        color: #1e293b;
+        font-size: 0.9rem;
+      }
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+        transition: 0.2s;
+        font-family: inherit;
+        background: white;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      }
+      .form-group textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+      .form-group input:disabled,
+      .form-group input.readonly {
+        background: #f1f5f9;
+        color: #1e293b;
+        cursor: not-allowed;
+        opacity: 0.8;
+        border-color: #e2e8f0;
+      }
+      .form-group select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 12px;
+        padding-right: 2rem;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .modifiable-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .modifiable-wrapper input,
+      .modifiable-wrapper select {
+        flex: 1;
+      }
+      .modifiable-wrapper .edit-icon {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        opacity: 0.6;
+        transition: 0.2s;
+        cursor: default;
+      }
+      .modifiable-wrapper:hover .edit-icon {
+        opacity: 1;
+        color: #3b82f6;
+      }
+
+      .username-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .username-wrapper input {
+        flex: 1;
+      }
+      .username-status {
+        font-size: 1.2rem;
+        min-width: 30px;
+        text-align: center;
+      }
+      .username-message {
+        font-size: 0.8rem;
+        margin-top: 0.2rem;
+        color: #64748b;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 2rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 0.9rem;
+        width: auto;
+      }
+      .btn-primary {
+        background: #3b82f6;
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #2563eb;
+      }
+      .btn-success {
+        background: #10b981;
+        color: white;
+      }
+      .btn-success:hover {
+        background: #059669;
+      }
+      .btn-danger {
+        background: #ef4444;
+        color: white;
+      }
+      .btn-danger:hover {
+        background: #dc2626;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid #94a3b8;
+        color: #1e293b;
+      }
+      .btn-outline:hover {
+        background: #f1f5f9;
+      }
+
+      .message {
+        margin-top: 0.8rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .message.error {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .message.success {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .message.info {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .stat-card {
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        text-align: center;
+        border: 1px solid #e2e8f0;
+      }
+      .stat-card .stat-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+      .stat-card .stat-label {
+        font-size: 0.75rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      .parrainage-box {
+        background: #f8fafc;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        border: 1px solid #e2e8f0;
+        text-align: center;
+      }
+      .parrainage-box .code {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #3b82f6;
+        letter-spacing: 0.1em;
+        background: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 0.5rem;
+        display: inline-block;
+        margin: 0.5rem 0;
+        border: 2px dashed #3b82f6;
+        word-break: break-all;
+      }
+      .parrainage-box .copy-btn {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.3rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+      .parrainage-box .copy-btn:hover {
+        background: #2563eb;
+      }
+
+      .presentation-preview {
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border-left: 4px solid #3b82f6;
+        margin-top: 0.5rem;
+        white-space: pre-wrap;
+        font-size: 0.9rem;
+        color: #1e293b;
+        word-break: break-word;
+      }
+
+      .progression-box {
+        background: #f8fafc;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        border: 1px solid #e2e8f0;
+        margin-top: 1rem;
+      }
+      .progression-box h4 {
+        margin-bottom: 0.5rem;
+        color: #0f172a;
+      }
+      body.dark-mode .progression-box {
+        background: #334155;
+        border-color: #475569;
+      }
+      body.dark-mode .progression-box h4 {
+        color: #f1f5f9;
+      }
+      .muted {
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+      body.dark-mode .muted {
+        color: #94a3b8;
+      }
+      .help-text {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-top: 0.5rem;
+      }
+      body.dark-mode .help-text {
+        color: #94a3b8;
+      }
+
+      /* Barres de progression */
+      .progress-line {
+        margin-bottom: 0.6rem;
+      }
+      .progress-line-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        margin-bottom: 0.2rem;
+        color: #1e293b;
+      }
+      .progress-track {
+        width: 100%;
+        height: 6px;
+        background: #e2e8f0;
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: #3b82f6;
+        border-radius: 3px;
+        transition: width 0.3s;
+      }
+      body.dark-mode .progress-track {
+        background: #1e293b;
+      }
+      body.dark-mode .progress-line-header {
+        color: #e2e8f0;
+      }
+
+      .filleuls-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .filleuls-list li {
+        padding: 0.4rem 0;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        word-break: break-word;
+      }
+      .filleuls-list .date {
+        color: #64748b;
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+      body.dark-mode .filleuls-list li {
+        border-bottom-color: #475569;
+      }
+      body.dark-mode .filleuls-list .date {
+        color: #94a3b8;
+      }
+
+      /* ============================================
+         BIM - Portefeuille
+         ============================================ */
+      .bim-solde-box {
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        color: white;
+        border-radius: 1.2rem;
+        padding: 1.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+      }
+      .bim-solde-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .bim-solde-value {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 0.4rem;
+        margin: 0.5rem 0;
+      }
+      .bim-solde-value #bimSolde {
+        font-size: 3rem;
+        font-weight: 800;
+        line-height: 1;
+      }
+      .bim-solde-unit {
+        font-size: 1.2rem;
+        font-weight: 600;
+        opacity: 0.9;
+      }
+      .bim-solde-desc {
+        font-size: 0.85rem;
+        opacity: 0.85;
+        margin: 0 0 1rem 0;
+      }
+      .bim-actions {
+        display: flex;
+        gap: 0.6rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .bim-actions .btn {
+        background: white;
+        color: #3b82f6;
+        font-weight: 600;
+      }
+      .bim-actions .btn-outline {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+      }
+      .bim-actions .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+
+      .bim-tx-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .bim-tx-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid #e2e8f0;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .bim-tx-item:last-child {
+        border-bottom: none;
+      }
+      .bim-tx-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .bim-tx-type {
+        font-weight: 600;
+        color: #1e293b;
+        display: block;
+      }
+      .bim-tx-date {
+        font-size: 0.75rem;
+        color: #64748b;
+      }
+      .bim-tx-motif {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        font-style: italic;
+        display: block;
+      }
+      .bim-tx-amount {
+        font-weight: 700;
+        font-size: 1rem;
+        white-space: nowrap;
+      }
+      .bim-tx-amount.credit {
+        color: #10b981;
+      }
+      .bim-tx-amount.debit {
+        color: #ef4444;
+      }
+      .bim-tx-balance {
+        font-size: 0.7rem;
+        color: #94a3b8;
+        display: block;
+        text-align: right;
+      }
+
+      /* Modal BIM */
+      .bim-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.55);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 1rem;
+      }
+      .bim-modal-content {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        max-width: 480px;
+        width: 100%;
+        max-height: 85vh;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      }
+      .bim-modal-close {
+        position: absolute;
+        top: 0.7rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        color: #64748b;
+        line-height: 1;
+      }
+      .bim-offre-card {
+        border: 2px solid #e2e8f0;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        margin-bottom: 0.6rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: 0.2s;
+        gap: 0.5rem;
+      }
+      .bim-offre-card:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+      }
+      .bim-offre-qty {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+      .bim-offre-price {
+        color: #3b82f6;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+      .bim-offre-cta {
+        font-size: 0.75rem;
+        color: #94a3b8;
+      }
+
+      .bim-demande-badge {
+        display: inline-block;
+        padding: 0.15rem 0.6rem;
+        border-radius: 1rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+      .bim-demande-badge.en_attente {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .bim-demande-badge.confirmee {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .bim-demande-badge.refusee {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      @media (max-width: 768px) {
+        .profil-container {
+          padding: 1rem;
+          border-radius: 1rem;
+        }
+        .form-row {
+          grid-template-columns: 1fr;
+          gap: 0.5rem;
+        }
+        .tabs {
+          flex-direction: column;
+          gap: 0.2rem;
+        }
+        .tab-btn {
+          min-width: unset;
+          width: 100%;
+          text-align: center;
+          padding: 0.5rem;
+          white-space: normal;
+        }
+        .profil-avatar {
+          width: 100%;
+          justify-content: center;
+        }
+        .stats-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .profil-header {
+          flex-direction: column;
+          align-items: stretch;
+          text-align: center;
+        }
+        .profil-header h1 {
+          justify-content: center;
+        }
+        .profil-avatar .avatar-name {
+          font-size: 1rem;
+        }
+        .parrainage-box .code {
+          font-size: 1.4rem;
+          padding: 0.3rem 1rem;
+        }
+        .username-wrapper {
+          flex-wrap: wrap;
+        }
+        .username-wrapper input {
+          flex: 1 1 100%;
+        }
+        .btn {
+          width: 100%;
+          text-align: center;
+        }
+      }
+      @media (max-width: 480px) {
+        .profil-container {
+          padding: 0.75rem;
+        }
+        .stat-card .stat-value {
+          font-size: 1.4rem;
+        }
+        .tabs .tab-btn {
+          font-size: 0.8rem;
+          padding: 0.4rem 0.6rem;
+        }
+        .avatar-container,
+        .profil-avatar .avatar-circle {
+          width: 60px;
+          height: 60px;
+          font-size: 1.4rem;
+        }
+        .section-title {
+          font-size: 1rem;
+        }
+        .form-group label {
+          font-size: 0.8rem;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+          font-size: 0.85rem;
+          padding: 0.4rem 0.5rem;
+        }
+        .parrainage-box .code {
+          font-size: 1.1rem;
+        }
+        .badge {
+          font-size: 0.6rem;
+        }
+        .bim-solde-value #bimSolde {
+          font-size: 2.4rem;
+        }
+      }
+
+      /* MODE SOMBRE */
+      body.dark-mode .profil-container {
+        background: #1e293b;
+        color: #e2e8f0;
+      }
+      body.dark-mode .profil-header {
+        border-bottom-color: #334155;
+      }
+      body.dark-mode .profil-header h1 {
+        color: #f1f5f9;
+      }
+      body.dark-mode .profil-avatar .avatar-name {
+        color: #f1f5f9;
+      }
+      body.dark-mode .tabs {
+        background: #334155;
+      }
+      body.dark-mode .tab-btn {
+        color: #94a3b8;
+      }
+      body.dark-mode .tab-btn:hover {
+        background: rgba(59, 130, 246, 0.15);
+        color: #e2e8f0;
+      }
+      body.dark-mode .tab-btn.active {
+        background: #1e293b;
+        color: #60a5fa;
+      }
+      body.dark-mode .form-group label {
+        color: #cbd5e1;
+      }
+      body.dark-mode .form-group input,
+      body.dark-mode .form-group select,
+      body.dark-mode .form-group textarea {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-color: #475569;
+      }
+      body.dark-mode .form-group input:disabled,
+      body.dark-mode .form-group input.readonly {
+        background: #1e293b;
+        color: #94a3b8;
+        border-color: #334155;
+      }
+      body.dark-mode .stat-card {
+        background: #334155;
+        border-color: #475569;
+      }
+      body.dark-mode .stat-card .stat-value {
+        color: #f1f5f9;
+      }
+      body.dark-mode .stat-card .stat-label {
+        color: #94a3b8;
+      }
+      body.dark-mode .parrainage-box {
+        background: #334155;
+        border-color: #475569;
+      }
+      body.dark-mode .parrainage-box .code {
+        background: #1e293b;
+        border-color: #60a5fa;
+        color: #60a5fa;
+      }
+      body.dark-mode .presentation-preview {
+        background: #334155;
+        color: #e2e8f0;
+      }
+      body.dark-mode .message.success {
+        background: #065f46;
+        color: #d1fae5;
+      }
+      body.dark-mode .message.error {
+        background: #7f1d1d;
+        color: #fee2e2;
+      }
+      body.dark-mode .message.info {
+        background: #1e3a5f;
+        color: #93c5fd;
+      }
+      body.dark-mode .btn-outline {
+        color: #cbd5e1;
+        border-color: #475569;
+      }
+      body.dark-mode .btn-outline:hover {
+        background: #334155;
+      }
+      body.dark-mode .form-group select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      }
+      body.dark-mode .bim-tx-item {
+        border-bottom-color: #475569;
+      }
+      body.dark-mode .bim-tx-type {
+        color: #e2e8f0;
+      }
+      body.dark-mode .bim-modal-content {
+        background: #1e293b;
+        color: #e2e8f0;
+      }
+      body.dark-mode .bim-offre-card {
+        border-color: #475569;
+        background: #0f172a;
+      }
+      body.dark-mode .bim-offre-card:hover {
+        border-color: #60a5fa;
+        background: #1e3a5f;
+      }
+      body.dark-mode .bim-offre-qty {
+        color: #f1f5f9;
+      }
+
+      img,
+      table {
+        max-width: 100%;
+      }
+      .profil-container hr {
+        border: none;
+        border-top: 1px solid #e2e8f0;
+        margin: 2rem 0;
+      }
+      body.dark-mode .profil-container hr {
+        border-top-color: #334155;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="dashboard-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <a href="dashboard.html" class="logo">
+            <img src="../assets/images/Logo.png" alt="CampusBox" />
+          </a>
+          <button class="btn-toggle-sidebar" id="toggleSidebarBtn">☰</button>
+          <div class="user-info-sidebar">
+            <span id="sidebarUserName">Chargement...</span>
+            <span class="online-status">● En ligne</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="dashboard.html">
+                <img
+                  src="../assets/images/icons/dashboard.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Tableau de bord</span>
+              </a>
+            </li>
+            <li>
+              <a href="cours.html">
+                <img
+                  src="../assets/images/icons/cours.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mes cours</span>
+              </a>
+            </li>
+            <li>
+              <a href="examens.html">
+                <img
+                  src="../assets/images/icons/exams.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Examens</span>
+              </a>
+            </li>
+            <li>
+              <a href="notes.html">
+                <img
+                  src="../assets/images/icons/notes.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Notes</span>
+              </a>
+            </li>
+            <li>
+              <a href="quiz.html">
+                <span class="nav-emoji">🧠</span>
+                <span>Quiz</span>
+              </a>
+            </li>
+            <li>
+              <a href="compte.html" class="active">
+                <img
+                  src="../assets/images/icons/profil.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mon profil</span>
+              </a>
+            </li>
+            <li>
+              <a href="messages.html">
+                <img
+                  src="../assets/images/icons/messages.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Messages</span>
+              </a>
+            </li>
+            <li>
+              <a href="parametres.html">
+                <span class="nav-emoji">⚙️</span>
+                <span>Paramètres</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" id="logoutBtnSidebar">
+                <span class="nav-emoji">🚪</span>
+                <span>Déconnexion</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <button class="btn-burger" id="burgerBtn">☰</button>
+
+        <div class="profil-container">
+          <div class="profil-header">
+            <div class="profil-avatar">
+              <label
+                for="avatarInput"
+                class="avatar-container"
+                id="avatarContainer"
+                title="Cliquez pour changer votre photo"
+                style="cursor: pointer"
+              >
+                <div class="avatar-circle" id="avatarInitials">👤</div>
+                <div class="avatar-overlay">📷</div>
+              </label>
+              <input
+                type="file"
+                id="avatarInput"
+                accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                style="display: none"
+              />
+              <div>
+                <div class="avatar-name" id="avatarName">Chargement...</div>
+                <div class="avatar-email" id="avatarEmail">
+                  email@exemple.com
+                </div>
+                <div
+                  id="avatarMessage"
+                  class="message"
+                  style="margin-top: 0.4rem; display: none"
+                ></div>
+              </div>
+            </div>
+            <span class="badge">Étudiant</span>
+          </div>
+
+          <div class="tabs" id="tabContainer">
+            <button class="tab-btn active" data-tab="info">
+              <span class="icon">👤</span> Infos personnelles
+            </button>
+            <button class="tab-btn" data-tab="etudiant">
+              <span class="icon">🎓</span> Infos étudiant
+            </button>
+            <button class="tab-btn" data-tab="activite">
+              <span class="icon">📈</span> Activité
+            </button>
+            <button class="tab-btn" data-tab="bim">
+              <span class="icon">💎</span> Mon portefeuille BIM
+            </button>
+            <button class="tab-btn" data-tab="parrainage">
+              <span class="icon">🤝</span> Parrainage
+            </button>
+            <button class="tab-btn" data-tab="presentation">
+              <span class="icon">📋</span> Présentation
+            </button>
+          </div>
+
+          <!-- ONGLET 1 : INFORMATIONS PERSONNELLES -->
+          <div class="tab-content active" id="tab-info">
+            <div class="section-title">
+              <span class="icon">👤</span> Informations personnelles
+            </div>
+            <form id="profilForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Prénom *</label>
+                  <div class="modifiable-wrapper">
+                    <input type="text" id="prenom" required />
+                    <span class="edit-icon">✏️</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Nom *</label>
+                  <div class="modifiable-wrapper">
+                    <input type="text" id="nom" required />
+                    <span class="edit-icon">✏️</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Nom d'utilisateur</label>
+                <div class="username-wrapper">
+                  <input
+                    type="text"
+                    id="username"
+                    placeholder="Choisissez un nom unique (ex: ibrahim223)"
+                  />
+                  <span class="username-status" id="usernameStatus"></span>
+                </div>
+                <div class="username-message" id="usernameMessage">
+                  Choisissez un nom unique
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  >Email
+                  <span style="color: #64748b; font-weight: normal"
+                    >(non modifiable)</span
+                  ></label
+                >
+                <input type="email" id="email" disabled class="readonly" />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Pays</label>
+                  <div class="modifiable-wrapper">
+                    <input type="text" id="pays" placeholder="France" />
+                    <span class="edit-icon">✏️</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Téléphone</label>
+                  <div class="modifiable-wrapper">
+                    <input
+                      type="tel"
+                      id="telephone"
+                      placeholder="+223 XX XX XX XX"
+                    />
+                    <span class="edit-icon">✏️</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  >Type d'étude
+                  <span style="color: #64748b; font-weight: normal"
+                    >(non modifiable)</span
+                  ></label
+                >
+                <input type="text" id="type_etude" disabled class="readonly" />
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                💾 Enregistrer
+              </button>
+              <div id="profilMessage" class="message"></div>
+            </form>
+
+            <hr />
+            <div class="section-title">
+              <span class="icon">🔒</span> Changer de mot de passe
+            </div>
+            <form id="passwordForm">
+              <div class="form-group">
+                <label>Ancien mot de passe</label>
+                <input type="password" id="oldPassword" required />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Nouveau mot de passe</label>
+                  <input
+                    type="password"
+                    id="newPassword"
+                    required
+                    minlength="6"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Confirmer</label>
+                  <input type="password" id="confirmNewPassword" required />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                🔒 Changer le mot de passe
+              </button>
+              <div id="passwordMessage" class="message"></div>
+            </form>
+          </div>
+
+          <!-- ONGLET 2 : INFORMATIONS ÉTUDIANT -->
+          <div class="tab-content" id="tab-etudiant">
+            <div class="section-title">
+              <span class="icon">🎓</span> Informations étudiant
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Filière</label>
+                <input
+                  type="text"
+                  id="filiere_etudiant"
+                  disabled
+                  class="readonly"
+                />
+              </div>
+              <div class="form-group">
+                <label>Classe / Niveau</label>
+                <input
+                  type="text"
+                  id="classe_etudiant"
+                  disabled
+                  class="readonly"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Date d'inscription</label>
+              <input
+                type="text"
+                id="date_inscription"
+                disabled
+                class="readonly"
+              />
+            </div>
+            <div id="etudiantMessage" class="message info">
+              ⚠️ Ces informations ont été définies lors de votre inscription et
+              ne sont pas modifiables.
+            </div>
+          </div>
+
+          <!-- ONGLET 3 : ACTIVITÉ -->
+          <div class="tab-content" id="tab-activite">
+            <div class="section-title">
+              <span class="icon">📈</span> Mon activité d'apprentissage
+            </div>
+            <div class="stats-grid" id="statsGrid">
+              <div class="stat-card">
+                <div class="stat-value" id="statQuiz">0</div>
+                <div class="stat-label">Quiz complétés</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="statDevoirs">0</div>
+                <div class="stat-label">Devoirs rendus</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="statMoyenne">0%</div>
+                <div class="stat-label">Moyenne générale</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="statChapitres">0</div>
+                <div class="stat-label">Chapitres terminés</div>
+              </div>
+            </div>
+            <div class="progression-box">
+              <h4>📊 Progression par matière</h4>
+              <div id="progressionMatieres">
+                <p class="muted">Chargement...</p>
+              </div>
+            </div>
+            <div id="activiteMessage" class="message"></div>
+          </div>
+
+          <!-- ONGLET BIM : PORTEFEUILLE -->
+          <div class="tab-content" id="tab-bim">
+            <div class="section-title">
+              <span class="icon">💎</span> Mon portefeuille BIM
+            </div>
+
+            <!-- Carte solde -->
+            <div class="bim-solde-box">
+              <p class="bim-solde-label">Solde actuel</p>
+              <div class="bim-solde-value">
+                <span id="bimSolde">0</span>
+                <span class="bim-solde-unit">BIM</span>
+              </div>
+              <p class="bim-solde-desc">
+                1 BIM = 1 nouvelle tentative d'examen
+              </p>
+              <div class="bim-actions">
+                <button class="btn btn-primary" id="btnObtenirBim">
+                  💰 Obtenir des BIM
+                </button>
+                <button class="btn btn-outline" id="btnParrainerBim">
+                  🤝 Parrainer un étudiant
+                </button>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid" id="bimStatsGrid">
+              <div class="stat-card">
+                <div class="stat-value" id="bimStatFilleuls">0</div>
+                <div class="stat-label">Filleuls</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="bimStatGagnes">0</div>
+                <div class="stat-label">BIM via parrainage</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="bimStatUtilises">0</div>
+                <div class="stat-label">BIM utilisés</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="bimStatTotal">0</div>
+                <div class="stat-label">Transactions</div>
+              </div>
+            </div>
+
+            <!-- Historique -->
+            <div class="progression-box">
+              <h4>📜 Historique des opérations</h4>
+              <div id="bimHistorique">
+                <p class="muted">Chargement...</p>
+              </div>
+            </div>
+
+            <!-- Demandes d'achat -->
+            <div class="progression-box">
+              <h4>🛒 Mes demandes d'achat</h4>
+              <div id="bimMesDemandes">
+                <p class="muted">Aucune demande pour le moment.</p>
+              </div>
+            </div>
+
+            <div id="bimMessage" class="message"></div>
+          </div>
+
+          <!-- ONGLET 4 : PARRAINAGE -->
+          <div class="tab-content" id="tab-parrainage">
+            <div class="section-title">
+              <span class="icon">🤝</span> Parrainage
+            </div>
+            <div class="parrainage-box">
+              <p class="muted">Votre code de parrainage unique</p>
+              <div class="code" id="codeParrainage">XXXX-XXXX</div>
+              <br />
+              <button class="copy-btn" id="copyCodeBtn">
+                📋 Copier le lien
+              </button>
+              <p class="help-text">
+                Partagez ce lien avec vos amis. Pour chaque ami qui s'inscrit
+                avec votre code et réussit son premier examen, vous gagnez
+                <strong>1 BIM</strong> !
+              </p>
+            </div>
+            <div class="progression-box">
+              <h4>👥 Vos filleuls</h4>
+              <div id="filleulsList">
+                <p class="muted">Aucun filleul pour le moment.</p>
+              </div>
+            </div>
+            <div id="parrainageMessage" class="message"></div>
+          </div>
+
+          <!-- ONGLET 5 : PRÉSENTATION -->
+          <div class="tab-content" id="tab-presentation">
+            <div class="section-title">
+              <span class="icon">📋</span> Ma présentation
+            </div>
+            <p class="muted" style="margin-bottom: 1rem">
+              Présentez-vous aux autres étudiants et à vos professeurs.
+            </p>
+            <form id="presentationForm">
+              <div class="form-group">
+                <label>Bio / Présentation</label>
+                <textarea
+                  id="bio"
+                  rows="6"
+                  placeholder="Décrivez-vous en quelques lignes..."
+                ></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Centres d'intérêt</label>
+                  <input
+                    type="text"
+                    id="centres_interet"
+                    placeholder="Ex: Sport, Musique, Lecture..."
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Objectif professionnel</label>
+                  <input
+                    type="text"
+                    id="objectif_pro"
+                    placeholder="Ex: Devenir développeur full-stack"
+                  />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                💾 Enregistrer
+              </button>
+              <div id="presentationMessage" class="message"></div>
+            </form>
+            <hr />
+            <h4 style="color: #0f172a; margin-bottom: 0.5rem">
+              👀 Aperçu de votre présentation
+            </h4>
+            <div class="presentation-preview" id="presentationPreview">
+              <em style="color: #94a3b8">Aucune présentation enregistrée.</em>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- MODAL : Obtenir des BIM -->
+    <div id="bimModal" class="bim-modal" style="display: none">
+      <div class="bim-modal-content">
+        <button class="bim-modal-close" id="bimModalCloseBtn">&times;</button>
+        <h2 style="margin-top: 0">💰 Obtenir des BIM</h2>
+        <p class="muted" style="margin-bottom: 1rem">
+          Choisissez une offre. La demande sera validée manuellement par un
+          administrateur.
+        </p>
+        <div id="bimOffresList">
+          <p class="muted">Chargement des offres...</p>
+        </div>
+        <div id="bimOffreMessage" class="message"></div>
+      </div>
+    </div>
+
+    <footer><p>&copy; 2025 CampusBox</p></footer>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/compte.js"></script>
+  </body>
+</html>

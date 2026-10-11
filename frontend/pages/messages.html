@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes"
+    />
+    <title>CampusBox - Messages</title>
+    <link rel="icon" type="image/png" href="../assets/images/Logo.png" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+    <link rel="stylesheet" href="../assets/css/messages.css" />
+    <link rel="stylesheet" href="../assets/css/dark-mode.css" />
+    <style>
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 850;
+      }
+      .sidebar-overlay.active {
+        display: block;
+      }
+      .btn-burger {
+        display: none;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        font-size: 1.5rem;
+        padding: 0.5rem 0.9rem;
+        border-radius: 0.6rem;
+        cursor: pointer;
+        margin-bottom: 1rem;
+      }
+      @media (max-width: 900px) {
+        .btn-burger {
+          display: inline-block;
+        }
+      }
+
+      /* ===== GROUPES OFFICIELS ===== */
+      .conversation-item.official {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border-left: 4px solid #3b82f6;
+      }
+      .conversation-item.official:hover {
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      }
+      body.dark-mode .conversation-item.official {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+        border-left-color: #60a5fa;
+      }
+      body.dark-mode .conversation-item.official:hover {
+        background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+      }
+
+      .official-badge {
+        display: inline-block;
+        background: #3b82f6;
+        color: white;
+        font-size: 0.6rem;
+        font-weight: 700;
+        padding: 0.15rem 0.45rem;
+        border-radius: 0.75rem;
+        margin-left: 0.3rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        vertical-align: middle;
+      }
+
+      .group-info-badge {
+        background: #e0e7ff;
+        color: #1e40af;
+        padding: 0.1rem 0.35rem;
+        border-radius: 0.35rem;
+        font-size: 0.65rem;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      body.dark-mode .group-info-badge {
+        background: #1e3a8a;
+        color: #93c5fd;
+      }
+
+      /* ===== AVATARS ===== */
+      .conversation-item .avatar img,
+      .avatar-sm img,
+      #profilePic img,
+      #sidebarUserAvatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+      }
+      .conversation-item .avatar,
+      .avatar-sm,
+      #profilePic {
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+      }
+      #sidebarUserAvatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #3b82f6;
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      .msg-sender-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #3b82f6;
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+        overflow: hidden;
+        flex-shrink: 0;
+        margin-right: 0.4rem;
+      }
+      .msg-sender-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .msg-with-avatar {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.4rem;
+      }
+
+      /* ===== NOM CLIQUABLE ===== */
+      .conv-name {
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+      .conv-name:hover {
+        color: #3b82f6;
+        text-decoration: underline;
+      }
+      .nickname-badge {
+        color: #94a3b8;
+        font-weight: 400;
+        font-size: 0.7rem;
+        margin-left: 0.3rem;
+      }
+
+      /* ===== MEMBRES ===== */
+      .member-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.6rem;
+        border-radius: 0.5rem;
+        background: #f8fafc;
+        margin-bottom: 0.4rem;
+      }
+      .member-item:hover {
+        background: #eff6ff;
+      }
+      .member-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #3b82f6;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      .member-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .member-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .member-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #1e293b;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        flex-wrap: wrap;
+      }
+      .member-username {
+        font-size: 0.75rem;
+        color: #64748b;
+      }
+      .admin-badge {
+        display: inline-block;
+        background: #fbbf24;
+        color: #78350f;
+        font-size: 0.6rem;
+        font-weight: 700;
+        padding: 0.1rem 0.4rem;
+        border-radius: 0.6rem;
+        text-transform: uppercase;
+      }
+      .member-actions {
+        display: flex;
+        gap: 0.3rem;
+      }
+      .member-actions button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        padding: 0.3rem;
+        border-radius: 0.4rem;
+        transition: 0.2s;
+      }
+      .member-actions button:hover {
+        background: #dbeafe;
+      }
+      body.dark-mode .member-item {
+        background: #1e293b;
+      }
+      body.dark-mode .member-item:hover {
+        background: #334155;
+      }
+      body.dark-mode .member-name {
+        color: #f1f5f9;
+      }
+      body.dark-mode .admin-badge {
+        background: #78350f;
+        color: #fde68a;
+      }
+
+      /* ===== PARTAGE ===== */
+      .share-link-box {
+        background: #eff6ff;
+        padding: 0.8rem;
+        border-radius: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+      .share-link-box input {
+        flex: 1;
+        padding: 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.4rem;
+        font-family: monospace;
+        font-size: 0.85rem;
+        background: white;
+      }
+      body.dark-mode .share-link-box {
+        background: #1e3a8a;
+      }
+      body.dark-mode .share-link-box input {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-color: #475569;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="dashboard-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <a href="dashboard.html" class="logo">
+            <img src="../assets/images/Logo.png" alt="CampusBox" />
+          </a>
+          <button class="btn-toggle-sidebar" id="toggleSidebarBtn">☰</button>
+          <div class="user-info-sidebar">
+            <div style="display: flex; align-items: center; gap: 0.5rem">
+              <div id="sidebarUserAvatar">U</div>
+              <span id="sidebarUserName">Chargement...</span>
+            </div>
+            <span class="online-status">● En ligne</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="dashboard.html">
+                <img
+                  src="../assets/images/icons/dashboard.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Tableau de bord</span>
+              </a>
+            </li>
+            <li>
+              <a href="cours.html">
+                <img
+                  src="../assets/images/icons/cours.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mes cours</span>
+              </a>
+            </li>
+            <li>
+              <a href="examens.html">
+                <img
+                  src="../assets/images/icons/exams.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Examens</span>
+              </a>
+            </li>
+            <li>
+              <a href="notes.html">
+                <img
+                  src="../assets/images/icons/notes.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Notes</span>
+              </a>
+            </li>
+            <li>
+              <a href="quiz.html">
+                <span class="nav-emoji">🧠</span>
+                <span>Quiz</span>
+              </a>
+            </li>
+            <li>
+              <a href="compte.html">
+                <img
+                  src="../assets/images/icons/profil.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mon profil</span>
+              </a>
+            </li>
+            <li>
+              <a href="messages.html" class="active">
+                <img
+                  src="../assets/images/icons/messages.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Messages</span>
+              </a>
+            </li>
+            <li>
+              <a href="parametres.html">
+                <span class="nav-emoji">⚙️</span>
+                <span>Paramètres</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" id="logoutBtnSidebar">
+                <span class="nav-emoji">🚪</span>
+                <span>Déconnexion</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <button class="btn-burger" id="burgerBtn">☰</button>
+
+        <div class="messages-layout">
+          <div class="messages-list-panel" id="listPanel">
+            <div class="panel-header">
+              <h2>💬 Messages</h2>
+              <div class="actions">
+                <button id="newMessageBtn" title="Nouveau message">✏️</button>
+                <button id="createGroupBtn" title="Créer un groupe">👥</button>
+                <button id="createRoomBtn" title="Créer une salle">🏫</button>
+                <button id="invitationsBtn" title="Invitations">📨</button>
+              </div>
+            </div>
+            <div class="search-conversations">
+              <input
+                type="text"
+                id="searchConvInput"
+                placeholder="🔍 Rechercher..."
+              />
+            </div>
+            <div class="conversation-filters" id="filterChips">
+              <button class="filter-chip active" data-filter="all">
+                Toutes
+              </button>
+              <button class="filter-chip" data-filter="unread">Non lus</button>
+              <button class="filter-chip" data-filter="pinned">
+                Épinglées
+              </button>
+              <button class="filter-chip" data-filter="official">
+                ★ Officiels
+              </button>
+            </div>
+            <div class="conversation-list" id="conversationList">
+              <div class="empty-state">
+                <span class="icon">💬</span>
+                <h3>Aucune conversation</h3>
+                <p>Commencez à discuter avec vos camarades.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="conversation-panel" id="conversationPanel">
+            <div class="chat-header" id="chatHeader">
+              <div class="left">
+                <button class="back-btn" id="backToListBtn">←</button>
+                <div class="avatar-sm" id="chatAvatar" style="cursor: pointer">
+                  👤
+                </div>
+                <div class="info" id="chatUserInfo" style="cursor: pointer">
+                  <h4 id="chatName">Sélectionnez une conversation</h4>
+                  <span class="status" id="chatStatus">En ligne</span>
+                </div>
+              </div>
+              <div class="right">
+                <button id="chatOptionsBtn" title="Options">⚙️</button>
+              </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+              <div class="empty-state">
+                <span class="icon">💬</span>
+                <h3>Bienvenue !</h3>
+                <p>Sélectionnez une conversation.</p>
+              </div>
+            </div>
+
+            <div class="chat-input" id="chatInputArea">
+              <div id="emojiPicker"><div id="emojiContainer"></div></div>
+
+              <div class="recording-indicator" id="recordingIndicator">
+                <span class="pulse"></span>
+                <span class="rec-time" id="recTime">0:00</span>
+                <div class="recording-actions">
+                  <button class="cancel-rec" id="cancelRecBtn">🗑️</button>
+                  <button class="send-rec" id="sendRecBtn">📤</button>
+                </div>
+              </div>
+
+              <div class="input-wrapper">
+                <button class="emoji-btn" id="emojiBtn">😊</button>
+                <input
+                  type="text"
+                  id="msgInput"
+                  placeholder="Écrivez un message..."
+                />
+                <button class="file-btn" id="fileBtn">📎</button>
+                <button class="mic-btn" id="micBtn" title="Message vocal">
+                  🎤
+                </button>
+                <input
+                  type="file"
+                  id="fileInput"
+                  style="display: none"
+                  multiple
+                />
+              </div>
+              <button class="send-btn" id="sendBtn">➤</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- MODALES -->
+    <div class="modal-overlay" id="newMessageModal">
+      <div class="modal-box">
+        <h3>🔍 Rechercher un utilisateur</h3>
+        <div class="form-group">
+          <input
+            type="text"
+            id="searchUserInput"
+            placeholder="@nom_utilisateur"
+          />
+        </div>
+        <div id="searchResults" style="max-height: 300px; overflow-y: auto">
+          <p style="color: #94a3b8">Saisissez un nom d'utilisateur...</p>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-outline" id="closeNewMsgModal">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="createGroupModal">
+      <div class="modal-box">
+        <h3>👥 Créer un groupe d'étude</h3>
+        <div class="form-group">
+          <label>Nom du groupe *</label>
+          <input
+            type="text"
+            id="groupNameInput"
+            placeholder="Ex: Groupe de mathématiques"
+          />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            id="groupDescInput"
+            placeholder="Description du groupe..."
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label>Membres (séparés par des virgules)</label>
+          <input
+            type="text"
+            id="groupMembersInput"
+            placeholder="@user1, @user2, @user3"
+          />
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-outline" id="closeGroupModal">Annuler</button>
+          <button class="btn btn-primary" id="saveGroupBtn">
+            Créer le groupe
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="createRoomModal">
+      <div class="modal-box">
+        <h3>🏫 Créer une salle d'étude</h3>
+        <div class="form-group">
+          <label>Nom de la salle *</label>
+          <input
+            type="text"
+            id="roomNameInput"
+            placeholder="Ex: Révision examen"
+          />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            id="roomDescInput"
+            placeholder="Description de la salle..."
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label>Limite de participants</label>
+          <input
+            type="number"
+            id="roomLimitInput"
+            value="10"
+            min="1"
+            max="50"
+          />
+        </div>
+        <div class="form-group">
+          <label>Visibilité</label>
+          <select id="roomVisibilityInput">
+            <option value="public">🌍 Public</option>
+            <option value="private">🔒 Privé</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Code (généré automatiquement)</label>
+          <input
+            type="text"
+            id="roomCodeInput"
+            readonly
+            style="background: #f1f5f9"
+          />
+          <button
+            id="generateCodeBtn"
+            style="
+              margin-top: 0.3rem;
+              background: none;
+              border: 1px solid #cbd5e1;
+              border-radius: 0.5rem;
+              padding: 0.2rem 0.8rem;
+              cursor: pointer;
+            "
+          >
+            🔄 Générer
+          </button>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-outline" id="closeRoomModal">Annuler</button>
+          <button class="btn btn-primary" id="saveRoomBtn">
+            Créer la salle
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="chatOptionsModal">
+      <div class="modal-box">
+        <h3>⚙️ Options</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem">
+          <button class="btn btn-outline" id="pinConvBtn">📌 Épingler</button>
+          <button class="btn btn-outline" id="muteConvBtn">
+            🔇 Mettre en sourdine
+          </button>
+          <button class="btn btn-outline" id="viewMembersBtn">
+            👥 Voir les membres
+          </button>
+          <button class="btn btn-outline" id="clearConvBtn">
+            🧹 Effacer l'historique
+          </button>
+          <button class="btn btn-danger" id="deleteConvBtn">
+            🗑️ Supprimer la conversation
+          </button>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-outline" id="closeChatOptions">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modale surnom personnalisé -->
+    <div class="modal-overlay" id="nicknameModal">
+      <div class="modal-box">
+        <h3>✏️ Surnom personnalisé</h3>
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem">
+          Ce surnom n'est visible que par <strong>toi</strong>.
+        </p>
+        <div class="form-group">
+          <label
+            >Nom d'affichage pour
+            <span id="nicknameTarget">cet utilisateur</span></label
+          >
+          <input
+            type="text"
+            id="nicknameInput"
+            placeholder="Ex: Mon pote"
+            maxlength="100"
+          />
+        </div>
+        <div class="modal-actions" style="flex-wrap: wrap">
+          <button class="btn btn-outline" id="closeNicknameModal">
+            Annuler
+          </button>
+          <button class="btn btn-primary" id="saveNicknameBtn">
+            💾 Enregistrer
+          </button>
+          <button class="btn btn-danger" id="removeNicknameBtn">
+            🗑️ Retirer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modale membres -->
+    <div class="modal-overlay" id="membersModal">
+      <div class="modal-box" style="max-width: 500px">
+        <h3>👥 Membres du groupe</h3>
+        <div
+          class="form-group"
+          id="inviteFormGroup"
+          style="margin-top: 1rem; display: none"
+        >
+          <label>Inviter par nom d'utilisateur</label>
+          <div style="display: flex; gap: 0.4rem">
+            <input
+              type="text"
+              id="inviteUsernameInput"
+              placeholder="@username"
+              style="flex: 1"
+            />
+            <button class="btn btn-primary" id="sendInviteBtn">Inviter</button>
+          </div>
+        </div>
+        <div
+          id="membersListContainer"
+          style="max-height: 400px; overflow-y: auto; margin-top: 1rem"
+        >
+          <p style="color: #94a3b8">Chargement...</p>
+        </div>
+        <div class="modal-actions" style="margin-top: 1rem; flex-wrap: wrap">
+          <button class="btn btn-outline" id="shareGroupBtn">
+            🔗 Partager le lien
+          </button>
+          <button class="btn btn-danger" id="leaveGroupBtn">
+            🚪 Quitter le groupe
+          </button>
+          <button class="btn btn-outline" id="closeMembersModal">Fermer</button>
+        </div>
+        <div id="shareLinkContainer" style="display: none"></div>
+      </div>
+    </div>
+
+    <!-- Modale invitations -->
+    <div class="modal-overlay" id="invitationsModal">
+      <div class="modal-box" style="max-width: 500px">
+        <h3>📨 Invitations en attente</h3>
+        <div
+          id="invitationsListContainer"
+          style="max-height: 400px; overflow-y: auto; margin-top: 1rem"
+        >
+          <p style="color: #94a3b8">Chargement...</p>
+        </div>
+        <div class="modal-actions" style="margin-top: 1rem">
+          <button class="btn btn-outline" id="closeInvitationsModal">
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL PROFIL -->
+    <div
+      id="profileOverlay"
+      style="
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 100;
+      "
+    ></div>
+    <div
+      id="userProfilePanel"
+      style="
+        position: fixed;
+        top: 0;
+        right: -400px;
+        width: 380px;
+        max-width: 100vw;
+        height: 100vh;
+        background: white;
+        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+        z-index: 200;
+        transition: right 0.3s;
+        padding: 1.5rem;
+        overflow-y: auto;
+      "
+    >
+      <button
+        id="closeProfilePanel"
+        style="
+          float: right;
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+        "
+      >
+        ✕
+      </button>
+      <div style="text-align: center; margin-top: 1rem">
+        <div
+          id="profilePic"
+          style="
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto;
+          "
+        >
+          👤
+        </div>
+        <h3 id="profileName" style="margin: 0.5rem 0 0">Nom</h3>
+        <p id="profileUsername" style="color: #64748b; margin: 0.2rem 0">
+          @username
+        </p>
+        <p id="profileStatus" style="font-size: 0.9rem; font-weight: 500">
+          🟢 En ligne
+        </p>
+      </div>
+      <hr />
+      <div>
+        <strong>🎓 Filière :</strong>
+        <span id="profileFiliere">Non renseignée</span>
+      </div>
+      <div>
+        <strong>🌍 Pays :</strong> <span id="profilePays">Non renseigné</span>
+      </div>
+      <div>
+        <strong>📝 Bio :</strong> <span id="profileBio">Aucune bio</span>
+      </div>
+      <hr />
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          margin-top: 1rem;
+        "
+      >
+        <button class="btn btn-primary" id="profileSendMsg">
+          💬 Envoyer un message
+        </button>
+        <button class="btn btn-outline" id="profileNickname">
+          ✏️ Modifier le surnom
+        </button>
+        <button class="btn btn-outline" id="profileInviteGroup">
+          👥 Inviter dans un groupe
+        </button>
+        <button class="btn btn-outline" id="profileInviteRoom">
+          🏫 Inviter dans une salle
+        </button>
+        <button class="btn btn-danger" id="profileBlock">🚫 Bloquer</button>
+        <button class="btn btn-outline" id="profileReport">🚨 Signaler</button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <footer><p>&copy; 2025 CampusBox</p></footer>
+
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/messages.js"></script>
+  </body>
+</html>

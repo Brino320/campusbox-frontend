@@ -1,0 +1,100 @@
+/* ============================================
+   BASE - Messages
+   ============================================ */
+.messages-layout {
+  display: flex;
+  height: calc(100vh - 70px);
+  background: white;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #94a3b8;
+  padding: 2rem;
+  text-align: center;
+}
+.empty-state .icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+.empty-state h3 {
+  color: #475569;
+  margin-bottom: 0.3rem;
+}
+.empty-state p {
+  font-size: 0.9rem;
+  max-width: 300px;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.75rem;
+  background: #0f172a;
+  color: white;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(120%);
+  transition: 0.4s ease;
+  z-index: 999;
+  max-width: 400px;
+}
+.toast.show {
+  transform: translateY(0);
+}
+.toast.success {
+  background: #10b981;
+}
+.toast.error {
+  background: #ef4444;
+}
+
+body.dark-mode .messages-layout {
+  background: #1e293b;
+}
+body.dark-mode .toast {
+  background: #1e293b;
+}
+/* Panneau de profil */
+#userProfilePanel {
+  transition: right 0.3s ease;
+}
+#userProfilePanel .btn {
+  width: 100%;
+  text-align: center;
+}
+#profileOverlay {
+  z-index: 100;
+}
+#userProfilePanel .btn-outline {
+  background: transparent;
+  border: 1px solid #94a3b8;
+  color: #1e293b;
+}
+#userProfilePanel .btn-outline:hover {
+  background: #f1f5f9;
+}
+body.dark-mode #userProfilePanel {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+body.dark-mode #userProfilePanel .btn-outline {
+  color: #cbd5e1;
+  border-color: #475569;
+}
+body.dark-mode #userProfilePanel .btn-outline:hover {
+  background: #334155;
+}
+body.dark-mode #profileOverlay {
+  background: rgba(0, 0, 0, 0.6);
+}

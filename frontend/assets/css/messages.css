@@ -1,0 +1,8 @@
+/* ============================================
+   MESSAGES - Fichier principal (importe tout)
+   ============================================ */
+@import url("messages/base.css");
+@import url("messages/conversations.css");
+@import url("messages/chat.css");
+@import url("messages/modals.css");
+@import url("messages/responsive.css");

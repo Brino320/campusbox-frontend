@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestion des questions - Examen</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <style>
+      body {
+        background: #f1f5f9;
+        font-family: system-ui;
+        padding: 1.5rem;
+      }
+      .container {
+        max-width: 1000px;
+        margin: auto;
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+      }
+      h1,
+      h2,
+      h3 {
+        margin-bottom: 0.75rem;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 0.3rem;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #cbd5e1;
+        font-family: inherit;
+      }
+      button {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        cursor: pointer;
+        margin-right: 0.5rem;
+        font-size: 0.9rem;
+      }
+      button:hover {
+        background: #2563eb;
+      }
+      .btn-secondary {
+        background: #94a3b8;
+      }
+      .btn-secondary:hover {
+        background: #64748b;
+      }
+      .btn-danger {
+        background: #ef4444;
+      }
+      .btn-danger:hover {
+        background: #dc2626;
+      }
+      .btn-success {
+        background: #10b981;
+      }
+      .btn-success:hover {
+        background: #059669;
+      }
+      .question-item {
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #3b82f6;
+      }
+      .question-item .q-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .question-item .q-text {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+      }
+      .question-item .q-rep {
+        font-size: 0.85rem;
+        margin: 0.2rem 0;
+      }
+      .q-rep.correct {
+        color: #065f46;
+        font-weight: 600;
+      }
+      .reponse-item {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+      .reponse-item input[type="text"] {
+        flex: 1;
+      }
+      .reponse-item label {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-weight: normal;
+        margin: 0;
+        cursor: pointer;
+      }
+      .reponse-item label input {
+        width: auto;
+      }
+      .form-box {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        margin-top: 1rem;
+      }
+      .bulk-box {
+        background: #fef3c7;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        margin-top: 1rem;
+      }
+      textarea.bulk {
+        font-family: monospace;
+        font-size: 0.85rem;
+      }
+      .header-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📋 Gestion des questions – Examen</h1>
+
+      <div class="form-group">
+        <label>Choisir un examen :</label>
+        <select id="examenSelect"></select>
+      </div>
+
+      <div
+        id="examInfo"
+        style="
+          display: none;
+          background: #eff6ff;
+          padding: 0.75rem;
+          border-radius: 0.5rem;
+          margin-bottom: 1rem;
+        "
+      >
+        <strong id="examInfoTitre"></strong> —
+        <span id="examInfoMatiere"></span>
+      </div>
+
+      <div id="questionsArea" style="display: none">
+        <div class="header-actions">
+          <button id="addQuestionBtn" class="btn-success">
+            ➕ Ajouter une question
+          </button>
+          <button id="bulkToggleBtn">📥 Import en masse</button>
+          <span style="margin-left: auto; color: #64748b">
+            Total : <b id="totalQuestions">0</b> question(s)
+          </span>
+        </div>
+
+        <div class="bulk-box" id="bulkBox" style="display: none">
+          <h3>Import en masse</h3>
+          <p style="font-size: 0.85rem; color: #78350f; margin-bottom: 0.5rem">
+            Format : une ligne par question<br />
+            <code>Question?|option1;option2;option3|2</code> (le 3e champ =
+            index de la bonne réponse, 1-based)
+          </p>
+          <textarea
+            id="bulkText"
+            class="bulk"
+            rows="8"
+            placeholder="Qu'est-ce que le SQL ?|Un langage web;Un langage BDD;Un OS|2
+Combien font 2+2 ?|3;4;5|2"
+          ></textarea>
+          <br /><br />
+          <button id="importBulkBtn" class="btn-success">📥 Importer</button>
+          <button id="cancelBulkBtn" class="btn-secondary">Annuler</button>
+        </div>
+
+        <div id="questionsList"></div>
+
+        <div id="questionForm" class="form-box" style="display: none">
+          <h3 id="formTitle">Ajouter une question</h3>
+          <input type="hidden" id="questionId" />
+          <div class="form-group">
+            <label>Texte de la question</label>
+            <textarea id="questionText" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select id="questionType">
+              <option value="qcm">QCM</option>
+              <option value="vrai_faux">Vrai/Faux</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Points</label>
+            <input type="number" id="questionPoints" value="1" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Réponses (cochez la bonne)</label>
+            <div id="reponsesContainer"></div>
+            <button type="button" id="addReponseBtn" class="btn-secondary">
+              ➕ Ajouter une réponse
+            </button>
+          </div>
+          <button id="saveQuestionBtn" class="btn-success">
+            💾 Enregistrer
+          </button>
+          <button id="cancelBtn" class="btn-secondary">Annuler</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ config.js AVANT le JS métier -->
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/examen-questions.js"></script>
+  </body>
+</html>

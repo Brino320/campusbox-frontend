@@ -1,0 +1,493 @@
+/* ===== RESET & BASE ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #f5f7fb;
+  font-family: "Segoe UI", Roboto, sans-serif;
+}
+
+/* ===== LAYOUT ===== */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 260px;
+  background-color: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+  z-index: 900;
+  transition: transform 0.3s;
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #eef2ff;
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 1rem;
+}
+
+.user-info-sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info-sidebar span:first-child {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.online-status {
+  font-size: 0.7rem;
+  color: #10b981;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 1rem 0;
+}
+
+.sidebar-nav li a {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  color: #334155;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.sidebar-nav li a:hover,
+.sidebar-nav li a.active {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border-left: 3px solid #2563eb;
+}
+
+/* Overlay mobile */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 850;
+}
+
+.sidebar-overlay.active {
+  display: block;
+}
+
+/* ===== CONTENU PRINCIPAL ===== */
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  padding: 2rem;
+  max-width: calc(100% - 260px);
+  overflow-x: hidden;
+}
+
+.top-bar h1 {
+  font-size: 1.6rem;
+  color: #0f172a;
+  margin-bottom: 1.8rem;
+  word-wrap: break-word;
+}
+
+/* Bouton burger (masqué en desktop) */
+.btn-burger {
+  display: none;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+/* ===== STATISTIQUES ===== */
+.stats-section h2 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: #475569;
+}
+
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  border: 1px solid #eef2ff;
+}
+
+.stat-card h3 {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #64748b;
+  margin-bottom: 0.3rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* ===== GRAPHIQUE ===== */
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 260px;
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+}
+
+.chart-wrapper canvas {
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+/* ===== SÉLECTEUR DE SEMESTRE ===== */
+.semestre-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0 0 1rem 0;
+  background: #f1f5f9;
+  padding: 0.3rem;
+  border-radius: 2rem;
+  width: fit-content;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+.semestre-tab {
+  background: transparent;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: #475569;
+  transition: 0.2s;
+  font-size: 0.9rem;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.semestre-tab:hover {
+  background: #e2e8f0;
+}
+
+.semestre-tab.active {
+  background: #3b82f6;
+  color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+}
+
+/* ===== PROGRAMME ===== */
+.programme-section {
+  background: #ffffff;
+  border-radius: 1.2rem;
+  padding: 1.5rem;
+  border: 1px solid #edf2f7;
+}
+
+.programme-section h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #eef2ff;
+  word-wrap: break-word;
+}
+
+.matieres-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.matiere-item {
+  padding: 0.7rem 1rem;
+  background-color: #fafcff;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-left: 4px solid #cbd5e1;
+}
+
+.matiere-item:hover {
+  background-color: #f1f5f9;
+  border-left-color: #2563eb;
+}
+
+.matiere-nom {
+  font-weight: 500;
+  color: #0f172a;
+  word-wrap: break-word;
+}
+
+.matiere-desc {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 0.2rem;
+  word-wrap: break-word;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  padding: 1rem;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  margin-left: 260px;
+}
+
+/* ===== MODE SOMBRE ===== */
+body.dark-mode {
+  background-color: #0f172a;
+}
+
+body.dark-mode .sidebar {
+  background-color: #1e293b;
+  border-right-color: #334155;
+}
+
+body.dark-mode .logo {
+  color: #60a5fa;
+}
+
+body.dark-mode .user-info-sidebar span:first-child {
+  color: #f1f5f9;
+}
+
+body.dark-mode .sidebar-nav li a {
+  color: #cbd5e1;
+}
+
+body.dark-mode .sidebar-nav li a:hover,
+body.dark-mode .sidebar-nav li a.active {
+  background-color: #334155;
+  color: #60a5fa;
+}
+
+body.dark-mode .top-bar h1 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .stats-section h2 {
+  color: #cbd5e1;
+}
+
+body.dark-mode .stat-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .stat-card h3 {
+  color: #94a3b8;
+}
+
+body.dark-mode .stat-value {
+  color: #f1f5f9;
+}
+
+body.dark-mode .chart-wrapper {
+  background: #1e293b;
+}
+
+body.dark-mode .programme-section {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .programme-section h2 {
+  color: #f1f5f9;
+  border-bottom-color: #334155;
+}
+
+body.dark-mode .matiere-item {
+  background-color: #0f172a;
+  border-left-color: #475569;
+}
+
+body.dark-mode .matiere-item:hover {
+  background-color: #334155;
+  border-left-color: #60a5fa;
+}
+
+body.dark-mode .matiere-nom {
+  color: #f1f5f9;
+}
+
+body.dark-mode .matiere-desc {
+  color: #94a3b8;
+}
+
+body.dark-mode .semestre-tabs {
+  background: #1e293b;
+}
+
+body.dark-mode .semestre-tab {
+  color: #cbd5e1;
+}
+
+body.dark-mode .semestre-tab:hover {
+  background: #334155;
+}
+
+body.dark-mode .semestre-tab.active {
+  background: #3b82f6;
+  color: white;
+}
+
+body.dark-mode footer {
+  color: #64748b;
+}
+
+/* ===== RESPONSIVE : TABLETTES ===== */
+@media (max-width: 900px) {
+  .main-content {
+    margin-left: 0;
+    max-width: 100%;
+    padding: 1.5rem;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  footer {
+    margin-left: 0;
+  }
+
+  .btn-burger {
+    display: inline-block;
+  }
+}
+
+/* ===== RESPONSIVE : MOBILES ===== */
+@media (max-width: 640px) {
+  .main-content {
+    padding: 1rem;
+  }
+
+  .top-bar h1 {
+    font-size: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .stats-section h2 {
+    font-size: 1rem;
+  }
+
+  .stats-cards {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  .stat-card {
+    padding: 0.8rem 1rem;
+  }
+
+  .stat-value {
+    font-size: 1.3rem;
+  }
+
+  .chart-wrapper {
+    height: 220px;
+    padding: 0.7rem;
+  }
+
+  .programme-section {
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .programme-section h2 {
+    font-size: 1rem;
+  }
+
+  .semestre-tabs {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .semestre-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    flex: 1;
+    text-align: center;
+  }
+
+  .matiere-item {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .matiere-nom {
+    font-size: 0.95rem;
+  }
+
+  .matiere-desc {
+    font-size: 0.75rem;
+  }
+
+  .btn-burger {
+    font-size: 1.3rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+/* ===== TRÈS PETITS ÉCRANS ===== */
+@media (max-width: 380px) {
+  .top-bar h1 {
+    font-size: 1.05rem;
+  }
+
+  .semestre-tab {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .stat-value {
+    font-size: 1.15rem;
+  }
+}

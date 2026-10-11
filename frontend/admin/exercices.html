@@ -1,0 +1,1265 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Gestion des exercices</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* ===== VARIABLES ===== */
+      :root {
+        --primary: #1e293b;
+        --primary-light: #334155;
+        --accent: #3b82f6;
+        --accent-hover: #2563eb;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
+        --radius: 12px;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.1);
+        --transition: 0.25s ease;
+      }
+
+      /* ===== RESET & BASE ===== */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--gray-100);
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        padding: 1.5rem;
+        color: var(--gray-800);
+        line-height: 1.6;
+      }
+
+      /* ===== NAV ===== */
+      .admin-nav {
+        background: var(--primary);
+        padding: 0.75rem 2rem;
+        border-radius: var(--radius);
+        margin-bottom: 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem 1.5rem;
+        box-shadow: var(--shadow);
+      }
+      .admin-nav a {
+        color: #cbd5e1;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.4rem 0.8rem;
+        border-radius: 2rem;
+        transition: var(--transition);
+        font-size: 0.95rem;
+      }
+      .admin-nav a:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+      }
+      .admin-nav a.active {
+        background: var(--accent);
+        color: white;
+      }
+
+      /* ===== CONTAINER ===== */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: var(--radius);
+        padding: 2rem 2rem 2.5rem;
+        box-shadow: var(--shadow);
+      }
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--gray-200);
+        padding-bottom: 1rem;
+      }
+      .page-header h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+      }
+      .page-header h1 i {
+        color: var(--accent);
+      }
+      .badge-info {
+        background: #dbeafe;
+        color: var(--accent);
+        padding: 0.3rem 1rem;
+        border-radius: 2rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      /* ===== FILTERS BAR ===== */
+      .filters-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        background: var(--gray-50);
+        padding: 1rem 1.2rem;
+        border-radius: var(--radius);
+        margin-bottom: 2rem;
+        border: 1px solid var(--gray-200);
+      }
+      .filters-bar label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--gray-600);
+        display: block;
+        margin-bottom: 0.25rem;
+      }
+      .filters-bar select,
+      .filters-bar input {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        border: 1px solid var(--gray-300);
+        background: white;
+        font-size: 0.95rem;
+        transition: var(--transition);
+      }
+      .filters-bar select:focus,
+      .filters-bar input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      }
+      .filters-bar select:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      /* ===== FORM SECTION ===== */
+      .form-section {
+        background: var(--gray-50);
+        padding: 1.5rem 1.8rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--gray-200);
+        margin-bottom: 2rem;
+        transition: var(--transition);
+      }
+      .form-section h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 1.5rem;
+      }
+      .form-grid .full-width {
+        grid-column: 1 / -1;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+      .form-group label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--gray-700);
+        margin-bottom: 0.3rem;
+      }
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+        border: 1px solid var(--gray-300);
+        font-size: 0.95rem;
+        transition: var(--transition);
+        font-family: inherit;
+      }
+      .form-group textarea {
+        resize: vertical;
+        min-height: 70px;
+      }
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+      }
+      .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.2rem;
+        flex-wrap: wrap;
+      }
+      .btn {
+        padding: 0.6rem 1.6rem;
+        border: none;
+        border-radius: 2rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: var(--accent-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+      .btn-success {
+        background: var(--success);
+        color: white;
+      }
+      .btn-success:hover {
+        background: #059669;
+        transform: translateY(-1px);
+      }
+      .btn-danger {
+        background: var(--danger);
+        color: white;
+      }
+      .btn-danger:hover {
+        background: #dc2626;
+        transform: translateY(-1px);
+      }
+      .btn-warning {
+        background: var(--warning);
+        color: white;
+      }
+      .btn-warning:hover {
+        background: #d97706;
+        transform: translateY(-1px);
+      }
+      .btn-secondary {
+        background: var(--gray-300);
+        color: var(--gray-700);
+      }
+      .btn-secondary:hover {
+        background: var(--gray-400);
+      }
+      .btn-sm {
+        padding: 0.25rem 0.8rem;
+        font-size: 0.8rem;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      /* ===== LISTE ===== */
+      .list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .list-header h2 {
+        font-size: 1.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: white;
+        border: 1px solid var(--gray-300);
+        border-radius: 2rem;
+        padding: 0.1rem 0.1rem 0.1rem 1rem;
+        transition: var(--transition);
+      }
+      .search-box:focus-within {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+      }
+      .search-box input {
+        border: none;
+        padding: 0.4rem 0;
+        font-size: 0.95rem;
+        background: transparent;
+        outline: none;
+        width: 180px;
+      }
+      .search-box button {
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 2rem;
+        padding: 0.4rem 1rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .search-box button:hover {
+        background: var(--accent-hover);
+      }
+
+      .exercice-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+      }
+      .exercice-item {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        padding: 1rem 1.2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+        transition: var(--transition);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+      }
+      .exercice-item:hover {
+        border-color: var(--accent);
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-2px);
+      }
+      .exercice-content {
+        flex: 1;
+        min-width: 200px;
+      }
+      .exercice-content .question {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .exercice-content .meta {
+        font-size: 0.85rem;
+        color: var(--gray-500);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+      }
+      .badge-type {
+        display: inline-block;
+        padding: 0.15rem 0.8rem;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
+      .badge-qcm {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .badge-ouvert {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .exercice-actions {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+      .empty-state {
+        text-align: center;
+        padding: 2.5rem 0;
+        color: var(--gray-500);
+      }
+      .empty-state i {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.3;
+      }
+
+      /* ===== PAGINATION ===== */
+      .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 0.3rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+      }
+      .pagination button {
+        padding: 0.3rem 0.9rem;
+        border: 1px solid var(--gray-300);
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: var(--transition);
+      }
+      .pagination button.active {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+      .pagination button:hover:not(.active) {
+        background: var(--gray-100);
+      }
+      .pagination button:disabled {
+        opacity: 0.4;
+        pointer-events: none;
+      }
+
+      /* ===== TOAST ===== */
+      .toast-container {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 9999;
+        max-width: 380px;
+        width: 100%;
+      }
+      .toast {
+        background: var(--gray-800);
+        color: white;
+        padding: 0.8rem 1.2rem;
+        border-radius: var(--radius);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        animation: slideUp 0.3s ease;
+        border-left: 4px solid var(--accent);
+      }
+      .toast.success {
+        border-left-color: var(--success);
+      }
+      .toast.error {
+        border-left-color: var(--danger);
+      }
+      .toast i {
+        font-size: 1.2rem;
+      }
+      .toast .msg {
+        flex: 1;
+        font-size: 0.95rem;
+      }
+      .toast .close-toast {
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0 0.2rem;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 768px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .filters-bar {
+          grid-template-columns: 1fr;
+        }
+        .page-header {
+          flex-direction: column;
+          align-items: start;
+        }
+        .search-box input {
+          width: 120px;
+        }
+        .container {
+          padding: 1rem;
+        }
+        .admin-nav {
+          flex-direction: column;
+          gap: 0.3rem;
+          padding: 0.5rem;
+        }
+        .exercice-item {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .exercice-actions {
+          justify-content: flex-end;
+        }
+        .toast-container {
+          left: 1rem;
+          right: 1rem;
+          max-width: 100%;
+          bottom: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="admin-nav">
+      <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
+      <a href="chapitres.html"><i class="fas fa-book"></i> Chapitres</a>
+      <a href="exercices.html" class="active"
+        ><i class="fas fa-pencil-alt"></i> Exercices</a
+      >
+      <a href="quiz-manager.html"
+        ><i class="fas fa-question-circle"></i> Quiz</a
+      >
+      <a href="gestion-matieres.html"
+        ><i class="fas fa-layer-group"></i> Matières</a
+      >
+      <a href="etudiants.html"><i class="fas fa-users"></i> Étudiants</a>
+    </nav>
+
+    <!-- ===== MAIN CONTAINER ===== -->
+    <div class="container">
+      <div class="page-header">
+        <h1><i class="fas fa-pencil-alt"></i> Gestion des exercices</h1>
+        <span class="badge-info"
+          ><i class="fas fa-info-circle"></i> QCM ou questions ouvertes</span
+        >
+      </div>
+
+      <!-- ===== FILTRES ===== -->
+      <div class="filters-bar">
+        <div>
+          <label for="filiereSelect"
+            ><i class="fas fa-graduation-cap"></i> Filière</label
+          >
+          <select id="filiereSelect">
+            <option value="">-- Chargement --</option>
+          </select>
+        </div>
+        <div>
+          <label for="matiereSelect"><i class="fas fa-book"></i> Matière</label>
+          <select id="matiereSelect" disabled>
+            <option value="">-- Sélectionnez une filière --</option>
+          </select>
+        </div>
+        <div>
+          <label for="chapitreSelect"
+            ><i class="fas fa-chapter"></i> Chapitre</label
+          >
+          <select id="chapitreSelect" disabled>
+            <option value="">-- Sélectionnez une matière --</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ===== FORMULAIRE ===== -->
+      <section class="form-section" id="formSection">
+        <h2 id="formTitle">
+          <i class="fas fa-plus-circle"></i> Ajouter un exercice
+        </h2>
+        <form id="exerciceForm" novalidate>
+          <input type="hidden" id="exerciceId" />
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="type">Type d'exercice</label>
+              <select id="type">
+                <option value="qcm">QCM (Choix multiples)</option>
+                <option value="ouvert">Question ouverte</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="ordre_exercice">Ordre d'affichage</label>
+              <input
+                type="number"
+                id="ordre_exercice"
+                value="0"
+                min="0"
+                step="1"
+              />
+            </div>
+            <div class="form-group full-width">
+              <label for="question">Question</label>
+              <textarea
+                id="question"
+                rows="2"
+                required
+                placeholder="Ex: Quelle est la capitale du Mali ?"
+              ></textarea>
+            </div>
+            <!-- QCM options (toggle) -->
+            <div id="qcmOptionsDiv" class="full-width" style="display: block">
+              <div class="form-group">
+                <label for="options">Options (séparées par des virgules)</label>
+                <input
+                  type="text"
+                  id="options"
+                  placeholder="Ex: Bamako, Sikasso, Ségou, Mopti"
+                />
+              </div>
+              <div class="form-group">
+                <label for="bonne_reponse"
+                  >Index de la bonne réponse (0 = première)</label
+                >
+                <input type="number" id="bonne_reponse" value="0" min="0" />
+              </div>
+            </div>
+            <div class="form-group full-width">
+              <label for="correction">Correction / Explication</label>
+              <textarea
+                id="correction"
+                rows="3"
+                required
+                placeholder="Explication détaillée de la réponse..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="btnSave" class="btn btn-primary">
+              <i class="fas fa-save"></i> Enregistrer
+            </button>
+            <button
+              type="button"
+              id="btnCancel"
+              class="btn btn-secondary"
+              style="display: none"
+            >
+              <i class="fas fa-times"></i> Annuler
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ===== LISTE ===== -->
+      <div>
+        <div class="list-header">
+          <h2><i class="fas fa-list"></i> Exercices du chapitre</h2>
+          <div class="search-box">
+            <i class="fas fa-search" style="color: var(--gray-400)"></i>
+            <input type="text" id="searchInput" placeholder="Rechercher..." />
+            <button id="clearSearch" type="button">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div id="listeExercices" class="exercice-list">
+          <div class="empty-state">
+            <i class="fas fa-arrow-up"></i>
+            <p>
+              Sélectionnez une filière, une matière, puis un chapitre pour voir
+              les exercices.
+            </p>
+          </div>
+        </div>
+        <div
+          id="paginationContainer"
+          class="pagination"
+          style="display: none"
+        ></div>
+      </div>
+    </div>
+
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="../assets/js/config.js"></script>
+    <script>
+      (function () {
+        "use strict";
+
+        // ============================================================
+        // 1. CONFIGURATION DE L'API
+        // ============================================================
+        // On construit l'URL de base pour les routes admin.
+        // window.API_BASE est défini dans config.js (ex: "http://localhost:3000/api")
+        const base = window.API_BASE || "http://localhost:3000/api";
+        // On s'assure que l'URL se termine par "/admin"
+        const API_BASE = base.endsWith("/admin")
+          ? base
+          : base + (base.endsWith("/") ? "admin" : "/admin");
+
+        console.log("🔗 API_BASE utilisé :", API_BASE);
+
+        // ============================================================
+        // 2. VÉRIFICATION DU TOKEN
+        // ============================================================
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "../pages/authentification.html";
+          return;
+        }
+
+        // ============================================================
+        // 3. ÉTAT DE L'APPLICATION
+        // ============================================================
+        let currentChapitreId = null;
+        let currentMatiereId = null;
+        let exercicesCache = [];
+        let filteredExercices = [];
+        let currentPage = 1;
+        const PAGE_SIZE = 8;
+
+        // ============================================================
+        // 4. RÉFÉRENCES DOM
+        // ============================================================
+        const $ = (id) => document.getElementById(id);
+        const filiereSelect = $("filiereSelect");
+        const matiereSelect = $("matiereSelect");
+        const chapitreSelect = $("chapitreSelect");
+        const listeDiv = $("listeExercices");
+        const paginationDiv = $("paginationContainer");
+        const searchInput = $("searchInput");
+        const clearSearchBtn = $("clearSearch");
+
+        const exerciceId = $("exerciceId");
+        const typeSelect = $("type");
+        const questionInput = $("question");
+        const optionsInput = $("options");
+        const bonneReponseInput = $("bonne_reponse");
+        const correctionInput = $("correction");
+        const ordreInput = $("ordre_exercice");
+        const qcmDiv = $("qcmOptionsDiv");
+        const btnSave = $("btnSave");
+        const btnCancel = $("btnCancel");
+        const formTitle = $("formTitle");
+
+        // ============================================================
+        // 5. SYSTÈME DE TOAST (notifications)
+        // ============================================================
+        function showToast(message, type = "success") {
+          const container = document.getElementById("toastContainer");
+          const toast = document.createElement("div");
+          toast.className = `toast ${type}`;
+          const icon =
+            type === "success"
+              ? "fa-check-circle"
+              : type === "error"
+                ? "fa-exclamation-circle"
+                : "fa-info-circle";
+          toast.innerHTML = `
+            <i class="fas ${icon}"></i>
+            <span class="msg">${message}</span>
+            <button class="close-toast"><i class="fas fa-times"></i></button>
+          `;
+          toast
+            .querySelector(".close-toast")
+            .addEventListener("click", () => toast.remove());
+          container.appendChild(toast);
+          setTimeout(() => toast.remove(), 5000);
+        }
+
+        // ============================================================
+        // 6. FONCTION D'APPEL API GÉNÉRIQUE
+        // ============================================================
+        async function apiFetch(endpoint, options = {}) {
+          const url = `${API_BASE}${endpoint}`;
+          const headers = {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            ...options.headers,
+          };
+          const response = await fetch(url, { ...options, headers });
+          if (!response.ok) {
+            let errorMsg = `Erreur ${response.status}`;
+            try {
+              const errData = await response.json();
+              errorMsg = errData.error || errorMsg;
+            } catch (_) {
+              // si la réponse n'est pas du JSON
+            }
+            throw new Error(errorMsg);
+          }
+          return response.json();
+        }
+
+        // ============================================================
+        // 7. CHARGEMENT DES FILIÈRES
+        // ============================================================
+        async function chargerFilieres() {
+          try {
+            const data = await apiFetch("/filieres");
+            filiereSelect.innerHTML =
+              '<option value="">-- Sélectionner une filière --</option>';
+            data.forEach((f) => {
+              const opt = document.createElement("option");
+              opt.value = f.id;
+              opt.textContent = `${f.nom} ${f.description ? "(" + f.description + ")" : ""}`;
+              filiereSelect.appendChild(opt);
+            });
+          } catch (e) {
+            showToast("Erreur chargement filières : " + e.message, "error");
+            console.error("Erreur /filieres :", e);
+          }
+        }
+
+        // ============================================================
+        // 8. CHARGEMENT DES MATIÈRES D'UNE FILIÈRE
+        // ============================================================
+        async function chargerMatieresParFiliere(filiereId) {
+          try {
+            const [matieres, assoc] = await Promise.all([
+              apiFetch("/matieres"),
+              apiFetch("/matieres-filieres"),
+            ]);
+            const filtered = matieres.filter((m) =>
+              assoc.some(
+                (a) => a.matiere_id === m.id && a.filiere_id == filiereId,
+              ),
+            );
+            matiereSelect.innerHTML =
+              '<option value="">-- Sélectionner une matière --</option>';
+            filtered.forEach((m) => {
+              const opt = document.createElement("option");
+              opt.value = m.id;
+              opt.textContent = m.nom;
+              matiereSelect.appendChild(opt);
+            });
+            matiereSelect.disabled = false;
+            // Réinitialiser chapitre
+            chapitreSelect.innerHTML =
+              '<option value="">-- Sélectionnez une matière --</option>';
+            chapitreSelect.disabled = true;
+            currentChapitreId = null;
+            afficherListeExercices([]);
+          } catch (e) {
+            showToast("Erreur chargement matières : " + e.message, "error");
+            console.error("Erreur /matieres ou /matieres-filieres :", e);
+          }
+        }
+
+        // ============================================================
+        // 9. CHARGEMENT DES CHAPITRES D'UNE MATIÈRE
+        // ============================================================
+        async function chargerChapitres(matiereId) {
+          try {
+            const data = await apiFetch(`/chapitres?matiere_id=${matiereId}`);
+            chapitreSelect.innerHTML =
+              '<option value="">-- Choisir un chapitre --</option>';
+            data.forEach((ch) => {
+              const opt = document.createElement("option");
+              opt.value = ch.id;
+              opt.textContent = ch.titre;
+              chapitreSelect.appendChild(opt);
+            });
+            chapitreSelect.disabled = false;
+            currentChapitreId = null;
+            afficherListeExercices([]);
+          } catch (e) {
+            showToast("Erreur chargement chapitres : " + e.message, "error");
+            console.error("Erreur /chapitres :", e);
+          }
+        }
+
+        // ============================================================
+        // 10. CHARGEMENT DES EXERCICES D'UN CHAPITRE
+        // ============================================================
+        async function chargerExercices(chapitreId) {
+          try {
+            const data = await apiFetch(`/exercices?chapitre_id=${chapitreId}`);
+            exercicesCache = data;
+            filteredExercices = [...data];
+            currentPage = 1;
+            afficherListeExercices(filteredExercices);
+            paginationDiv.style.display =
+              filteredExercices.length > PAGE_SIZE ? "flex" : "none";
+          } catch (e) {
+            showToast("Erreur chargement exercices : " + e.message, "error");
+            console.error("Erreur /exercices :", e);
+            exercicesCache = [];
+            filteredExercices = [];
+            afficherListeExercices([]);
+          }
+        }
+
+        // ============================================================
+        // 11. AFFICHAGE DE LA LISTE (avec pagination et recherche)
+        // ============================================================
+        function afficherListeExercices(exercices) {
+          const start = (currentPage - 1) * PAGE_SIZE;
+          const end = start + PAGE_SIZE;
+          const pageItems = exercices.slice(start, end);
+
+          if (exercices.length === 0) {
+            listeDiv.innerHTML = `
+              <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>Aucun exercice pour ce chapitre.</p>
+              </div>
+            `;
+            paginationDiv.style.display = "none";
+            return;
+          }
+
+          let html = "";
+          pageItems.forEach((ex) => {
+            const badge = ex.type === "qcm" ? "badge-qcm" : "badge-ouvert";
+            const label = ex.type === "qcm" ? "QCM" : "Ouvert";
+            const optionsPreview =
+              ex.type === "qcm" && ex.options_json
+                ? ex.options_json.join(", ")
+                : "";
+            html += `
+              <div class="exercice-item" data-id="${ex.id}">
+                <div class="exercice-content">
+                  <div class="question">
+                    <span class="badge-type ${badge}">${label}</span>
+                    ${ex.question}
+                  </div>
+                  <div class="meta">
+                    <span><i class="far fa-clock"></i> Ordre ${ex.ordre_exercice}</span>
+                    ${optionsPreview ? `<span><i class="fas fa-list-ul"></i> ${optionsPreview}</span>` : ""}
+                    ${ex.bonne_reponse !== null && ex.type === "qcm" ? `<span><i class="fas fa-check"></i> Bonne réponse index ${ex.bonne_reponse}</span>` : ""}
+                  </div>
+                </div>
+                <div class="exercice-actions">
+                  <button class="btn btn-warning btn-sm btn-modifier" data-id="${ex.id}"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-danger btn-sm btn-supprimer" data-id="${ex.id}"><i class="fas fa-trash-alt"></i></button>
+                </div>
+              </div>
+            `;
+          });
+          listeDiv.innerHTML = html;
+
+          // Pagination
+          const totalPages = Math.ceil(exercices.length / PAGE_SIZE);
+          if (totalPages > 1) {
+            let pagHtml = "";
+            pagHtml += `<button class="page-prev" ${currentPage === 1 ? "disabled" : ""}><i class="fas fa-chevron-left"></i></button>`;
+            for (let i = 1; i <= totalPages; i++) {
+              pagHtml += `<button class="page-num ${i === currentPage ? "active" : ""}" data-page="${i}">${i}</button>`;
+            }
+            pagHtml += `<button class="page-next" ${currentPage === totalPages ? "disabled" : ""}><i class="fas fa-chevron-right"></i></button>`;
+            paginationDiv.innerHTML = pagHtml;
+            paginationDiv.style.display = "flex";
+
+            // Événements pagination
+            paginationDiv.querySelectorAll(".page-num").forEach((btn) => {
+              btn.addEventListener("click", () => {
+                currentPage = parseInt(btn.dataset.page);
+                afficherListeExercices(filteredExercices);
+              });
+            });
+            paginationDiv
+              .querySelector(".page-prev")
+              ?.addEventListener("click", () => {
+                if (currentPage > 1) {
+                  currentPage--;
+                  afficherListeExercices(filteredExercices);
+                }
+              });
+            paginationDiv
+              .querySelector(".page-next")
+              ?.addEventListener("click", () => {
+                if (currentPage < totalPages) {
+                  currentPage++;
+                  afficherListeExercices(filteredExercices);
+                }
+              });
+          } else {
+            paginationDiv.style.display = "none";
+          }
+
+          // Événements pour modifier / supprimer
+          document.querySelectorAll(".btn-modifier").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              chargerExercicePourModification(btn.dataset.id),
+            );
+          });
+          document.querySelectorAll(".btn-supprimer").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              supprimerExercice(btn.dataset.id),
+            );
+          });
+        }
+
+        // ============================================================
+        // 12. RECHERCHE EN TEMPS RÉEL
+        // ============================================================
+        searchInput.addEventListener("input", () => {
+          const q = searchInput.value.trim().toLowerCase();
+          if (q === "") {
+            filteredExercices = [...exercicesCache];
+          } else {
+            filteredExercices = exercicesCache.filter((ex) =>
+              ex.question.toLowerCase().includes(q),
+            );
+          }
+          currentPage = 1;
+          afficherListeExercices(filteredExercices);
+        });
+        clearSearchBtn.addEventListener("click", () => {
+          searchInput.value = "";
+          filteredExercices = [...exercicesCache];
+          currentPage = 1;
+          afficherListeExercices(filteredExercices);
+        });
+
+        // ============================================================
+        // 13. CHARGER UN EXERCICE POUR MODIFICATION
+        // ============================================================
+        async function chargerExercicePourModification(id) {
+          try {
+            let ex = exercicesCache.find((e) => e.id == id);
+            if (!ex) {
+              // Si l'exercice n'est pas dans le cache, on recharge la liste
+              await chargerExercices(currentChapitreId);
+              ex = exercicesCache.find((e) => e.id == id);
+              if (!ex) throw new Error("Exercice non trouvé");
+            }
+            exerciceId.value = ex.id;
+            typeSelect.value = ex.type;
+            questionInput.value = ex.question;
+            correctionInput.value = ex.correction || "";
+            ordreInput.value = ex.ordre_exercice || 0;
+            if (ex.type === "qcm") {
+              qcmDiv.style.display = "block";
+              optionsInput.value = ex.options_json
+                ? ex.options_json.join(", ")
+                : "";
+              bonneReponseInput.value = ex.bonne_reponse ?? 0;
+            } else {
+              qcmDiv.style.display = "none";
+            }
+            formTitle.innerHTML =
+              '<i class="fas fa-edit"></i> Modifier l\'exercice';
+            btnCancel.style.display = "inline-flex";
+            btnSave.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+            document
+              .getElementById("formSection")
+              .scrollIntoView({ behavior: "smooth" });
+          } catch (e) {
+            showToast("Erreur chargement exercice : " + e.message, "error");
+          }
+        }
+
+        // ============================================================
+        // 14. SUPPRIMER UN EXERCICE
+        // ============================================================
+        async function supprimerExercice(id) {
+          if (
+            !confirm(
+              "Supprimer définitivement cet exercice ? Cette action est irréversible.",
+            )
+          )
+            return;
+          try {
+            await apiFetch(`/exercices/${id}`, { method: "DELETE" });
+            showToast("Exercice supprimé avec succès", "success");
+            reinitialiserFormulaire();
+            await chargerExercices(currentChapitreId);
+          } catch (e) {
+            showToast("Erreur suppression : " + e.message, "error");
+          }
+        }
+
+        // ============================================================
+        // 15. SAUVEGARDE (AJOUT / MODIFICATION)
+        // ============================================================
+        btnSave.addEventListener("click", async () => {
+          const id = exerciceId.value;
+          const type = typeSelect.value;
+          const question = questionInput.value.trim();
+          const correction = correctionInput.value.trim();
+          const ordre = parseInt(ordreInput.value) || 0;
+
+          if (!currentChapitreId) {
+            showToast("Veuillez sélectionner un chapitre.", "error");
+            return;
+          }
+          if (!question || !correction) {
+            showToast(
+              "La question et la correction sont obligatoires.",
+              "error",
+            );
+            return;
+          }
+
+          let body = {
+            chapitre_id: currentChapitreId,
+            type,
+            question,
+            correction,
+            ordre_exercice: ordre,
+          };
+
+          if (type === "qcm") {
+            const optionsStr = optionsInput.value.trim();
+            if (!optionsStr) {
+              showToast(
+                "Veuillez saisir les options séparées par des virgules.",
+                "error",
+              );
+              return;
+            }
+            const options = optionsStr
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean);
+            if (options.length < 2) {
+              showToast(
+                "Au moins deux options sont requises pour un QCM.",
+                "error",
+              );
+              return;
+            }
+            const bonne = parseInt(bonneReponseInput.value);
+            if (isNaN(bonne) || bonne < 0 || bonne >= options.length) {
+              showToast(
+                `L'index de la bonne réponse doit être entre 0 et ${options.length - 1}.`,
+                "error",
+              );
+              return;
+            }
+            body.options = options;
+            body.bonne_reponse = bonne;
+          } else {
+            body.options = null;
+            body.bonne_reponse = null;
+          }
+
+          try {
+            if (id) {
+              await apiFetch(`/exercices/${id}`, {
+                method: "PUT",
+                body: JSON.stringify(body),
+              });
+              showToast("Exercice modifié avec succès", "success");
+            } else {
+              await apiFetch("/exercices", {
+                method: "POST",
+                body: JSON.stringify(body),
+              });
+              showToast("Exercice ajouté avec succès", "success");
+            }
+            reinitialiserFormulaire();
+            await chargerExercices(currentChapitreId);
+          } catch (e) {
+            showToast("Erreur : " + e.message, "error");
+          }
+        });
+
+        // ============================================================
+        // 16. RÉINITIALISATION DU FORMULAIRE
+        // ============================================================
+        function reinitialiserFormulaire() {
+          exerciceId.value = "";
+          typeSelect.value = "qcm";
+          questionInput.value = "";
+          correctionInput.value = "";
+          ordreInput.value = "0";
+          optionsInput.value = "";
+          bonneReponseInput.value = "0";
+          qcmDiv.style.display = "block";
+          formTitle.innerHTML =
+            '<i class="fas fa-plus-circle"></i> Ajouter un exercice';
+          btnCancel.style.display = "none";
+          btnSave.innerHTML = '<i class="fas fa-save"></i> Enregistrer';
+        }
+
+        btnCancel.addEventListener("click", reinitialiserFormulaire);
+
+        // ============================================================
+        // 17. AFFICHAGE/MASQUAGE DES OPTIONS QCM
+        // ============================================================
+        typeSelect.addEventListener("change", function () {
+          qcmDiv.style.display = this.value === "qcm" ? "block" : "none";
+        });
+
+        // ============================================================
+        // 18. ÉVÉNEMENTS DES FILTRES (cascade)
+        // ============================================================
+        filiereSelect.addEventListener("change", function () {
+          const fid = this.value;
+          if (fid) {
+            chargerMatieresParFiliere(fid);
+            chapitreSelect.disabled = true;
+            chapitreSelect.innerHTML =
+              '<option value="">-- Sélectionnez une matière --</option>';
+            currentChapitreId = null;
+            afficherListeExercices([]);
+          } else {
+            matiereSelect.innerHTML =
+              '<option value="">-- Sélectionnez une filière --</option>';
+            matiereSelect.disabled = true;
+            chapitreSelect.innerHTML =
+              '<option value="">-- Sélectionnez une matière --</option>';
+            chapitreSelect.disabled = true;
+            currentChapitreId = null;
+            afficherListeExercices([]);
+          }
+        });
+
+        matiereSelect.addEventListener("change", function () {
+          const mid = this.value;
+          if (mid) {
+            currentMatiereId = mid;
+            chargerChapitres(mid);
+          } else {
+            chapitreSelect.innerHTML =
+              '<option value="">-- Sélectionnez une matière --</option>';
+            chapitreSelect.disabled = true;
+            currentChapitreId = null;
+            afficherListeExercices([]);
+          }
+        });
+
+        chapitreSelect.addEventListener("change", function () {
+          const cid = this.value;
+          if (cid) {
+            currentChapitreId = cid;
+            chargerExercices(cid);
+            reinitialiserFormulaire();
+          } else {
+            currentChapitreId = null;
+            afficherListeExercices([]);
+          }
+        });
+
+        // ============================================================
+        // 19. DÉMARRAGE
+        // ============================================================
+        chargerFilieres();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusBox - Tableau de bord</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+    <link rel="stylesheet" href="../assets/css/dark-mode.css" />
+    <script src="../assets/js/config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <!-- Overlay pour fermer la sidebar en cliquant à côté -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="dashboard-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <a href="dashboard.html" class="logo">
+            <img src="../assets/images/Logo.png" alt="CampusBox" />
+          </a>
+          <button class="btn-toggle-sidebar" id="toggleSidebarBtn">☰</button>
+          <div class="user-info-sidebar">
+            <span id="sidebarUserName">Mark R.</span>
+            <span class="online-status">● En ligne</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="dashboard.html" class="active">
+                <img
+                  src="../assets/images/icons/dashboard.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Tableau de bord</span>
+              </a>
+            </li>
+            <li>
+              <a href="cours.html">
+                <img
+                  src="../assets/images/icons/cours.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mes cours</span>
+              </a>
+            </li>
+            <li>
+              <a href="examens.html">
+                <img
+                  src="../assets/images/icons/exams.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Examens</span>
+              </a>
+            </li>
+            <li>
+              <a href="notes.html">
+                <img
+                  src="../assets/images/icons/notes.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Notes</span>
+              </a>
+            </li>
+            <li>
+              <a href="quiz.html">
+                <span class="nav-emoji">🧠</span>
+                <span>Quiz</span>
+              </a>
+            </li>
+            <li>
+              <a href="compte.html">
+                <img
+                  src="../assets/images/icons/profil.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Mon profil</span>
+              </a>
+            </li>
+            <li>
+              <a href="messages.html">
+                <img
+                  src="../assets/images/icons/messages.png"
+                  alt=""
+                  class="nav-icon"
+                />
+                <span>Messages</span>
+              </a>
+            </li>
+            <li>
+              <a href="parametres.html">
+                <span class="nav-emoji">⚙️</span>
+                <span>Paramètres</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" id="logoutBtnSidebar">
+                <span class="nav-emoji">🚪</span>
+                <span>Déconnexion</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <!-- Bouton burger visible seulement en mobile -->
+        <button class="btn-burger" id="burgerBtn">☰</button>
+
+        <div class="top-bar">
+          <h1>Bienvenue, <span id="welcomeUser">...</span> !</h1>
+        </div>
+
+        <!-- Statistiques -->
+        <section class="stats-section">
+          <h2>Statistiques</h2>
+          <div class="stats-cards">
+            <div class="stat-card">
+              <h3>Progression</h3>
+              <div class="stat-value">0%</div>
+            </div>
+            <div class="stat-card">
+              <h3>Quiz réussis</h3>
+              <div class="stat-value">0/0</div>
+            </div>
+            <div class="stat-card">
+              <h3>Moyenne</h3>
+              <div class="stat-value">0.00</div>
+            </div>
+          </div>
+
+          <div class="chart-wrapper">
+            <canvas id="quizChart"></canvas>
+          </div>
+        </section>
+
+        <!-- Programme -->
+        <div class="programme-section">
+          <h2>📚 Chargement du programme...</h2>
+
+          <!-- Sélecteur S1 / S2 -->
+          <div class="semestre-tabs" id="semestreTabs">
+            <button class="semestre-tab active" data-semestre="1">
+              📘 Semestre 1
+            </button>
+            <button class="semestre-tab" data-semestre="2">
+              📗 Semestre 2
+            </button>
+          </div>
+
+          <div class="matieres-list" id="matieresList">
+            <p>Chargement du programme...</p>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <footer><p>&copy; 2025 CampusBox</p></footer>
+    <script src="../assets/js/dashboard.js"></script>
+  </body>
+</html>

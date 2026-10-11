@@ -1,0 +1,494 @@
+/* Styles propres à la page cours */
+.cours-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+}
+
+.cours-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.cours-header h1 {
+  font-size: 1.5rem;
+  color: #1e293b;
+}
+
+.cours-header p {
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+/* Chapitres (accordéon) */
+.chapitre-item {
+  margin-bottom: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.chapitre-titre {
+  background: #f8fafc;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s;
+}
+
+.chapitre-titre:hover {
+  background: #eef2ff;
+}
+
+.chapitre-titre h2 {
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.icone {
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+
+.chapitre-contenu {
+  padding: 1rem;
+  border-top: 1px solid #e2e8f0;
+  display: none;
+}
+
+.chapitre-contenu.ouvert {
+  display: block;
+}
+
+.contenu-texte {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #0f172a;
+  margin-bottom: 1rem;
+}
+
+/* Exercices */
+.exercices-section {
+  background: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  margin-top: 1rem;
+}
+
+.exercices-section h3 {
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.exercice {
+  margin-bottom: 1.2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #cbd5e1;
+}
+
+.exercice:last-child {
+  border-bottom: none;
+}
+
+.options label {
+  display: block;
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+}
+
+.btn-correction {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.8rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.correction {
+  background: #e6f7e6;
+  padding: 0.6rem;
+  margin-top: 0.6rem;
+  border-radius: 0.5rem;
+  color: #166534;
+  font-size: 0.85rem;
+}
+
+/* Bouton retour */
+.retour-dashboard {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.btn-retour {
+  background: #e2e8f0;
+  color: #1e293b;
+  text-decoration: none;
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  transition: background 0.2s;
+}
+
+.btn-retour:hover {
+  background: #cbd5e1;
+}
+.btn-valider {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.8rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+}
+.btn-valider:hover {
+  background: #059669;
+}
+/* Mode sombre pour la page cours */
+body.dark-mode .cours-container {
+  background-color: #1e293b;
+  color: #e2e8f0;
+}
+
+body.dark-mode .chapitre-item {
+  border-color: #475569;
+}
+
+body.dark-mode .chapitre-titre {
+  background-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .chapitre-contenu {
+  background-color: #1e293b;
+}
+
+body.dark-mode .exercice {
+  background-color: #334155;
+}
+
+body.dark-mode .btn-correction {
+  background-color: #3b82f6;
+}
+
+body.dark-mode .btn-valider {
+  background-color: #10b981;
+}
+
+body.dark-mode .retour-dashboard .btn-retour {
+  background-color: #475569;
+  color: white;
+}
+/* ============================================ */
+/* NOUVEAUX STYLES — Responsive + boutons      */
+/* ============================================ */
+
+/* Bouton burger (mobile) */
+.btn-burger {
+  display: none;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+/* Section exercices */
+.exercices-section {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #cbd5e1;
+}
+.exercices-section h3 {
+  margin-bottom: 0.8rem;
+  color: #1e293b;
+  font-size: 1rem;
+}
+
+.exercice {
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 0.8rem;
+  border-left: 3px solid #3b82f6;
+}
+.exercice-question {
+  margin-bottom: 0.7rem;
+  color: #1e293b;
+  font-size: 0.95rem;
+  word-wrap: break-word;
+}
+
+/* Options QCM */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+.option-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: 0.15s;
+  word-wrap: break-word;
+}
+.option-label:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+.option-label input {
+  flex-shrink: 0;
+}
+
+/* Textarea réponse ouverte */
+.reponse-texte {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  margin-bottom: 0.6rem;
+  resize: vertical;
+}
+
+/* Actions exercice (boutons côte à côte) */
+.exercice-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.btn-valider,
+.btn-correction {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: 0.2s;
+}
+.btn-valider {
+  background: #3b82f6;
+  color: white;
+}
+.btn-valider:hover {
+  background: #2563eb;
+}
+.btn-correction {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+.btn-correction:hover {
+  background: #cbd5e1;
+}
+
+/* Correction */
+.correction {
+  background: #ecfdf5;
+  border-left: 3px solid #10b981;
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #065f46;
+  word-wrap: break-word;
+}
+
+.feedback {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* Bouton "Marquer comme terminé" */
+.btn-complete {
+  margin-top: 1rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 2rem;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* Section devoirs */
+.devoirs-section {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid #e2e8f0;
+}
+.devoirs-section h3 {
+  margin-bottom: 0.8rem;
+  color: #1e293b;
+}
+.devoir-item {
+  background: #f8fafc;
+  padding: 0.9rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.6rem;
+  border-left: 4px solid #10b981;
+  word-wrap: break-word;
+}
+.devoir-item p {
+  font-size: 0.9rem;
+  color: #475569;
+  margin: 0.3rem 0 0.6rem 0;
+}
+.btn-passer-devoir {
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* Rendu du contenu HTML des chapitres */
+.contenu-texte {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.contenu-texte img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+.contenu-texte table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+.contenu-texte pre,
+.contenu-texte code {
+  background: #f1f5f9;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.3rem;
+  font-size: 0.85rem;
+  overflow-x: auto;
+  display: block;
+  max-width: 100%;
+}
+
+/* ============================================ */
+/* RESPONSIVE MOBILE                            */
+/* ============================================ */
+@media (max-width: 900px) {
+  .btn-burger {
+    display: inline-block;
+  }
+}
+
+@media (max-width: 640px) {
+  .cours-header h1 {
+    font-size: 1.2rem;
+  }
+  .cours-header p {
+    font-size: 0.85rem;
+  }
+
+  .chapitre-titre h2 {
+    font-size: 1rem;
+    word-wrap: break-word;
+  }
+
+  .exercice {
+    padding: 0.75rem;
+  }
+  .exercice-question {
+    font-size: 0.9rem;
+  }
+
+  .option-label {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .exercice-actions {
+    flex-direction: column;
+  }
+  .btn-valider,
+  .btn-correction {
+    width: 100%;
+    text-align: center;
+  }
+
+  .btn-complete {
+    width: 100%;
+  }
+
+  .devoir-item {
+    padding: 0.75rem;
+  }
+  .btn-passer-devoir {
+    width: 100%;
+  }
+}
+
+/* ============================================ */
+/* MODE SOMBRE                                  */
+/* ============================================ */
+body.dark-mode .exercice {
+  background: #1e293b;
+  border-left-color: #60a5fa;
+}
+body.dark-mode .exercice-question {
+  color: #f1f5f9;
+}
+body.dark-mode .option-label {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+body.dark-mode .option-label:hover {
+  background: #334155;
+  border-color: #60a5fa;
+}
+body.dark-mode .reponse-texte {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+body.dark-mode .btn-correction {
+  background: #475569;
+  color: #f1f5f9;
+}
+body.dark-mode .correction {
+  background: #064e3b;
+  color: #d1fae5;
+}
+body.dark-mode .devoirs-section {
+  border-top-color: #334155;
+}
+body.dark-mode .devoirs-section h3 {
+  color: #f1f5f9;
+}
+body.dark-mode .devoir-item {
+  background: #1e293b;
+}
+body.dark-mode .devoir-item p {
+  color: #94a3b8;
+}
+body.dark-mode .contenu-texte pre,
+body.dark-mode .contenu-texte code {
+  background: #0f172a;
+  color: #e2e8f0;
+}
